@@ -15,31 +15,54 @@ import android.widget.Toast;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.util.Util;
+import com.example.capstoneproject.viewmodel.CheckUserLoggedInViewModel;
+import com.example.capstoneproject.viewmodel.SignInListViewModel;
+import com.example.capstoneproject.viewmodel.SignInListViewModelFactory;
 import com.example.capstoneproject.viewmodel.SignUpListViewModel;
 import com.example.capstoneproject.viewmodel.SignUpListViewModelFactory;
+import com.google.firebase.auth.FirebaseUser;
 
 import static com.example.capstoneproject.util.Util.checkPassword;
 import static com.example.capstoneproject.util.Util.checkUsername;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String USER_CREDENTIAL = "credential";
     EditText etUsername;
     EditText etPassword;
     Button btSignUp;
     Button btLogin;
-
-    String userName="";
-    String password="";
+    String userName = "";
+    String password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkUserLoggedInStatus();
+    }
 
-        initView();
-        setViewOnclickListerners();
+    private void checkUserLoggedInStatus() {
+        final CheckUserLoggedInViewModel viewModelLoggedInStatus =
+                ViewModelProviders.of(this)
+                        .get(CheckUserLoggedInViewModel.class);
+        observeViewModelLoggedInStatus(viewModelLoggedInStatus);
+    }
 
-
+    private void observeViewModelLoggedInStatus(CheckUserLoggedInViewModel viewModelLoggedInStatus) {
+        viewModelLoggedInStatus.isLoggedInStatus().observe(this, new Observer<FirebaseUser>() {
+            @Override
+            public void onChanged(FirebaseUser result) {
+                if (result != null) {
+                    Log.e("USER", "USER ALREADY LOGGED IN" + result.getEmail().toString());
+                    sendUserToWelcomeScreen(result);
+                } else {
+                    Log.e("USER", "USER NOT LOGGED IN");
+                    initView();
+                    setViewOnclickListerners();
+                }
+            }
+        });
     }
 
     private void getValues() {
@@ -56,29 +79,63 @@ public class LoginActivity extends AppCompatActivity {
                 checkUsername(userName);
                 checkPassword(password);
 
-                sendCredentialsForVerification(userName,password);
+                sendCredentialsForVerification(userName, password);
+            }
+        });
+
+        btLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getValues();
+                checkUsername(userName);
+                checkPassword(password);
+                loginWithGivenCredentials(userName, password);
+            }
+        });
+    }
+
+    private void loginWithGivenCredentials(String userName, String password) {
+        final SignInListViewModel viewModelSignIn =
+                ViewModelProviders.of(this, new SignInListViewModelFactory(getApplication(), userName, password))
+                        .get(SignInListViewModel.class);
+        observeViewModelSignIn(viewModelSignIn);
+    }
+
+    private void observeViewModelSignIn(SignInListViewModel viewModelSignIn) {
+        viewModelSignIn.isLoggedInStatus().observe(this, new Observer<FirebaseUser>() {
+            @Override
+            public void onChanged(@Nullable FirebaseUser result) {
+                if (result != null) {
+                    Log.e("USER", "USER LOGGED IN" + result.getEmail().toString());
+                    sendUserToWelcomeScreen(result);
+                } else {
+                    Log.e("USER", "USER NOT LOGGED IN");
+                    initView();
+                    setViewOnclickListerners();
+                }
             }
         });
     }
 
     private void sendCredentialsForVerification(String userName, String password) {
         final SignUpListViewModel viewModel =
-                ViewModelProviders.of(this, new SignUpListViewModelFactory(getApplication(), userName,password))
+                ViewModelProviders.of(this, new SignUpListViewModelFactory(getApplication(), userName, password))
                         .get(SignUpListViewModel.class);
-        observeViewModel(viewModel);
+        observeViewModelSignUp(viewModel);
     }
 
-    private void observeViewModel(SignUpListViewModel viewModel) {
-        viewModel.isRegisteredStatus().observe(this, new Observer<Boolean>() {
+    private void observeViewModelSignUp(SignUpListViewModel viewModel) {
+        viewModel.isRegisteredStatus().observe(this, new Observer<FirebaseUser>() {
             @Override
-            public void onChanged(@Nullable Boolean result) {
-                if(result!=null){
-                    if(result)
-                    Log.e("CREATE_USER","USER CREATED");
-                    else
-                        Log.e("CREATE_USER","USER NOT CREATED");
+            public void onChanged(@Nullable FirebaseUser result) {
+                if (result != null) {
+                    Log.e("USER", "USER REGISTERED AND LOGGED IN" + result.getEmail().toString());
+                    sendUserToWelcomeScreen(result);
+                } else {
+                    Log.e("USER", "USER NOT REGISTERED");
+                    initView();
+                    setViewOnclickListerners();
                 }
-
             }
         });
     }
@@ -86,7 +143,14 @@ public class LoginActivity extends AppCompatActivity {
     private void initView() {
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
-        btLogin=findViewById(R.id.bt_login);
-        btSignUp=findViewById(R.id.bt_register);
+        btLogin = findViewById(R.id.bt_login);
+        btSignUp = findViewById(R.id.bt_register);
+    }
+
+    private void sendUserToWelcomeScreen(FirebaseUser user) {
+        Intent newIntent = new Intent(LoginActivity.this, MainActivity.class);
+        newIntent.putExtra(USER_CREDENTIAL, user.getEmail());
+        startActivity(newIntent);
+        finish();
     }
 }

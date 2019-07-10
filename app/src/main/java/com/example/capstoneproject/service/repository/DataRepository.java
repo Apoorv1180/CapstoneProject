@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class DataRepository {
 
@@ -33,8 +34,8 @@ public class DataRepository {
         return dataRepository;
     }
 
-    public LiveData<Boolean> registerUser(String mUserName, String mPassword) {
-        final MutableLiveData<Boolean> status  = new MutableLiveData<>();
+    public LiveData<FirebaseUser> registerUser(String mUserName, String mPassword) {
+        final MutableLiveData<FirebaseUser> userValues  = new MutableLiveData<>();
         auth.createUserWithEmailAndPassword(mUserName, mPassword)
                 .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
                     @Override
@@ -43,12 +44,54 @@ public class DataRepository {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            status.setValue(Boolean.valueOf(false));
+                            userValues.setValue(null);
                         } else {
-                            status.setValue(Boolean.valueOf(true));
+                            if(auth.getCurrentUser()!=null)
+                            {
+                                userValues.setValue(auth.getCurrentUser());
+                            }
+                            else
+                                userValues.setValue(null);
                         }
                     }
                 });
-        return status;
+        return userValues;
+    }
+
+    public LiveData<FirebaseUser> signInUser(String mUserName, String mPassword) {
+        final MutableLiveData<FirebaseUser> userValues  = new MutableLiveData<>();
+        auth.signInWithEmailAndPassword(mUserName, mPassword)
+                .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            userValues.setValue(null);
+                        } else {
+                            if(auth.getCurrentUser()!=null)
+                            {
+                                userValues.setValue(auth.getCurrentUser());
+                            }
+                            else
+                                userValues.setValue(null);
+                        }
+                    }
+                });
+        return userValues;
+    }
+
+    public LiveData<FirebaseUser> checkIfUserIsLoggedIn(){
+        final MutableLiveData<FirebaseUser> userValues  = new MutableLiveData<>();
+
+        if(auth.getCurrentUser()!=null)
+        {
+            userValues.setValue(auth.getCurrentUser());
+        }
+        else
+            userValues.setValue(null);
+
+        return userValues;
     }
 }

@@ -9,23 +9,20 @@ import com.example.capstoneproject.service.repository.DataRepository;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class SignUpListViewModel extends AndroidViewModel {
+public class CheckUserLoggedInViewModel extends AndroidViewModel {
 
     DataRepository dataRepository;
-    String mUserName,mPassword;
 
-    public SignUpListViewModel(Application mApplication, String mUserName, String mPassword) {
+    public CheckUserLoggedInViewModel(Application mApplication) {
         super(mApplication);
         try {
-            this.mUserName = mUserName;
-            this.mPassword =mPassword;
             dataRepository = DataRepository.getInstance(mApplication);
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public LiveData<FirebaseUser> isRegisteredStatus() {
-        return dataRepository.registerUser(mUserName,mPassword);
+    public LiveData<FirebaseUser> isLoggedInStatus() {
+        return (LiveData<FirebaseUser>)dataRepository.checkIfUserIsLoggedIn();
     }
 }
