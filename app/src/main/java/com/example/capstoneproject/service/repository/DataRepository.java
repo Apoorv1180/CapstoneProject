@@ -1,12 +1,12 @@
 package com.example.capstoneproject.service.repository;
 
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,7 +18,6 @@ public class DataRepository {
     private static DataRepository dataRepository;
     private static Context context;
     private FirebaseAuth auth;
-    private boolean status;
 
     public DataRepository(Application application) {
         auth = FirebaseAuth.getInstance();
@@ -34,29 +33,22 @@ public class DataRepository {
         return dataRepository;
     }
 
-    public boolean registerUser(String mUserName, String mPassword) {
+    public LiveData<Boolean> registerUser(String mUserName, String mPassword) {
+        final MutableLiveData<Boolean> status  = new MutableLiveData<>();
         auth.createUserWithEmailAndPassword(mUserName, mPassword)
-                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            setStatusValueTrue();
+                            status.setValue(Boolean.valueOf(false));
                         } else {
-                            setStatusValueFalse();
+                            status.setValue(Boolean.valueOf(true));
                         }
                     }
                 });
         return status;
-    }
-
-    private void setStatusValueFalse() {
-        status = false;
-    }
-
-    private void setStatusValueTrue() {
-        status = true;
     }
 }

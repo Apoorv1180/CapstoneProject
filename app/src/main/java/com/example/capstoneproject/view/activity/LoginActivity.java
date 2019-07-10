@@ -1,10 +1,13 @@
 package com.example.capstoneproject.view.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +21,7 @@ import com.example.capstoneproject.viewmodel.SignUpListViewModelFactory;
 import static com.example.capstoneproject.util.Util.checkPassword;
 import static com.example.capstoneproject.util.Util.checkUsername;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     EditText etUsername;
     EditText etPassword;
@@ -66,15 +69,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void observeViewModel(SignUpListViewModel viewModel) {
-       boolean registeredStatus= viewModel.isRegisteredStatus() ;
-       if(registeredStatus){
-           Intent newIntent = new Intent(this,MainActivity.class);
-           startActivity(newIntent);
-           finish();
-       }
-       else {
-           Toast.makeText(getApplicationContext(),"Not Registered",Toast.LENGTH_SHORT).show();
-       }
+        viewModel.isRegisteredStatus().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean result) {
+                if(result!=null){
+                    if(result)
+                    Log.e("CREATE_USER","USER CREATED");
+                    else
+                        Log.e("CREATE_USER","USER NOT CREATED");
+                }
+
+            }
+        });
     }
 
     private void initView() {
