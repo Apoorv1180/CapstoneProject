@@ -22,7 +22,7 @@ public class CheckUserLoggedInViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<FirebaseUser> isLoggedInStatus() {
+    public LiveData<FirebaseUser> isAlreadyLoggedInStatus() {
         return (LiveData<FirebaseUser>)dataRepository.checkIfUserIsLoggedIn();
     }
 }

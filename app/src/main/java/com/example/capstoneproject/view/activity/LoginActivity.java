@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void observeViewModelLoggedInStatus(CheckUserLoggedInViewModel viewModelLoggedInStatus) {
-        viewModelLoggedInStatus.isLoggedInStatus().observe(this, new Observer<FirebaseUser>() {
+        viewModelLoggedInStatus.isAlreadyLoggedInStatus().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser result) {
                 if (result != null) {

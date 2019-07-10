@@ -59,7 +59,7 @@ public class DataRepository {
     }
 
     public LiveData<FirebaseUser> signInUser(String mUserName, String mPassword) {
-        final MutableLiveData<FirebaseUser> userValues  = new MutableLiveData<>();
+        final MutableLiveData<FirebaseUser> userValuesSignIn  = new MutableLiveData<>();
         auth.signInWithEmailAndPassword(mUserName, mPassword)
                 .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
                     @Override
@@ -68,18 +68,18 @@ public class DataRepository {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            userValues.setValue(null);
+                            userValuesSignIn.setValue(null);
                         } else {
                             if(auth.getCurrentUser()!=null)
                             {
-                                userValues.setValue(auth.getCurrentUser());
+                                userValuesSignIn.setValue(auth.getCurrentUser());
                             }
                             else
-                                userValues.setValue(null);
+                                userValuesSignIn.setValue(null);
                         }
                     }
                 });
-        return userValues;
+        return userValuesSignIn;
     }
 
     public LiveData<FirebaseUser> checkIfUserIsLoggedIn(){
