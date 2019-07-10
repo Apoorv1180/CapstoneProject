@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -13,15 +14,23 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DataRepository {
 
     private static DataRepository dataRepository;
     private static Context context;
     private FirebaseAuth auth;
+    private DatabaseReference mDatabase;
 
     public DataRepository(Application application) {
         auth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public synchronized static DataRepository getInstance(Application application) {
@@ -93,5 +102,24 @@ public class DataRepository {
             userValues.setValue(null);
 
         return userValues;
+    }
+
+    public LiveData<Boolean> saveUser(String userId, String mUserName, String mPhoneNumber) {
+        final MutableLiveData<Boolean> status  = new MutableLiveData<>();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS").child(userId);
+        Map newUser = new HashMap();
+        newUser.put("name",mUserName);
+        newUser.put("phone",mPhoneNumber);
+        mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if(databaseError!=null){
+                    status.setValue(Boolean.FALSE);
+                }else
+                    status.setValue(Boolean.TRUE);
+            }
+        });
+    return  status;
     }
 }

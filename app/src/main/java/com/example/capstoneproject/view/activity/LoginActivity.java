@@ -27,7 +27,8 @@ import static com.example.capstoneproject.util.Util.checkUsername;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String USER_CREDENTIAL = "credential";
+    public static final String USER_CREDENTIAL = "credential";
+    public static final String USER_UUID = "uuid";
     EditText etUsername;
     EditText etPassword;
     Button btSignUp;
@@ -149,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendUserToWelcomeScreen(FirebaseUser user) {
         Intent newIntent = new Intent(LoginActivity.this, MainActivity.class);
-        newIntent.putExtra(USER_CREDENTIAL, user.getEmail());
+        newIntent.putExtra(USER_UUID,user.getUid());
         startActivity(newIntent);
         finish();
     }

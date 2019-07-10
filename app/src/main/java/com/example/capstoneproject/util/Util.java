@@ -10,6 +10,12 @@ public class Util {
         else
             return true;
     }
+    public static boolean checkPhoneNumber(String phoneNumber) {
+        if (TextUtils.isEmpty(phoneNumber))
+            return false;
+        else
+            return true;
+    }
 
     public static boolean checkPassword(String password) {
         if (TextUtils.isEmpty(password)) {
