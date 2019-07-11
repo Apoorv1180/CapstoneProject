@@ -1,6 +1,7 @@
 package com.example.capstoneproject.view.fragment;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Action;
@@ -37,11 +39,27 @@ public class MainFragment extends Fragment {
 
     private List<Action> actionList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private ActionAdapter mAdapter;
+    private SendMessages sendMessages;
+
+
 
     public MainFragment() {
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        sendMessages = (SendMessages) context;
+    }
+    // Interface - fragment to activity
+    public interface SendMessages {
+        void sendAction(Action actionItem);
+    }
+
+    //Receive message - activity to fragment
+    public void receiveAction(Action actionItem) {
+        //DO SOMETHING
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,12 +79,16 @@ public class MainFragment extends Fragment {
 
     private void initView(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.actions_recyclerview);
-        mAdapter = new ActionAdapter(actionList, listener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(new ActionAdapter(actionList, new ActionAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Action item) {
+                sendMessages.sendAction(item);
+            }
+        }));
 
     }
 
