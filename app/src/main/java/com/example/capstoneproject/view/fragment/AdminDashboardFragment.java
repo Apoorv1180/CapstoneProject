@@ -1,5 +1,6 @@
 package com.example.capstoneproject.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
@@ -25,23 +28,25 @@ public class AdminDashboardFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     @BindView(R.id.tv_count_apporved)
     TextView tvCountApporved;
-    @BindView(R.id.card_approved)
-    CardView cardApproved;
+    @BindView(R.id.card_plan)
+    CardView cardPlan;
     @BindView(R.id.tv_count_open)
     TextView tvCountOpen;
-    @BindView(R.id.card_open)
-   CardView cardOpen;
+    @BindView(R.id.card_program)
+    CardView cardProgram;
     @BindView(R.id.mainGrid)
     LinearLayout mainGrid;
     @BindView(R.id.tv_count_close)
     TextView tvCountClose;
-    @BindView(R.id.card_close)
-    CardView cardClose;
+    @BindView(R.id.card_article)
+    CardView cardArticle;
     @BindView(R.id.dashboard_item_value_tv)
     TextView dashboardItemValueTv;
     @BindView(R.id.dashboard_item_name_tv)
     TextView dashboardItemNameTv;
 
+
+    SendOption sendOption;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -83,20 +88,18 @@ public class AdminDashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_admin_dashboard, container, false);
-
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        checkUserLoggedInStatus(view,savedInstanceState);
+        checkUserLoggedInStatus(view, savedInstanceState);
     }
 
     private void checkUserLoggedInStatus(View view, Bundle savedInstanceState) {
         final CheckUserLoggedInViewModel viewModelLoggedInStatus =
                 ViewModelProviders.of(this)
                         .get(CheckUserLoggedInViewModel.class);
-        observeViewModelLoggedInStatus(viewModelLoggedInStatus,view,savedInstanceState);
+        observeViewModelLoggedInStatus(viewModelLoggedInStatus, view, savedInstanceState);
     }
 
     private void observeViewModelLoggedInStatus(CheckUserLoggedInViewModel viewModelLoggedInStatus, final View view, Bundle savedInstanceState) {
@@ -104,7 +107,7 @@ public class AdminDashboardFragment extends Fragment {
         viewModelLoggedInStatus.isAlreadyLoggedInStatus().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser result) {
-                if(result!=null) {
+                if (result != null) {
                 }
             }
 
@@ -112,14 +115,33 @@ public class AdminDashboardFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.card_approved, R.id.card_open, R.id.card_close})
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        sendOption = (SendOption) context;
+    }
+    public interface SendOption{
+        void sendOptionAction(int option);
+    }
+
+
+    @OnClick({R.id.card_plan, R.id.card_program, R.id.card_article})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.card_approved:
+            case R.id.card_plan:
+                sendOption.sendOptionAction(1);
                 break;
-            case R.id.card_open:
+            case R.id.card_program:
+                sendOption.sendOptionAction(2);
                 break;
-            case R.id.card_close:
+            case R.id.card_article:
+                sendOption.sendOptionAction(3);
+//                Fragment fragment = new ArticleDetailFragment();
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.fragment_container, fragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
                 break;
         }
     }

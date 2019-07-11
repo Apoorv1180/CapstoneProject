@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Action;
 import com.example.capstoneproject.view.fragment.AdminDashboardFragment;
+import com.example.capstoneproject.view.fragment.ArticleDetailFragment;
 import com.example.capstoneproject.view.fragment.ArticleFragment;
 import com.example.capstoneproject.view.fragment.MainFragment;
 import com.example.capstoneproject.viewmodel.LogoutViewModel;
@@ -23,7 +24,7 @@ import com.example.capstoneproject.viewmodel.LogoutViewModel;
 import static com.example.capstoneproject.util.Util.getRole;
 import static com.example.capstoneproject.view.activity.LoginActivity.USER_CREDENTIAL;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.SendMessages {
+public class MainActivity extends AppCompatActivity implements MainFragment.SendMessages,AdminDashboardFragment.SendOption {
 
     private static final String MAIN_FRAG = "TAG_MAIN_FRAG";
     private static final String ARTICLE_FRAG = "TAG_ARTICLE_FRAG";
@@ -114,5 +115,27 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
               }
             }
         });
+    }
+
+    @Override
+    public void sendOptionAction(int option) {
+        switch (option) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                openArticleDetailFragment();
+                break;
+        }
+
+    }
+
+    private void openArticleDetailFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.fragment_container, new ArticleDetailFragment());
+        ft.addToBackStack(ARTICLE_FRAG);
+        ft.commit();
     }
 }
