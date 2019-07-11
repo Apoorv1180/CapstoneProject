@@ -2,45 +2,42 @@ package com.example.capstoneproject.view.fragment;
 
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.example.capstoneproject.R;
+import com.example.capstoneproject.service.model.Action;
 import com.example.capstoneproject.util.Util;
+import com.example.capstoneproject.view.adapter.ActionAdapter;
 import com.example.capstoneproject.viewmodel.CheckUserLoggedInViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserViewModelFactory;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static android.content.ContentValues.TAG;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainFragment extends Fragment {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Bitmap mImageBitmap;
-    private String mCurrentPhotoPath;
+    private List<Action> actionList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private ActionAdapter mAdapter;
 
     public MainFragment() {
     }
@@ -49,29 +46,62 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main,container,false);
+        // bind your data here.
+        initView(view);
+        return view;
     }
+
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        checkUserLoggedInStatus();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        checkUserLoggedInStatus(view,savedInstanceState);
+    }
+
+    private void initView(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.actions_recyclerview);
+        mAdapter = new ActionAdapter(actionList, listener);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.setAdapter(mAdapter);
 
     }
 
-    private void checkUserLoggedInStatus() {
+    private void prepareActionData() {
+        Action action = new Action("My Plans", "Schedule and view My Plans", R.drawable.ic_my_plan);
+        actionList.add(action);
+
+        action= new Action("My Programs", "View my enrollements", R.drawable.ic_my_program);
+        actionList.add(action);
+
+        action = new Action("Articles", "Read and be fit", R.drawable.ic_my_article);
+        actionList.add(action);
+    }
+
+    private void checkUserLoggedInStatus(View view, Bundle savedInstanceState) {
         final CheckUserLoggedInViewModel viewModelLoggedInStatus =
                 ViewModelProviders.of(this)
                         .get(CheckUserLoggedInViewModel.class);
-        observeViewModelLoggedInStatus(viewModelLoggedInStatus);
+        observeViewModelLoggedInStatus(viewModelLoggedInStatus,view,savedInstanceState);
     }
 
-    private void observeViewModelLoggedInStatus(CheckUserLoggedInViewModel viewModelLoggedInStatus) {
+    private void observeViewModelLoggedInStatus(CheckUserLoggedInViewModel viewModelLoggedInStatus, final View view, Bundle savedInstanceState) {
+
         viewModelLoggedInStatus.isAlreadyLoggedInStatus().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser result) {
-                if(result.getDisplayName()==null){
-                    fetchInformationInProfileDialog(result);
+                if(result!=null) {
+                    if (result.getDisplayName() == null) {
+                        fetchInformationInProfileDialog(result);
+                    }
+                    else {
+                        prepareActionData();
+                        initView(view);
+                    }
+
                 }
             }
 

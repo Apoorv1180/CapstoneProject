@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private void openMainFragment() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(new MainFragment(), MAIN_FRAG);
+        ft.add(R.id.fragment_container,new MainFragment());
         ft.commit();
     }
 }
