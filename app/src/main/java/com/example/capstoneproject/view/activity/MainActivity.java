@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
                   loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                   loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                   startActivity(loginPageIntent);
-                  finish();
               }
             }
         });
