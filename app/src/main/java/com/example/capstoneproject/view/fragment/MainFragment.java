@@ -117,7 +117,7 @@ public class MainFragment extends Fragment {
             public void onChanged(FirebaseUser result) {
                 if(result!=null) {
                     if (result.getDisplayName() == null) {
-                        fetchInformationInProfileDialog(result);
+                        fetchInformationInProfileDialog(result,view);
                     }
                     else {
                         prepareActionData();
@@ -130,7 +130,7 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void fetchInformationInProfileDialog(final FirebaseUser result) {
+    private void fetchInformationInProfileDialog(final FirebaseUser result, final View view) {
         // get prompts.xml view
         final  EditText userName,userPhoneNumber;
 
@@ -158,8 +158,7 @@ public class MainFragment extends Fragment {
                                 Util.checkUsername(userName.getText().toString().trim());
                                 Util.checkPhoneNumber(userPhoneNumber.getText().toString().trim());
 
-                                saveUserValues(result.getUid(),userName.getText().toString().trim(),userPhoneNumber.getText().toString().trim());
-
+                                saveUserValues(result.getUid(),userName.getText().toString().trim(),userPhoneNumber.getText().toString().trim(),view);
                             }
 
                         })
@@ -175,24 +174,26 @@ public class MainFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void saveUserValues(String userId,String Uname,String Password) {
+    private void saveUserValues(String userId, String Uname, String Password, View view) {
         final SaveUserViewModel viewModelSignIn =
                 ViewModelProviders.of(getActivity(), new SaveUserViewModelFactory(getActivity().getApplication(),userId, Uname, Password))
                         .get(SaveUserViewModel.class);
-        observeViewModelSaveUserStatus(viewModelSignIn);
+        observeViewModelSaveUserStatus(viewModelSignIn,view);
     }
 
-    private void observeViewModelSaveUserStatus(SaveUserViewModel viewModelSaveUserStatus) {
+    private void observeViewModelSaveUserStatus(SaveUserViewModel viewModelSaveUserStatus,  View view) {
     viewModelSaveUserStatus.isSavedStatus().observe(getActivity(), new Observer<Boolean>() {
         @Override
         public void onChanged(Boolean result) {
             if(result){
                 Log.e("USER","SAVED SUCCESSFULLY");
+
             }
             else
                 Log.e("USER","NOT SAVED ");
         }
     });
-
+        initView(view);
     }
+
 }

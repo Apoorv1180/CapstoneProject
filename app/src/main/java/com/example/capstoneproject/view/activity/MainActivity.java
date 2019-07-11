@@ -64,18 +64,18 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
             case "My Programs":
                 break;
             case "Articles":
-                openArticleFragment();
+                openArticleReadActivity();
                 break;
         }
     }
 
-    private void openArticleFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container, new ArticleFragment());
-        ft.addToBackStack(ARTICLE_FRAG);
-        ft.commit();
+    private void openArticleReadActivity() {
+        Intent newIntent = new Intent(this,ArticleReadActivity.class);
+        startActivity(newIntent);
+        finish();
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
