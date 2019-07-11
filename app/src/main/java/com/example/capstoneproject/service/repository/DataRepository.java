@@ -121,4 +121,23 @@ public class DataRepository {
         });
     return  status;
     }
+
+
+    public LiveData<Boolean> logout() {
+        final MutableLiveData<Boolean> status  = new MutableLiveData<>();
+
+        auth.signOut();
+
+        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser()==null)
+                    status.setValue(Boolean.TRUE);
+                else
+                    status.setValue(Boolean.FALSE);
+            }
+        });
+
+        return status;
+    }
 }
