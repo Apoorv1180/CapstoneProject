@@ -35,10 +35,8 @@ public class DataRepository {
 
     public synchronized static DataRepository getInstance(Application application) {
         if (dataRepository == null) {
-            if (dataRepository == null) {
                 dataRepository = new DataRepository(application);
                 context = application.getApplicationContext();
-            }
         }
         return dataRepository;
     }
@@ -106,8 +104,9 @@ public class DataRepository {
 
     public LiveData<Boolean> saveUser(String userId, String mUserName, String mPhoneNumber) {
         final MutableLiveData<Boolean> status  = new MutableLiveData<>();
+        String userIdChild = userId;
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS").child(userId);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS").child(userIdChild);
         Map newUser = new HashMap();
         newUser.put("name",mUserName);
         newUser.put("phone",mPhoneNumber);

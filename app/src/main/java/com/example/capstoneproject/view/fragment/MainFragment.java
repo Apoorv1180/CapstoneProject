@@ -26,6 +26,7 @@ import com.example.capstoneproject.R;
 import com.example.capstoneproject.util.Util;
 import com.example.capstoneproject.viewmodel.CheckUserLoggedInViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserViewModel;
+import com.example.capstoneproject.viewmodel.SaveUserViewModelFactory;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
@@ -70,13 +71,14 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser result) {
                 if(result.getDisplayName()==null){
-                    fetchInformationInProfileDialog();
+                    fetchInformationInProfileDialog(result);
                 }
             }
+
         });
     }
 
-    private void fetchInformationInProfileDialog() {
+    private void fetchInformationInProfileDialog(final FirebaseUser result) {
         // get prompts.xml view
         final  EditText userName,userPhoneNumber;
 
@@ -104,7 +106,7 @@ public class MainFragment extends Fragment {
                                 Util.checkUsername(userName.getText().toString().trim());
                                 Util.checkPhoneNumber(userPhoneNumber.getText().toString().trim());
 
-                                saveUserValues();
+                                saveUserValues(result.getUid(),userName.getText().toString().trim(),userPhoneNumber.getText().toString().trim());
 
                             }
 
@@ -121,11 +123,11 @@ public class MainFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void saveUserValues() {
-        final SaveUserViewModel viewModelSaveUserStatus =
-                ViewModelProviders.of(this)
+    private void saveUserValues(String userId,String Uname,String Password) {
+        final SaveUserViewModel viewModelSignIn =
+                ViewModelProviders.of(getActivity(), new SaveUserViewModelFactory(getActivity().getApplication(),userId, Uname, Password))
                         .get(SaveUserViewModel.class);
-        observeViewModelSaveUserStatus(viewModelSaveUserStatus);
+        observeViewModelSaveUserStatus(viewModelSignIn);
     }
 
     private void observeViewModelSaveUserStatus(SaveUserViewModel viewModelSaveUserStatus) {

@@ -134,8 +134,8 @@ public class LoginActivity extends AppCompatActivity {
                     sendUserToWelcomeScreen(result);
                 } else {
                     Log.e("USER", "USER NOT REGISTERED");
-                    initView();
-                    setViewOnclickListerners();
+                   // initView();
+                  //  setViewOnclickListerners();
                 }
             }
         });
