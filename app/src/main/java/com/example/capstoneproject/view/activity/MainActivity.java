@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.fragment_container,new MainFragment(),MAIN_FRAG);
-        ft.commit();
+        ft.commit() ;
     }
 
 
