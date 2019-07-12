@@ -11,23 +11,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Action;
 import com.example.capstoneproject.view.fragment.AdminDashboardFragment;
-import com.example.capstoneproject.view.fragment.ArticleDetailFragment;
-import com.example.capstoneproject.view.fragment.ArticleFragment;
+import com.example.capstoneproject.view.fragment.ArticleCreateFragment;
 import com.example.capstoneproject.view.fragment.MainFragment;
 import com.example.capstoneproject.viewmodel.LogoutViewModel;
 
-import static com.example.capstoneproject.util.Util.getRole;
 import static com.example.capstoneproject.view.activity.LoginActivity.USER_CREDENTIAL;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.SendMessages,AdminDashboardFragment.SendOption {
+public class MainActivity extends AppCompatActivity implements MainFragment.SendMessages ,AdminDashboardFragment.SendMessages{
 
     private static final String MAIN_FRAG = "TAG_MAIN_FRAG";
     private static final String ARTICLE_FRAG = "TAG_ARTICLE_FRAG";
+    private static final String ARTICLE_FRAG_CREATE = "TAG_ARTICLE_CREATE_FRAG";
     String credential;
 
     @Override
@@ -118,24 +116,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     }
 
     @Override
-    public void sendOptionAction(int option) {
-        switch (option) {
+    public void sendAction(int actionItem) {
+
+        switch (actionItem){
+            case 0:
+                break;
             case 1:
                 break;
             case 2:
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.fragment_container, new ArticleCreateFragment());
+                ft.addToBackStack(ARTICLE_FRAG_CREATE);
+                ft.commit();
                 break;
-            case 3:
-                openArticleDetailFragment();
-                break;
-        }
-
-    }
-
-    private void openArticleDetailFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container, new ArticleDetailFragment());
-        ft.addToBackStack(ARTICLE_FRAG);
-        ft.commit();
+            }
     }
 }

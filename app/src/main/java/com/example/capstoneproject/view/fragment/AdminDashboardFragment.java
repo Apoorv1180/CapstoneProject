@@ -2,6 +2,7 @@ package com.example.capstoneproject.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,31 +23,32 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class AdminDashboardFragment extends Fragment {
+
+    private SendMessages sendMessages;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        sendMessages = (AdminDashboardFragment.SendMessages) context;
+    }
+    // Interface - fragment to activity
+    public interface SendMessages {
+        void sendAction(int actionItem);
+    }
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    @BindView(R.id.tv_count_apporved)
     TextView tvCountApporved;
-    @BindView(R.id.card_plan)
-    CardView cardPlan;
-    @BindView(R.id.tv_count_open)
+    CardView cardApproved;
     TextView tvCountOpen;
-    @BindView(R.id.card_program)
-    CardView cardProgram;
-    @BindView(R.id.mainGrid)
+    CardView cardOpen;
     LinearLayout mainGrid;
-    @BindView(R.id.tv_count_close)
     TextView tvCountClose;
-    @BindView(R.id.card_article)
-    CardView cardArticle;
-    @BindView(R.id.dashboard_item_value_tv)
+    CardView cardClose;
     TextView dashboardItemValueTv;
-    @BindView(R.id.dashboard_item_name_tv)
     TextView dashboardItemNameTv;
 
-
-    SendOption sendOption;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -87,12 +89,53 @@ public class AdminDashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_dashboard, container, false);
+        View view = inflater.inflate(R.layout.fragment_admin_dashboard, container, false);
+        initView(view);
+        return view;
+
+    }
+
+    private void initView(View view) {
+         tvCountApporved=view.findViewById(R.id.tv_count_apporved);
+         cardApproved=view.findViewById(R.id.card_plan);
+         tvCountOpen=view.findViewById(R.id.tv_count_open);
+         cardOpen=view.findViewById(R.id.card_program);
+         mainGrid=view.findViewById(R.id.mainGrid);
+         tvCountClose=view.findViewById(R.id.tv_count_close);
+         cardClose=view.findViewById(R.id.card_article);
+         dashboardItemValueTv=view.findViewById(R.id.dashboard_item_value_tv);
+         dashboardItemNameTv=view.findViewById(R.id.dashboard_item_name_tv);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        checkUserLoggedInStatus(view, savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
+        checkUserLoggedInStatus(view,savedInstanceState);
+        initViewListeners();
+    }
+
+    private void initViewListeners() {
+        cardClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("USER","Clicked close");
+                sendMessages.sendAction(2);
+            }
+        });
+        cardOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("USER","Clicked open");
+                sendMessages.sendAction(1);
+            }
+        });
+        cardApproved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("USER","Clicked approved");
+                sendMessages.sendAction(0);
+            }
+        });
     }
 
     private void checkUserLoggedInStatus(View view, Bundle savedInstanceState) {
@@ -112,37 +155,5 @@ public class AdminDashboardFragment extends Fragment {
             }
 
         });
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        sendOption = (SendOption) context;
-    }
-    public interface SendOption{
-        void sendOptionAction(int option);
-    }
-
-
-    @OnClick({R.id.card_plan, R.id.card_program, R.id.card_article})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.card_plan:
-                sendOption.sendOptionAction(1);
-                break;
-            case R.id.card_program:
-                sendOption.sendOptionAction(2);
-                break;
-            case R.id.card_article:
-                sendOption.sendOptionAction(3);
-//                Fragment fragment = new ArticleDetailFragment();
-//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.fragment_container, fragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-                break;
-        }
     }
 }

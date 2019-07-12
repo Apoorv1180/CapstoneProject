@@ -2,10 +2,17 @@
 <resources>
     <color name="colorPrimary">#e53935</color>
     <color name="colorPrimaryDark">#c62828</color>
-    <color name="colorAccent">#ffd600</color>
+    <color name="colorAccent">#004d40</color>
     <color name="textYellow">#ff6f00</color>
     <color name="textOrange">#e65100</color>
     <color name="md_cyan_900">#ba6435</color>
     <color name="white">#f9f7f7</color>
+    <color name="lightgrey">#eeeeee</color>
+    <color name="darkgrey">#757575</color>
+    <color name="orange100">#ffccbc</color>
+    <color name="orange400">#ff7043</color>
+    <color name="red700">#d32f2f</color>
+    <color name="redA700">#d50000</color>
+
     <color name="black">#000000</color>
 </resources>

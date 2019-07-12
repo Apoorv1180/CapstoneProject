@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import com.google.firebase.auth.FirebaseUser;
+
 public class Util {
 
     private static final String KEY_ROLE="Admin";
@@ -42,4 +44,5 @@ public class Util {
             return true;
 
     }
+
 }

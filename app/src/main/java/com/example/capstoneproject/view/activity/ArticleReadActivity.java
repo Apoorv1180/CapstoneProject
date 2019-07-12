@@ -9,8 +9,13 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.capstoneproject.R;
+import com.example.capstoneproject.service.model.Article;
 import com.example.capstoneproject.util.ZoomOutPageTransformer;
+import com.example.capstoneproject.view.adapter.CustomPageAdapter;
 import com.example.capstoneproject.view.adapter.ScreenSlidePagerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArticleReadActivity extends AppCompatActivity {
     /**
@@ -37,8 +42,9 @@ public class ArticleReadActivity extends AppCompatActivity {
         previous=findViewById(R.id.previous);
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
+        List<Article> getData = dataSource();
         mPager.setPageTransformer(true, new ZoomOutPageTransformer());
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),NUM_PAGES);
+        pagerAdapter = new CustomPageAdapter(this, getData);
         mPager.setAdapter(pagerAdapter);
 
         previous.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +62,14 @@ public class ArticleReadActivity extends AppCompatActivity {
                     mPager.setCurrentItem(mPager.getCurrentItem() + 1);
             }
         });
+    }
+
+    private List<Article> dataSource() {
+        List<Article> data = new ArrayList<Article>();
+        data.add(new Article(R.drawable.ic_my_article, getString(R.string.lorem_ipsum)));
+        data.add(new Article(R.drawable.ic_my_plan, getString(R.string.lorem_ipsum)));
+        data.add(new Article(R.drawable.ic_my_program, getString(R.string.lorem_ipsum)));
+        return data;
     }
 
     @Override

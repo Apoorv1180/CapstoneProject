@@ -66,7 +66,6 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main,container,false);
         // bind your data here.
-        initView(view);
         return view;
     }
 
@@ -74,7 +73,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        checkUserLoggedInStatus(view,savedInstanceState);
+        prepareActionData();
+        initView(view);
     }
 
     private void initView(View view) {
@@ -103,97 +103,5 @@ public class MainFragment extends Fragment {
         actionList.add(action);
     }
 
-    private void checkUserLoggedInStatus(View view, Bundle savedInstanceState) {
-        final CheckUserLoggedInViewModel viewModelLoggedInStatus =
-                ViewModelProviders.of(this)
-                        .get(CheckUserLoggedInViewModel.class);
-        observeViewModelLoggedInStatus(viewModelLoggedInStatus,view,savedInstanceState);
-    }
-
-    private void observeViewModelLoggedInStatus(CheckUserLoggedInViewModel viewModelLoggedInStatus, final View view, Bundle savedInstanceState) {
-
-        viewModelLoggedInStatus.isAlreadyLoggedInStatus().observe(this, new Observer<FirebaseUser>() {
-            @Override
-            public void onChanged(FirebaseUser result) {
-                if(result!=null) {
-                    if (result.getDisplayName() == null) {
-                        fetchInformationInProfileDialog(result,view);
-                    }
-                    else {
-                        prepareActionData();
-                        initView(view);
-                    }
-
-                }
-            }
-
-        });
-    }
-
-    private void fetchInformationInProfileDialog(final FirebaseUser result, final View view) {
-        // get prompts.xml view
-        final  EditText userName,userPhoneNumber;
-
-        LayoutInflater li = LayoutInflater.from(getActivity());
-        View promptsView = li.inflate(R.layout.custom_profile_input_dialog_box, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getActivity());
-
-        // set prompts.xml to alertdialog builder
-        alertDialogBuilder.setView(promptsView);
-        userName = (EditText) promptsView
-                .findViewById(R.id.editTextDialogUserInputName);
-        userPhoneNumber = (EditText) promptsView
-                .findViewById(R.id.editTextDialogUserPhoneNumber);
-
-        // set dialog message
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                // get user input and set it to result
-                                // edit text
-                                Util.checkUsername(userName.getText().toString().trim());
-                                Util.checkPhoneNumber(userPhoneNumber.getText().toString().trim());
-
-                                saveUserValues(result.getUid(),userName.getText().toString().trim(),userPhoneNumber.getText().toString().trim(),view);
-                            }
-
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                dialog.cancel();
-                            }
-                        });
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        // show it
-        alertDialog.show();
-    }
-
-    private void saveUserValues(String userId, String Uname, String Password, View view) {
-        final SaveUserViewModel viewModelSignIn =
-                ViewModelProviders.of(getActivity(), new SaveUserViewModelFactory(getActivity().getApplication(),userId, Uname, Password))
-                        .get(SaveUserViewModel.class);
-        observeViewModelSaveUserStatus(viewModelSignIn,view);
-    }
-
-    private void observeViewModelSaveUserStatus(SaveUserViewModel viewModelSaveUserStatus,  View view) {
-    viewModelSaveUserStatus.isSavedStatus().observe(getActivity(), new Observer<Boolean>() {
-        @Override
-        public void onChanged(Boolean result) {
-            if(result){
-                Log.e("USER","SAVED SUCCESSFULLY");
-
-            }
-            else
-                Log.e("USER","NOT SAVED ");
-        }
-    });
-        initView(view);
-    }
 
 }

@@ -1,21 +1,32 @@
 package com.example.capstoneproject.view.activity;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.capstoneproject.R;
+import com.example.capstoneproject.service.model.Action;
 import com.example.capstoneproject.util.Util;
+import com.example.capstoneproject.view.adapter.ActionAdapter;
 import com.example.capstoneproject.viewmodel.CheckUserLoggedInViewModel;
+import com.example.capstoneproject.viewmodel.SaveUserViewModel;
+import com.example.capstoneproject.viewmodel.SaveUserViewModelFactory;
 import com.example.capstoneproject.viewmodel.SignInListViewModel;
 import com.example.capstoneproject.viewmodel.SignInListViewModelFactory;
 import com.example.capstoneproject.viewmodel.SignUpListViewModel;
@@ -32,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String USER_UUID = "uuid";
     EditText etUsername;
     EditText etPassword;
+    CardView cardView;
     Button btSignUp;
     Button btLogin;
     String userName = "";
@@ -118,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onChanged(@Nullable FirebaseUser result) {
                 if (result != null) {
                     Log.e("USER", "USER LOGGED IN" + result.getEmail().toString());
-                    sendUserToWelcomeScreen(result);
+                    fetchInformationInProfileDialog(result);
                 } else {
                     Log.e("USER", "USER NOT LOGGED IN");
                     initView();
@@ -141,11 +153,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onChanged(@Nullable FirebaseUser result) {
                 if (result != null) {
                     Log.e("USER", "USER REGISTERED AND LOGGED IN" + result.getEmail().toString());
-                    sendUserToWelcomeScreen(result);
+                    fetchInformationInProfileDialog(result);
                 } else {
                     Log.e("USER", "USER NOT REGISTERED");
-                   // initView();
-                  //  setViewOnclickListerners();
                 }
             }
         });
@@ -156,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         btLogin = findViewById(R.id.bt_login);
         btSignUp = findViewById(R.id.bt_register);
+        cardView =findViewById(R.id.login_card);
     }
 
     private void sendUserToWelcomeScreen(FirebaseUser user) {
@@ -164,5 +175,79 @@ public class LoginActivity extends AppCompatActivity {
         newIntent.putExtra(USER_CREDENTIAL,user.getEmail());
         startActivity(newIntent);
         finish();
+    }
+
+    private void fetchInformationInProfileDialog(final FirebaseUser result) {
+        // get prompts.xml view
+        cardView.setVisibility(View.GONE);
+        final  EditText userName,userPhoneNumber;
+
+        LayoutInflater li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.custom_profile_input_dialog_box, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+        userName = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInputName);
+        userPhoneNumber = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserPhoneNumber);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // get user input and set it to result
+                                // edit text
+                                Util.checkUsername(userName.getText().toString().trim());
+                                Util.checkPhoneNumber(userPhoneNumber.getText().toString().trim());
+                                saveUserValues(result.getUid(),userName.getText().toString().trim(),userPhoneNumber.getText().toString().trim(),result,dialog);
+                            }
+
+                        });
+
+        // create alert dialog
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.white));
+            }
+        });
+
+
+        alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.cornered_card_layout));
+        // show it
+        alertDialog.show();
+    }
+    private void saveUserValues(String userId, String Uname, String Password, FirebaseUser result, DialogInterface dialog) {
+        final SaveUserViewModel viewModelSignIn =
+                ViewModelProviders.of(this, new SaveUserViewModelFactory(this.getApplication(),userId, Uname, Password))
+                        .get(SaveUserViewModel.class);
+        boolean status =observeViewModelSaveUserStatus(viewModelSignIn,dialog);
+        if(status){
+            sendUserToWelcomeScreen(result);
+        }
+    }
+
+    private boolean observeViewModelSaveUserStatus(SaveUserViewModel viewModelSaveUserStatus, final DialogInterface dialog) {
+        viewModelSaveUserStatus.isSavedStatus().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean result) {
+                if(result){
+                    Log.e("USER","SAVED SUCCESSFULLY");
+                    dialog.cancel();
+                }
+                else
+                    Log.e("USER","NOT SAVED ");
+                dialog.cancel();
+            }
+        });
+
+        return true;
     }
 }
