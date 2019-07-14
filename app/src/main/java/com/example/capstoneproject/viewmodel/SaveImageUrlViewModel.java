@@ -10,26 +10,24 @@ import com.example.capstoneproject.service.repository.DataRepository;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class UploadImageViewModel extends AndroidViewModel {
+public class SaveImageUrlViewModel extends AndroidViewModel {
 
     DataRepository dataRepository;
-    byte[] mFilePath;
-    FirebaseUser mUser;
-    String mChildPath;
+   String mChildPath;
+   Uri mFilePath;
 
-    public UploadImageViewModel(Application mApplication, byte[] mFilePath, FirebaseUser mUser,String childPath) {
+    public SaveImageUrlViewModel(Application mApplication, String mChildPath,Uri mFilePath) {
         super(mApplication);
         try {
-            this.mFilePath = mFilePath;
-            this.mUser = mUser;
-            this.mChildPath = childPath;
+            this.mChildPath = mChildPath;
             dataRepository = DataRepository.getInstance(mApplication);
+            this.mFilePath = mFilePath;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public LiveData<Boolean> isImageUploaded() {
-        return dataRepository.saveImage(mFilePath,mUser,mChildPath);
+    public LiveData<Uri> isImageUrlSaved() {
+        return dataRepository.saveImageUrl(mChildPath,mFilePath);
     }
 }

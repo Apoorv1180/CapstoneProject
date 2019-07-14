@@ -7,6 +7,8 @@ import android.text.TextUtils;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.UUID;
+
 public class Util {
 
     private static final String KEY_ROLE="Admin";
@@ -45,4 +47,7 @@ public class Util {
 
     }
 
+    public static String makePath() {
+        return "ARTICLE_IMAGES/"+ UUID.randomUUID().toString();
+    }
 }

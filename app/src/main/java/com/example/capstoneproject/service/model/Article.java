@@ -6,10 +6,19 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 // Created by apoorv on 12/7/19.
-public class Article implements Serializable, Parcelable {
+public class Article implements Serializable,Parcelable{
 
     int imageId;
+    String imageUrl;
     String articleDescription;
+
+    public Article() {
+    }
+
+    public Article(String imageUrl, String articleDescription) {
+        this.imageUrl = imageUrl;
+        this.articleDescription = articleDescription;
+    }
 
     public Article(int imageId, String articleDescription) {
         this.imageId = imageId;
@@ -18,6 +27,7 @@ public class Article implements Serializable, Parcelable {
 
     protected Article(Parcel in) {
         imageId = in.readInt();
+        imageUrl = in.readString();
         articleDescription = in.readString();
     }
 
@@ -32,6 +42,14 @@ public class Article implements Serializable, Parcelable {
             return new Article[size];
         }
     };
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public int getImageId() {
         return imageId;
@@ -49,6 +67,7 @@ public class Article implements Serializable, Parcelable {
         this.articleDescription = articleDescription;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -57,6 +76,7 @@ public class Article implements Serializable, Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(imageId);
+        parcel.writeString(imageUrl);
         parcel.writeString(articleDescription);
     }
 }

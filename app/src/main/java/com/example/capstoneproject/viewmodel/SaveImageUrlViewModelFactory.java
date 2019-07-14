@@ -8,23 +8,20 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseUser;
 
-public class UploadImageViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class SaveImageUrlViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private Application mApplication;
-    private byte[] mFilePath;
-    private FirebaseUser mUser;
     private String mChildPath;
+    private Uri mFilePath;
 
 
-
-    public UploadImageViewModelFactory(Application application, byte[] filePath, FirebaseUser result,String childPath) {
+    public SaveImageUrlViewModelFactory(Application application, String childPath,Uri filePath) {
         mApplication = application;
-        mFilePath = filePath;
-        mUser=result;
         mChildPath = childPath;
+        mFilePath = filePath;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new UploadImageViewModel(mApplication,mFilePath,mUser,mChildPath);
+        return (T) new SaveImageUrlViewModel(mApplication,mChildPath,mFilePath);
     }
 }

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,26 +38,29 @@ public class DataRepository {
     private DatabaseReference mDatabase;
     FirebaseStorage storage;
     StorageReference storageReference;
+    UploadTask uploadTask;
 
     public DataRepository(Application application) {
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
+        mDatabase.keepSynced(true);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         storageReference = storage.getReference();
     }
 
     public synchronized static DataRepository getInstance(Application application) {
         if (dataRepository == null) {
-                dataRepository = new DataRepository(application);
-                context = application.getApplicationContext();
+            dataRepository = new DataRepository(application);
+            context = application.getApplicationContext();
         }
         return dataRepository;
     }
 
     public LiveData<FirebaseUser> registerUser(String mUserName, String mPassword) {
-        final MutableLiveData<FirebaseUser> userValues  = new MutableLiveData<>();
+        final MutableLiveData<FirebaseUser> userValues = new MutableLiveData<>();
         auth.createUserWithEmailAndPassword(mUserName, mPassword)
-                .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // If sign in fails, display a message to the user. If sign in succeeds
@@ -65,11 +69,9 @@ public class DataRepository {
                         if (!task.isSuccessful()) {
                             userValues.setValue(null);
                         } else {
-                            if(auth.getCurrentUser()!=null)
-                            {
+                            if (auth.getCurrentUser() != null) {
                                 userValues.setValue(auth.getCurrentUser());
-                            }
-                            else
+                            } else
                                 userValues.setValue(null);
                         }
                     }
@@ -78,9 +80,9 @@ public class DataRepository {
     }
 
     public LiveData<FirebaseUser> signInUser(String mUserName, String mPassword) {
-        final MutableLiveData<FirebaseUser> userValuesSignIn  = new MutableLiveData<>();
+        final MutableLiveData<FirebaseUser> userValuesSignIn = new MutableLiveData<>();
         auth.signInWithEmailAndPassword(mUserName, mPassword)
-                .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // If sign in fails, display a message to the user. If sign in succeeds
@@ -89,11 +91,9 @@ public class DataRepository {
                         if (!task.isSuccessful()) {
                             userValuesSignIn.setValue(null);
                         } else {
-                            if(auth.getCurrentUser()!=null)
-                            {
+                            if (auth.getCurrentUser() != null) {
                                 userValuesSignIn.setValue(auth.getCurrentUser());
-                            }
-                            else
+                            } else
                                 userValuesSignIn.setValue(null);
                         }
                     }
@@ -101,72 +101,143 @@ public class DataRepository {
         return userValuesSignIn;
     }
 
-    public LiveData<FirebaseUser> checkIfUserIsLoggedIn(){
-        final MutableLiveData<FirebaseUser> userValues  = new MutableLiveData<>();
+    public LiveData<FirebaseUser> checkIfUserIsLoggedIn() {
+        final MutableLiveData<FirebaseUser> userValues = new MutableLiveData<>();
 
-        if(auth.getCurrentUser()!=null)
-        {
+        if (auth.getCurrentUser() != null) {
             userValues.setValue(auth.getCurrentUser());
-        }
-        else
+        } else
             userValues.setValue(null);
 
         return userValues;
     }
 
     public LiveData<Boolean> saveUser(String userId, String mUserName, String mPhoneNumber) {
-        final MutableLiveData<Boolean> status  = new MutableLiveData<>();
+        final MutableLiveData<Boolean> status = new MutableLiveData<>();
         String userIdChild = userId;
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS").child(userIdChild);
         Map newUser = new HashMap();
-        newUser.put("name",mUserName);
-        newUser.put("phone",mPhoneNumber);
+        newUser.put("name", mUserName);
+        newUser.put("phone", mPhoneNumber);
+        FirebaseUser user =  auth.getCurrentUser();
+
         mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                if(databaseError!=null){
+                if (databaseError != null) {
                     status.setValue(Boolean.FALSE);
-                }else
+                } else
                     status.setValue(Boolean.TRUE);
             }
         });
-    return  status;
+        return status;
     }
 
 
     public LiveData<Boolean> logout() {
-        final MutableLiveData<Boolean> status  = new MutableLiveData<>();
+        final MutableLiveData<Boolean> status = new MutableLiveData<>();
 
         auth.signOut();
 
         auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser()==null)
+                if (firebaseAuth.getCurrentUser() == null) {
                     status.setValue(Boolean.TRUE);
-                else
+//                    auth = null;
+//                    mDatabase = null;
+//                    storage = null;
+//                    storageReference = null;
+                } else {
                     status.setValue(Boolean.FALSE);
+//                    auth = null;
+//                    auth = null;
+//                    mDatabase = null;
+//                    storage = null;
+//                    storageReference = null;
+                }
             }
         });
 
         return status;
     }
+    //"ARTICLE_IMAGES/"+ UUID.randomUUID().toString()
 
-    public LiveData<Boolean> saveImage(Uri mFilePath, FirebaseUser mUser) {
-        final MutableLiveData<Boolean> status  = new MutableLiveData<>();
-        StorageReference ref = storageReference.child("ARTICLE_IMAGES/"+ UUID.randomUUID().toString());
-        ref.putFile(mFilePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+    public LiveData<Boolean> saveImage(byte[] byteData, FirebaseUser mUser, String childPath) {
+        final MutableLiveData<Boolean> status = new MutableLiveData<>();
+
+        uploadTask = storageReference.child(childPath).putBytes(byteData);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                status.setValue(Boolean.FALSE);
+
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                status.setValue(Boolean.TRUE);
+            }
+        });
+        return status;
+    }
+
+
+    public LiveData<Uri> saveImageUrl(String mChildPath, Uri filePath) {
+        final StorageReference ref = storageReference.child(mChildPath);
+        final MutableLiveData<Uri> uri = new MutableLiveData<>();
+
+        uploadTask = ref.putFile(filePath);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return ref.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    uri.setValue(downloadUri);
+                } else {
+                    // Handle failures
+                    // ...
+                    uri.setValue(null);
+                }
+            }
+        });
+
+//        uri.setValue(urlTask.getResult());
+        return uri;
+    }
+
+    public LiveData<Boolean> saveArticle(String mImageUrl, String mArticleDescripton) {
+        final MutableLiveData<Boolean>  status = new MutableLiveData<>();
+        String userIdChild = UUID.randomUUID().toString();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("ARTICLES").child(userIdChild);
+        Map newUser = new HashMap();
+        newUser.put("imageUrl", mImageUrl);
+        newUser.put("articleDescription", mArticleDescripton);
+        mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    status.setValue(Boolean.FALSE);
+                } else
                     status.setValue(Boolean.TRUE);
             }
-        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        status.setValue(Boolean.FALSE);
-                    }
-                });
+        });
         return status;
     }
 }

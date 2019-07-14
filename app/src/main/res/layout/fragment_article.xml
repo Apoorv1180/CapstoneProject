@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
     <LinearLayout
         android:id="@+id/layout_button"
@@ -35,7 +36,42 @@
 
     <ImageView
         android:id="@+id/imgView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="100dp"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center"
+        android:layout_height="100dp" />
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/articleDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Write your Article Here!!"
+        android:gravity="center"
+        android:textSize="14dp"
+        android:inputType="textMultiLine" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <Button
+        android:id="@+id/SaveArticle"
+        android:layout_weight="1"
+        android:layout_margin="@dimen/dimen5dp"
+        android:background="@color/colorAccent"
+        android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SAVE" />
+    <Button
+        android:layout_margin="@dimen/dimen5dp"
+        android:layout_weight="1"
+        android:id="@+id/RefreshPage"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:text="Reset" />
+    </LinearLayout>
+</LinearLayout>
