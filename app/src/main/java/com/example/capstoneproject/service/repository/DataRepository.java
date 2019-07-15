@@ -44,8 +44,10 @@ public class DataRepository {
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
-        mDatabase.keepSynced(true);
+
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+//        mDatabase.keepSynced(true);
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         storageReference = storage.getReference();
     }
 
@@ -117,6 +119,7 @@ public class DataRepository {
         String userIdChild = userId;
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS").child(userIdChild);
+        mDatabase.keepSynced(true);
         Map newUser = new HashMap();
         newUser.put("name", mUserName);
         newUser.put("phone", mPhoneNumber);

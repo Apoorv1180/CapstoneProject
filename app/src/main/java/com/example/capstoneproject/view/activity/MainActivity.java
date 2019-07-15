@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     private void openArticleReadActivity() {
         Intent newIntent = new Intent(this,ArticleReadActivity.class);
         startActivity(newIntent);
-        finish();
+       // finish();
     }
 
 
@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
                   loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                   loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                   startActivity(loginPageIntent);
+                  finish();
               }
             }
         });
