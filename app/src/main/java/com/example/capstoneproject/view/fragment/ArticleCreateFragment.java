@@ -34,7 +34,6 @@ import com.example.capstoneproject.viewmodel.SaveImageUrlViewModel;
 import com.example.capstoneproject.viewmodel.SaveImageUrlViewModelFactory;
 import com.example.capstoneproject.viewmodel.UploadImageViewModel;
 import com.example.capstoneproject.viewmodel.UploadImageViewModelFactory;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;

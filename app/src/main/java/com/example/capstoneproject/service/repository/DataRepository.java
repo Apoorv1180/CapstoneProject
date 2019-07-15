@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.capstoneproject.service.model.Article;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,15 +19,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,8 +51,8 @@ public class DataRepository {
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
-        mDatabase.keepSynced(true);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+//        mDatabase.keepSynced(true);
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         storageReference = storage.getReference();
     }
 
@@ -120,7 +127,7 @@ public class DataRepository {
         Map newUser = new HashMap();
         newUser.put("name", mUserName);
         newUser.put("phone", mPhoneNumber);
-        FirebaseUser user =  auth.getCurrentUser();
+        FirebaseUser user = auth.getCurrentUser();
 
         mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
             @Override
@@ -132,6 +139,31 @@ public class DataRepository {
             }
         });
         return status;
+    }
+
+    public LiveData<List<Article>> getArticles() {
+        final MutableLiveData<List<Article>> articleData = new MutableLiveData<>();
+        final List<Article> articleList =new ArrayList<>();
+
+        mDatabase=FirebaseDatabase.getInstance().getReference().child("ARTICLES");
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    Article article = postSnapshot.getValue(Article.class);
+                    articleList.add(article);
+                }
+                articleData.setValue(articleList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return articleData;
     }
 
 
@@ -222,7 +254,7 @@ public class DataRepository {
     }
 
     public LiveData<Boolean> saveArticle(String mImageUrl, String mArticleDescripton) {
-        final MutableLiveData<Boolean>  status = new MutableLiveData<>();
+        final MutableLiveData<Boolean> status = new MutableLiveData<>();
         String userIdChild = UUID.randomUUID().toString();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("ARTICLES").child(userIdChild);

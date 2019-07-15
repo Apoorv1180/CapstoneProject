@@ -11,6 +11,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Article;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class CustomPageAdapter extends PagerAdapter {
         View view = this.layoutInflater.inflate(R.layout.pager_list_item, container, false);
         ImageView displayImage = (ImageView) view.findViewById(R.id.large_image);
         TextView imageText = (TextView) view.findViewById(R.id.image_name);
-        displayImage.setImageResource(this.dataObjectList.get(position).getImageId());
+        Picasso.with(context).load(this.dataObjectList.get(position).getImageUrl()).into(displayImage);
         imageText.setText(this.dataObjectList.get(position).getArticleDescription());
         container.addView(view);
         return view;
