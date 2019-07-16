@@ -262,4 +262,29 @@ public class DataRepository {
         });
         return status;
     }
+
+    public LiveData<List<Article>> getArticles() {
+        final MutableLiveData<List<Article>> articleData = new MutableLiveData<>();
+        final List<Article> articleList =new ArrayList<>();
+
+        mDatabase=FirebaseDatabase.getInstance().getReference().child("ARTICLES");
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    Article article = postSnapshot.getValue(Article.class);
+                    articleList.add(article);
+                }
+                articleData.setValue(articleList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return articleData;
+    }
 }
