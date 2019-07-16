@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
         switch (actionItem.getActionName()) {
             case "My Plans":
                 break;
-            case "My Programs":
+            case "My Progress":
+                openProgressReadActivity();
                 break;
             case "Articles":
                 openArticleReadActivity();
@@ -89,10 +90,16 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
         }
     }
 
+    private void openProgressReadActivity() {
+        Intent newIntent = new Intent(this,ProgressReadActivity.class);
+        startActivity(newIntent);
+        finish();
+    }
+
     private void openArticleReadActivity() {
         Intent newIntent = new Intent(this,ArticleReadActivity.class);
         startActivity(newIntent);
-       // finish();
+        finish();
     }
 
 
@@ -135,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
                   loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                   loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                   startActivity(loginPageIntent);
-                  finish();
               }
             }
         });

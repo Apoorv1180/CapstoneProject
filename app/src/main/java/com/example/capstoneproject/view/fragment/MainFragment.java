@@ -103,7 +103,7 @@ public class MainFragment extends Fragment {
         Action action = new Action("My Plans", "Schedule and view My Plans", R.drawable.ic_my_plan);
         actionList.add(action);
 
-        action= new Action("My Programs", "View my enrollements", R.drawable.ic_my_program);
+        action= new Action("My Progress", "View my enrollements", R.drawable.ic_my_program);
         actionList.add(action);
 
         action = new Action("Articles", "Read and be fit", R.drawable.ic_my_article);
