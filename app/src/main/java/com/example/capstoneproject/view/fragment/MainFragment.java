@@ -20,6 +20,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -89,6 +91,11 @@ public class MainFragment extends Fragment {
                 sendMessages.sendAction(item);
             }
         }));
+        int resId = R.anim.list_fall_down;
+
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(
+                getContext(), resId);
+        recyclerView.setLayoutAnimation(animation);
 
     }
 

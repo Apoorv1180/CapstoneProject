@@ -51,7 +51,7 @@ public class DataRepository {
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
-//        mDatabase.keepSynced(true);
+        mDatabase.keepSynced(true);
 //        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         storageReference = storage.getReference();
     }
