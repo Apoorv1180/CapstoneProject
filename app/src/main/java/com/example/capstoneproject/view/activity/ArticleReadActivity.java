@@ -1,8 +1,6 @@
 package com.example.capstoneproject.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -15,7 +13,6 @@ import com.example.capstoneproject.service.model.Article;
 import com.example.capstoneproject.util.ZoomOutPageTransformer;
 import com.example.capstoneproject.view.adapter.CustomPageAdapter;
 import com.example.capstoneproject.view.adapter.ScreenSlidePagerAdapter;
-import com.example.capstoneproject.viewmodel.GetArticleListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,18 +33,19 @@ public class ArticleReadActivity extends AppCompatActivity {
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter pagerAdapter;
-    Button next, previous;
-
+    Button next,previous;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_read);
         next = findViewById(R.id.next);
-        previous = findViewById(R.id.previous);
+        previous=findViewById(R.id.previous);
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
-
-        getArticleList();
+        List<Article> getData = dataSource();
+        mPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        pagerAdapter = new CustomPageAdapter(this, getData);
+        mPager.setAdapter(pagerAdapter);
 
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +64,14 @@ public class ArticleReadActivity extends AppCompatActivity {
         });
     }
 
+    private List<Article> dataSource() {
+        List<Article> data = new ArrayList<Article>();
+        data.add(new Article(R.drawable.ic_my_article, getString(R.string.lorem_ipsum)));
+        data.add(new Article(R.drawable.ic_my_plan, getString(R.string.lorem_ipsum)));
+        data.add(new Article(R.drawable.ic_my_program, getString(R.string.lorem_ipsum)));
+        return data;
+    }
+
     @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
@@ -76,25 +82,5 @@ public class ArticleReadActivity extends AppCompatActivity {
             // Otherwise, select the previous step.
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
-    }
-
-    private void getArticleList() {
-        final GetArticleListViewModel myModel =
-                ViewModelProviders.of(this)
-                        .get(GetArticleListViewModel.class);
-        ObserveGetArticleListViewModel(myModel);
-    }
-
-    private void ObserveGetArticleListViewModel(GetArticleListViewModel getArticleListViewModel) {
-        getArticleListViewModel.getArticleList().observe(this, new Observer<List<Article>>() {
-            @Override
-            public void onChanged(List<Article> articles) {
-                if (!articles.isEmpty()) {
-                    mPager.setPageTransformer(true, new ZoomOutPageTransformer());
-                    pagerAdapter = new CustomPageAdapter(ArticleReadActivity.this, articles);
-                    mPager.setAdapter(pagerAdapter);
-                }
-            }
-        });
     }
 }
