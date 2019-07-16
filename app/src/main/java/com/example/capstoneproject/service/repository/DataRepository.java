@@ -19,7 +19,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +49,7 @@ public class DataRepository {
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
-//        mDatabase.keepSynced(true);
+        mDatabase.keepSynced(true);
 //        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         storageReference = storage.getReference();
     }
@@ -124,11 +122,10 @@ public class DataRepository {
         String userIdChild = userId;
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS").child(userIdChild);
-        mDatabase.keepSynced(true);
         Map newUser = new HashMap();
         newUser.put("name", mUserName);
         newUser.put("phone", mPhoneNumber);
-        FirebaseUser user = auth.getCurrentUser();
+        FirebaseUser user =  auth.getCurrentUser();
 
         mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
             @Override
@@ -230,7 +227,7 @@ public class DataRepository {
     }
 
     public LiveData<Boolean> saveArticle(String mImageUrl, String mArticleDescripton) {
-        final MutableLiveData<Boolean> status = new MutableLiveData<>();
+        final MutableLiveData<Boolean>  status = new MutableLiveData<>();
         String userIdChild = UUID.randomUUID().toString();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("ARTICLES").child(userIdChild);

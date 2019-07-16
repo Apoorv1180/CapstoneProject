@@ -1,7 +1,9 @@
 package com.example.capstoneproject.view.activity;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -11,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Action;
@@ -28,14 +31,32 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     private static final String ARTICLE_FRAG_CREATE = "TAG_ARTICLE_CREATE_FRAG";
     String credential;
 
+    Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //overridePendingTransition(R.anim.blink,R.anim.fade_in_activity);
         setContentView(R.layout.activity_main2);
+
         if (getIntent() != null) {
             credential = getIntent().getStringExtra(USER_CREDENTIAL);
         }
         openMainFragment();
+        setSupportActionBar(mToolbar);
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(true);
+        }
+
 
     }
 
@@ -78,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     private void openArticleReadActivity() {
         Intent newIntent = new Intent(this,ArticleReadActivity.class);
         startActivity(newIntent);
-       // finish();
+        finish();
     }
 
 
@@ -96,10 +117,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
             case R.id.logout:
                 logout();
                 return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     private void logout() {
         final LogoutViewModel viewModelLogout =
@@ -117,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
                   loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                   loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                   startActivity(loginPageIntent);
-                  finish();
               }
             }
         });

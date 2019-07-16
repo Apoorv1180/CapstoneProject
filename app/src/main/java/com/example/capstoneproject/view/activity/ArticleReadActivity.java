@@ -1,12 +1,16 @@
 package com.example.capstoneproject.view.activity;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -24,6 +28,7 @@ public class ArticleReadActivity extends AppCompatActivity {
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
+    Toolbar mToolbar;
     private static final int NUM_PAGES = 5;
 
     /**
@@ -41,6 +46,7 @@ public class ArticleReadActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // overridePendingTransition(R.anim.blink,R.anim.fade_in_activity);
         setContentView(R.layout.activity_article_read);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
@@ -64,6 +70,22 @@ public class ArticleReadActivity extends AppCompatActivity {
                     mPager.setCurrentItem(mPager.getCurrentItem() + 1);
             }
         });
+        setSupportActionBar(mToolbar);
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(true);
+        }
+
+
     }
 
     @Override
@@ -97,4 +119,18 @@ public class ArticleReadActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

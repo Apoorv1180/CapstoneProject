@@ -34,6 +34,7 @@ import com.example.capstoneproject.viewmodel.SaveImageUrlViewModel;
 import com.example.capstoneproject.viewmodel.SaveImageUrlViewModelFactory;
 import com.example.capstoneproject.viewmodel.UploadImageViewModel;
 import com.example.capstoneproject.viewmodel.UploadImageViewModelFactory;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;
@@ -55,7 +56,7 @@ public class ArticleCreateFragment extends Fragment {
      ProgressDialog progressDialog;
      CoordinatorLayout coordinatorLayout;
      private String mChildPath;
-     private Article article;
+     private Article article = new Article();
 
     private final int PICK_IMAGE_REQUEST = 71;
 
@@ -70,20 +71,19 @@ public class ArticleCreateFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_article, container, false);
         initView(view);
-        article= new Article();
         return view;
     }
 
     private void initView(View view) {
-       // btnChoose = (Button) view.findViewById(R.id.btnChoose);
+        btnChoose = (Button) view.findViewById(R.id.btnChoose);
         btnUpload = (Button) view.findViewById(R.id.btnUpload);
         btnSaveArticle=(Button)view.findViewById(R.id.SaveArticle);
         btnReset=(Button)view.findViewById(R.id.RefreshPage);
         imageView = (ImageView) view.findViewById(R.id.imgView);
         articleDesc=(EditText)view.findViewById(R.id.articleDescription);
         articleDesc.setEnabled(false);
-//        btnSaveArticle.setEnabled(false);
-//        btnReset.setEnabled(false);
+        btnSaveArticle.setEnabled(false);
+        btnReset.setEnabled(false);
 
      //   coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id
        //         .coordinatorLayout);
@@ -97,7 +97,7 @@ public class ArticleCreateFragment extends Fragment {
     }
 
     private void initListeners() {
-        imageView.setOnClickListener(new View.OnClickListener() {
+        btnChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chooseImage();
@@ -120,11 +120,6 @@ public class ArticleCreateFragment extends Fragment {
         btnSaveArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String desc = articleDesc.getText().toString();
-                if(!TextUtils.isEmpty(desc))
-                    article.setArticleDescription(desc);
-
-
                 if(!TextUtils.isEmpty(articleDesc.getText()))
                 saveArticleInDatabase(article);
             }
@@ -144,11 +139,6 @@ public class ArticleCreateFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             filePath = data.getData();
-            articleDesc.setEnabled(true);
-            articleDesc.requestFocus();
-            btnUpload.setVisibility(View.VISIBLE);
-            btnSaveArticle.setVisibility(View.GONE);
-            btnReset.setVisibility(View.GONE);
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
                 imageView.setImageBitmap(bitmap);
@@ -241,12 +231,9 @@ public class ArticleCreateFragment extends Fragment {
                 Log.e("USER","add more"+result.toString());
                 progressDialog.dismiss();
                 progressDialog.cancel();
-                btnSaveArticle.setVisibility(View.VISIBLE);
-                btnReset.setVisibility(View.VISIBLE);
-                btnUpload.setVisibility(View.GONE);
-                btnSaveArticle.setEnabled(true);
+                articleDesc.setEnabled(true);
                 btnReset.setEnabled(true);
-                article.setImageUrl(result.toString());
+                createAnArticleObject(result);
 
             }
             else
@@ -258,11 +245,11 @@ public class ArticleCreateFragment extends Fragment {
 
     private void createAnArticleObject(Uri result) {
 
-//        String desc = articleDesc.getText().toString();
-//        if(!TextUtils.isEmpty(desc))
-//            article.setArticleDescription(desc);
-//            article.setImageUrl(result.toString());
-//            btnSaveArticle.setEnabled(true);
+        String desc = articleDesc.getText().toString();
+        if(!TextUtils.isEmpty(desc))
+            article.setArticleDescription(desc);
+            article.setImageUrl(result.toString());
+            btnSaveArticle.setEnabled(true);
 
     }
 

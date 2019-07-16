@@ -5,12 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="@drawable/gradient_background"
-    tools:context=".view.fragment.MainFragment">
+    tools:context=".view.fragment.MainFragment"
+    android:focusable="true">
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/actions_recyclerview"/>
+        android:id="@+id/actions_recyclerview"
+        android:descendantFocusability="afterDescendants"/>
 
 </LinearLayout>

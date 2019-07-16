@@ -13,8 +13,6 @@
     <color name="orange400">#ff7043</color>
     <color name="red700">#d32f2f</color>
     <color name="redA700">#d50000</color>
-    <color name="border">#d78585</color>
-    <color name="strok">#c48f8f</color>
 
     <color name="black">#000000</color>
 </resources>
