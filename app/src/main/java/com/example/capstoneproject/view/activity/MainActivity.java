@@ -60,12 +60,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
         switch (actionItem.getActionName()) {
             case "My Plans":
                 break;
-            case "My Programs":
+            case "My Progress":
+                openProgressReadActivity();
                 break;
             case "Articles":
                 openArticleReadActivity();
                 break;
         }
+    }
+
+    private void openProgressReadActivity() {
+        Intent newIntent = new Intent(this,ProgressReadActivity.class);
+        startActivity(newIntent);
+        finish();
     }
 
     private void openArticleReadActivity() {

@@ -249,6 +249,28 @@ public class DataRepository {
         return status;
     }
 
+    public LiveData<Boolean> saveUserProgress(String mWeight,String selectedDate) {
+        final MutableLiveData<Boolean>  status = new MutableLiveData<>();
+        String userIdChild="";
+        if(auth.getCurrentUser()!=null) {
+             userIdChild = auth.getCurrentUser().getUid();
+        }
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(selectedDate).child(userIdChild);
+        Map newUser = new HashMap();
+        newUser.put("weight", mWeight);
+
+        mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    status.setValue(Boolean.FALSE);
+                } else
+                    status.setValue(Boolean.TRUE);
+            }
+        });
+        return status;
+    }
+
     public LiveData<List<Article>> getArticles() {
         final MutableLiveData<List<Article>> articleData = new MutableLiveData<>();
         final List<Article> articleList =new ArrayList<>();
