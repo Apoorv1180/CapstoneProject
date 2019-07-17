@@ -33,6 +33,7 @@ public class ProgressReadActivity extends AppCompatActivity {
     CardView cardView;
     final MutableLiveData<Boolean> returnEvent = new MutableLiveData<>();
     AlertDialog alertDialog;
+    String selectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +64,9 @@ public class ProgressReadActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         String weight = editWeight.getText().toString();
-
+                        selectedDate=eventDay.getCalendar().getTime().toString();
                         if (!TextUtils.isEmpty(weight)) {
-                            saveWeightDetails(weight, eventDay.getCalendar().getTime().toString(), eventDay);
+                            saveWeightDetails(weight, eventDay);
                         }
                     }
                 });
@@ -74,9 +75,9 @@ public class ProgressReadActivity extends AppCompatActivity {
 
     }
 
-    private void saveWeightDetails(String weight, String selectedDateStr, EventDay eventDay) {
+    private void saveWeightDetails(String weight, EventDay eventDay) {
         final SaveUserProgressViewModel viewModel =
-                ViewModelProviders.of(this, new SaveUserProgressViewModelFactory(this.getApplication(), weight, selectedDateStr))
+                ViewModelProviders.of(this, new SaveUserProgressViewModelFactory(this.getApplication(), weight, selectedDate))
                         .get(SaveUserProgressViewModel.class);
         observeViewModelSaveUserProgressStatus(viewModel, eventDay);
     }
