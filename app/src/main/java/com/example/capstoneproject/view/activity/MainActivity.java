@@ -20,6 +20,7 @@ import com.example.capstoneproject.service.model.Action;
 import com.example.capstoneproject.view.fragment.AdminDashboardFragment;
 import com.example.capstoneproject.view.fragment.ArticleCreateFragment;
 import com.example.capstoneproject.view.fragment.MainFragment;
+import com.example.capstoneproject.view.fragment.PlanCreation;
 import com.example.capstoneproject.viewmodel.LogoutViewModel;
 
 import static com.example.capstoneproject.view.activity.LoginActivity.USER_CREDENTIAL;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     private static final String MAIN_FRAG = "TAG_MAIN_FRAG";
     private static final String ARTICLE_FRAG = "TAG_ARTICLE_FRAG";
     private static final String ARTICLE_FRAG_CREATE = "TAG_ARTICLE_CREATE_FRAG";
+    private static final String PLAN_FRAG_CREATE = "TAG_PLAN_CREATE_FRAG";
     String credential;
 
     Toolbar mToolbar;
@@ -152,6 +154,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
 
         switch (actionItem){
             case 0:
+                FragmentManager frm = getSupportFragmentManager();
+                FragmentTransaction frt = frm.beginTransaction();
+                frt.replace(R.id.fragment_container, new PlanCreation());
+                frt.addToBackStack(PLAN_FRAG_CREATE);
+                frt.commit();
                 break;
             case 1:
                 break;
@@ -164,4 +171,5 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
                 break;
             }
     }
+
 }

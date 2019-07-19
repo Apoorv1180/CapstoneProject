@@ -12,14 +12,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/actions_recyclerview"
-        android:descendantFocusability="afterDescendants"/>
-
-    <View
-        android:id="@+id/dummy"
-        android:layout_width="1dp"
-        android:layout_height="1dp"
-        android:focusable="true"
-        />
+        android:id="@+id/plancreation_user_recyclerview" />
 
 </LinearLayout>

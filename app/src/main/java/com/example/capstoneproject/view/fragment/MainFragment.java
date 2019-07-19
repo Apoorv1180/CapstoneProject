@@ -91,6 +91,7 @@ public class MainFragment extends Fragment {
                 sendMessages.sendAction(item);
             }
         }));
+        //recyclerView.setItemsCanFocus(true);
         int resId = R.anim.list_fall_down;
 
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(

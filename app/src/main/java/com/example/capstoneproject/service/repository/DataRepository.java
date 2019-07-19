@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.capstoneproject.service.model.Article;
+import com.example.capstoneproject.service.model.UserDetail;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -291,5 +292,30 @@ public class DataRepository {
         });
 
         return articleData;
+    }
+
+    public LiveData<List<UserDetail>> getUserRecord() {
+        final MutableLiveData<List<UserDetail>> userData = new MutableLiveData<>();
+        final List<UserDetail> userList =new ArrayList<>();
+
+        mDatabase=FirebaseDatabase.getInstance().getReference().child("USERS");
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    UserDetail userDetail = postSnapshot.getValue(UserDetail.class);
+                    userList.add(userDetail);
+                }
+                userData.setValue(userList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return userData;
     }
 }
