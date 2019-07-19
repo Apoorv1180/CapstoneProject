@@ -13,15 +13,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name=".NewAppWidget">
+        <receiver android:name=".OurWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="APPWIDGET_ONCLICK_UPDATE" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="APPWIDGET_REGULAR_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/new_app_widget_info" />
         </receiver>
+
+        <service android:name=".OurWidget$UpdateWidgetService"/>
 
         <activity android:name=".view.activity.ProgressReadActivity" />
         <activity android:name=".view.activity.ArticleReadActivity" />

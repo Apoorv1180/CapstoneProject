@@ -4,6 +4,7 @@ package com.example.capstoneproject.service.repository;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +12,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.capstoneproject.service.model.Article;
+import com.example.capstoneproject.service.model.UserProgress;
 import com.example.capstoneproject.service.model.UserDetail;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -126,7 +128,7 @@ public class DataRepository {
         Map newUser = new HashMap();
         newUser.put("name", mUserName);
         newUser.put("phone", mPhoneNumber);
-        FirebaseUser user =  auth.getCurrentUser();
+        FirebaseUser user = auth.getCurrentUser();
 
         mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
             @Override
@@ -228,7 +230,7 @@ public class DataRepository {
     }
 
     public LiveData<Boolean> saveArticle(String mImageUrl, String mArticleDescripton) {
-        final MutableLiveData<Boolean>  status = new MutableLiveData<>();
+        final MutableLiveData<Boolean> status = new MutableLiveData<>();
         String userIdChild = UUID.randomUUID().toString();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("ARTICLES").child(userIdChild);
@@ -247,38 +249,110 @@ public class DataRepository {
         return status;
     }
 
-    public LiveData<Boolean> saveUserProgress(String mWeight,String selectedDate) {
-        final MutableLiveData<Boolean>  status = new MutableLiveData<>();
-        String userIdChild="";
-        if(auth.getCurrentUser()!=null) {
-             userIdChild = auth.getCurrentUser().getUid();
+    public LiveData<Boolean> saveUserProgress(String mWeight, String selectedDate) {
+        final MutableLiveData<Boolean> status = new MutableLiveData<>();
+        String userIdChild = "";
+        if (auth.getCurrentUser() != null) {
+            userIdChild = auth.getCurrentUser().getUid();
         }
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(selectedDate).child(userIdChild);
-        Map newUser = new HashMap();
-        newUser.put("weight", mWeight);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS");
 
-        mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
+//        Map newUser = new HashMap();
+//        newUser.put(selectedDate, mWeight);
+
+        String finalUserIdChild = userIdChild;
+
+//        Map newUser = new HashMap();
+//        newUser.put("weight", mWeight);
+//        newUser.put("selectedDate",selectedDate);
+//        Map mapData = new HashMap();
+//        mapData.put(finalUserIdChild,newUser);
+//        mDatabase.push().updateChildren(newUser, new DatabaseReference.CompletionListener() {
+//            @Override
+//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                if (databaseError != null) {
+//                    status.setValue(Boolean.FALSE);
+//                } else
+//                    status.setValue(Boolean.TRUE);
+//            }
+//        });
+
+//        Map newUser = new HashMap();
+//        newUser.put("weight", mWeight);
+//        newUser.put("selectedDate",selectedDate);
+//        Map mapData = new HashMap();
+//        mapData.put(finalUserIdChild,newUser);
+//        mDatabase.updateChildren(mapData, new DatabaseReference.CompletionListener() {
+//            @Override
+//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                if (databaseError != null) {
+//                    status.setValue(Boolean.FALSE);
+//                } else
+//                    status.setValue(Boolean.TRUE);
+//            }
+//        });
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                if (databaseError != null) {
-                    status.setValue(Boolean.FALSE);
-                } else
-                    status.setValue(Boolean.TRUE);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+                        if (data.child(finalUserIdChild).exists()) {
+
+                            /*Map newUser = new HashMap();
+                            newUser.put("weight", mWeight);
+                            newUser.put("selectedDate",selectedDate);
+                            Map mapData = new HashMap();
+                            mapData.put(finalUserIdChild,newUser);
+                            mDatabase.child(finalUserIdChild).push().updateChildren(mapData, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                    if (databaseError != null) {
+                                        status.setValue(Boolean.FALSE);
+                                    } else
+                                        status.setValue(Boolean.TRUE);
+                                }
+                            });*/
+                            Toast.makeText(context, "exists", Toast.LENGTH_SHORT).show();
+                            status.setValue(Boolean.FALSE);
+                        }
+                        else
+                        {
+                            UserProgress userProgress = new UserProgress(finalUserIdChild,mWeight,selectedDate);
+                            mDatabase.push().setValue(userProgress);
+                            status.setValue(Boolean.TRUE);
+                        }
+
+
+                    }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
+//        mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
+//            @Override
+//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                if (databaseError != null) {
+//                    status.setValue(Boolean.FALSE);
+//                } else
+//                    status.setValue(Boolean.TRUE);
+//            }
+//        });
         return status;
     }
 
     public LiveData<List<Article>> getArticles() {
         final MutableLiveData<List<Article>> articleData = new MutableLiveData<>();
-        final List<Article> articleList =new ArrayList<>();
+        final List<Article> articleList = new ArrayList<>();
 
-        mDatabase=FirebaseDatabase.getInstance().getReference().child("ARTICLES");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("ARTICLES");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Article article = postSnapshot.getValue(Article.class);
                     articleList.add(article);
                 }
