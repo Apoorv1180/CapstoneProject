@@ -23,8 +23,11 @@ import com.example.capstoneproject.R;
 import com.example.capstoneproject.viewmodel.SaveUserProgressViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserProgressViewModelFactory;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ProgressReadActivity extends AppCompatActivity {
@@ -42,6 +45,33 @@ public class ProgressReadActivity extends AppCompatActivity {
         calendarView = findViewById(R.id.calendarView);
         cardView = findViewById(R.id.infoCardView);
 
+
+    }
+
+    private void saveWeightDetails(String weight, EventDay eventDay) {
+        final SaveUserProgressViewModel viewModel =
+                ViewModelProviders.of(this, new SaveUserProgressViewModelFactory(this.getApplication(), weight, convertDate(eventDay.getCalendar().getTime())))
+                        .get(SaveUserProgressViewModel.class);
+        observeViewModelSaveUserProgressStatus(viewModel, eventDay);
+    }
+
+    private void observeViewModelSaveUserProgressStatus(SaveUserProgressViewModel viewModel, EventDay eventDay) {
+
+        viewModel.isSavedProgressStatus().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    createEvent(eventDay);
+                }
+            }
+        });
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
@@ -49,7 +79,7 @@ public class ProgressReadActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ProgressReadActivity.this)
                         .setMessage("Please enter your calculated weight");
 
-                final View dialogView = getLayoutInflater().inflate(R.layout.dialog_weight, null);
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_weight, null);
                 builder.setView(dialogView).create();
 
                 alertDialog = builder.show();
@@ -75,33 +105,18 @@ public class ProgressReadActivity extends AppCompatActivity {
 
     }
 
-    private void saveWeightDetails(String weight, EventDay eventDay) {
-        final SaveUserProgressViewModel viewModel =
-                ViewModelProviders.of(this, new SaveUserProgressViewModelFactory(this.getApplication(), weight, selectedDate))
-                        .get(SaveUserProgressViewModel.class);
-        observeViewModelSaveUserProgressStatus(viewModel, eventDay);
-    }
-
-    private void observeViewModelSaveUserProgressStatus(SaveUserProgressViewModel viewModel, EventDay eventDay) {
-
-        viewModel.isSavedProgressStatus().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    createEvent(eventDay);
-                }
-            }
-        });
-
-
-    }
-
     private void createEvent(EventDay eventDay) {
         List<EventDay> events = new ArrayList<>();
         events.add(new EventDay(eventDay.getCalendar(), R.drawable.circle_indicator));
         calendarView.setEvents(events);
         alertDialog.dismiss();
         alertDialog.cancel();
+    }
+
+    private String convertDate(Date date){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd ");
+        String strDate = dateFormat.format(date);
+        return strDate;
     }
 }
 
