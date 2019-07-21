@@ -68,25 +68,20 @@ public class OurWidget extends AppWidgetProvider {
         if (pendingIntent == null) {
             pendingIntent = PendingIntent.getService(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
         }
-        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 60000, pendingIntent);
+        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 600000, pendingIntent);
 
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        super.onReceive(context, intent);
+
 
         if (SYNC_CLICKED.equals(intent.getAction())) {
 
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            RemoteViews remoteViews;
-            ComponentName watchWidget;
-            remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-            watchWidget = new ComponentName(context, OurWidget.class);
-            remoteViews.setTextViewText(R.id.id_value, "TESTING");
-            appWidgetManager.updateAppWidget(watchWidget, remoteViews);
-
+            Intent intentOne = new Intent(context,ProgressReadActivity.class);
+            intentOne.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intentOne);
         }
     }
 
@@ -116,11 +111,6 @@ public class OurWidget extends AppWidgetProvider {
             }
         }
 
-        /**
-         * For the random passcode app widget with the provided ID, updates its
-         * display with a new passcode, and registers click handling for its
-         * buttons.
-         */
         private void updateOneAppWidget(AppWidgetManager appWidgetManager,
                                         int appWidgetId) {
             RemoteViews views = new RemoteViews(this.getPackageName(),
@@ -142,46 +132,13 @@ public class OurWidget extends AppWidgetProvider {
                             views.setTextViewText(R.id.id_value, articleList.get(0).getArticleDescription());
                            appWidgetManager.updateAppWidget(appWidgetId,views);
                         }
-                     //   appWidgetManager.updateAppWidget(appWidgetId, views);//4. Update the App Widget to reflect the changes
-
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                            Log.e("Error",databaseError.getMessage());
                     }
                 });
             }
-        private void getValuesFromDataBase(UpdateWidgetService updateService) {
-            Log.e("VALUES","YOYOYOYOYOYO");
-            MutableLiveData<String> data= new MutableLiveData<>();
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("ARTICLES");
-
-            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Article article = postSnapshot.getValue(Article.class);
-                        articleList.add(article);
-                    }
-                    if (!articleList.isEmpty())
-                    {
-                        data.setValue( articleList.get(0).getArticleDescription());
-                        Log.e("VALUES","LOLOLOLO");
-
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    data.setValue("NA");
-                }
-            });
-            Log.e("VALUES",data.getValue());
-        }
-
     }
 }

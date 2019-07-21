@@ -4,7 +4,7 @@ package com.example.capstoneproject.service.repository;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
-import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +12,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.capstoneproject.service.model.Article;
-import com.example.capstoneproject.service.model.UserProgress;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,7 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -248,98 +246,32 @@ public class DataRepository {
         return status;
     }
 
-    public LiveData<Boolean> saveUserProgress(String mWeight, String selectedDate) {
-        final MutableLiveData<Boolean> status = new MutableLiveData<>();
+    public void saveUserProgress(String mWeight, String selectedDate) {
+        final MutableLiveData<Boolean> Bstatus = new MutableLiveData<>();
         String userIdChild = "";
         if (auth.getCurrentUser() != null) {
             userIdChild = auth.getCurrentUser().getUid();
         }
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild).child(selectedDate);
 
-//        Map newUser = new HashMap();
-//        newUser.put(selectedDate, mWeight);
-
-        String finalUserIdChild = userIdChild;
-
-//        Map newUser = new HashMap();
-//        newUser.put("weight", mWeight);
-//        newUser.put("selectedDate",selectedDate);
-//        Map mapData = new HashMap();
-//        mapData.put(finalUserIdChild,newUser);
-//        mDatabase.push().updateChildren(newUser, new DatabaseReference.CompletionListener() {
-//            @Override
-//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-//                if (databaseError != null) {
-//                    status.setValue(Boolean.FALSE);
-//                } else
-//                    status.setValue(Boolean.TRUE);
-//            }
-//        });
-
-//        Map newUser = new HashMap();
-//        newUser.put("weight", mWeight);
-//        newUser.put("selectedDate",selectedDate);
-//        Map mapData = new HashMap();
-//        mapData.put(finalUserIdChild,newUser);
-//        mDatabase.updateChildren(mapData, new DatabaseReference.CompletionListener() {
-//            @Override
-//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-//                if (databaseError != null) {
-//                    status.setValue(Boolean.FALSE);
-//                } else
-//                    status.setValue(Boolean.TRUE);
-//            }
-//        });
-
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        Map newUser = new HashMap();
+        newUser.put("weight", mWeight);
+        mDatabase.updateChildren(newUser, new DatabaseReference.CompletionListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        if (data.child(finalUserIdChild).exists()) {
-
-                            /*Map newUser = new HashMap();
-                            newUser.put("weight", mWeight);
-                            newUser.put("selectedDate",selectedDate);
-                            Map mapData = new HashMap();
-                            mapData.put(finalUserIdChild,newUser);
-                            mDatabase.child(finalUserIdChild).push().updateChildren(mapData, new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                    if (databaseError != null) {
-                                        status.setValue(Boolean.FALSE);
-                                    } else
-                                        status.setValue(Boolean.TRUE);
-                                }
-                            });*/
-                            Toast.makeText(context, "exists", Toast.LENGTH_SHORT).show();
-                            status.setValue(Boolean.FALSE);
-                        }
-                        else
-                        {
-                            UserProgress userProgress = new UserProgress(finalUserIdChild,mWeight,selectedDate);
-                            mDatabase.push().setValue(userProgress);
-                            status.setValue(Boolean.TRUE);
-                        }
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Log.e("DATABASE","Data could not be saved " + databaseError.getMessage());
+                    Bstatus.setValue(Boolean.FALSE);
 
 
-                    }
-            }
+                } else {
+                    Log.e("DATABASE","Data saved successfully.");
+                    Bstatus.setValue(Boolean.TRUE);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                }
             }
         });
-//        mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
-//            @Override
-//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-//                if (databaseError != null) {
-//                    status.setValue(Boolean.FALSE);
-//                } else
-//                    status.setValue(Boolean.TRUE);
-//            }
-//        });
-        return status;
+     //   return Bstatus;
     }
 
     public LiveData<List<Article>> getArticles() {

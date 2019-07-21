@@ -1,13 +1,16 @@
 package com.example.capstoneproject.view.activity;
 
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,112 +18,227 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
-import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.capstoneproject.R;
+import com.example.capstoneproject.service.model.DateCellView;
+import com.example.capstoneproject.service.repository.DataRepository;
 import com.example.capstoneproject.viewmodel.SaveUserProgressViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserProgressViewModelFactory;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import sun.bob.mcalendarview.CellConfig;
+import sun.bob.mcalendarview.MCalendarView;
+import sun.bob.mcalendarview.MarkStyle;
+import sun.bob.mcalendarview.listeners.OnDateClickListener;
+import sun.bob.mcalendarview.listeners.OnExpDateClickListener;
+import sun.bob.mcalendarview.listeners.OnMonthScrollListener;
+import sun.bob.mcalendarview.views.ExpCalendarView;
+import sun.bob.mcalendarview.vo.DateData;
+import sun.bob.mcalendarview.vo.DayData;
+
 
 public class ProgressReadActivity extends AppCompatActivity {
 
-    CalendarView calendarView;
-    CardView cardView;
-    final MutableLiveData<Boolean> returnEvent = new MutableLiveData<>();
-    AlertDialog alertDialog;
-    String selectedDate;
+    private TextView YearMonthTv;
+    private ExpCalendarView expCalendarView;
+    private DateData selectedDate;
+    private AlertDialog alertDialog;
+    private boolean ifExpand = true;
+    private AlertDialog.Builder builder;
+
+    private static DataRepository dataRepository;
+    private static Context context;
+    private FirebaseAuth auth;
+    private DatabaseReference mDatabase;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress_read);
-        calendarView = findViewById(R.id.calendarView);
-        cardView = findViewById(R.id.infoCardView);
+
+        initViews();
+        imageInit();
+        initDatabase();
+        setAlreadyMarkedDates();
+        setUpListeners();
 
 
+
+        Calendar calendar = Calendar.getInstance();
+        selectedDate = new DateData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+        expCalendarView.unMarkDate(selectedDate);
     }
 
-    private void saveWeightDetails(String weight, EventDay eventDay) {
-        final SaveUserProgressViewModel viewModel =
-                ViewModelProviders.of(this, new SaveUserProgressViewModelFactory(this.getApplication(), weight, convertDate(eventDay.getCalendar().getTime())))
-                        .get(SaveUserProgressViewModel.class);
-        observeViewModelSaveUserProgressStatus(viewModel, eventDay);
+    private void initDatabase() {
+        auth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.keepSynced(true);
     }
 
-    private void observeViewModelSaveUserProgressStatus(SaveUserProgressViewModel viewModel, EventDay eventDay) {
+    private void setAlreadyMarkedDates() {
+        //Fetch details from database of dates for particular user and display
+        int year;
+        int month;
+        int day;
 
-        viewModel.isSavedProgressStatus().observe(this, new Observer<Boolean>() {
+        final MutableLiveData<List<String>> articleData = new MutableLiveData<>();
+        final List<DateData> articleList = new ArrayList<>();
+        String userIdChild = "";
+        if (auth.getCurrentUser() != null) {
+            userIdChild = auth.getCurrentUser().getUid();
+        }
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild);
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    createEvent(eventDay);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        }
+
+    private void setUpListeners() {
+       // Set up listeners.
+                expCalendarView.setOnDateClickListener(new OnExpDateClickListener()).setOnMonthScrollListener(new OnMonthScrollListener() {
+            @Override
+            public void onMonthChange(int year, int month) {
+                YearMonthTv.setText(String.format("%dY%dM", year, month));
+
+            }
+
+            @Override
+            public void onMonthScroll(float positionOffset) {
+//                Log.i("listener", "onMonthScroll:" + positionOffset);
+            }
+        });
+
+        expCalendarView.setOnDateClickListener(new OnDateClickListener() {
+            @Override
+            public void onDateClick(View view, DateData date) {
+              //  expCalendarView.getMarkedDates().removeAdd();
+               // expCalendarView.markDate(date);
+               // selectedDate = date;
+                addInfoOnSelectedDate(date);
+            }
+        });
+    }
+
+    private void addInfoOnSelectedDate(DateData date) {
+         builder = new AlertDialog.Builder(ProgressReadActivity.this)
+                .setMessage("Please enter your calculated weight");
+
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_weight, null);
+        builder.setView(dialogView).create();
+
+        alertDialog = builder.show();
+
+        Button save;
+        EditText editWeight;
+
+        save = dialogView.findViewById(R.id.saveInfo);
+        editWeight = dialogView.findViewById(R.id.weightInfo);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String weight = editWeight.getText().toString();
+                if (!TextUtils.isEmpty(weight)) {
+                    saveWeightDetails(weight, date);
                 }
             }
         });
-
-
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        calendarView.setOnDayClickListener(new OnDayClickListener() {
+
+    private void initViews() {
+        //      Get instance.
+        expCalendarView = ((ExpCalendarView) findViewById(R.id.calendar_exp));
+        expCalendarView.setMarkedStyle(MarkStyle.DOT);
+        YearMonthTv = (TextView) findViewById(R.id.main_YYMM_Tv);
+        YearMonthTv.setText(Calendar.getInstance().get(Calendar.YEAR) + "--Year--" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "--Month");
+    }
+
+
+
+    private void imageInit() {
+        final ImageView expandIV = (ImageView) findViewById(R.id.main_expandIV);
+        expandIV.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDayClick(EventDay eventDay) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(ProgressReadActivity.this)
-                        .setMessage("Please enter your calculated weight");
-
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_weight, null);
-                builder.setView(dialogView).create();
-
-                alertDialog = builder.show();
-
-                Button save;
-                EditText editWeight;
-
-                save = dialogView.findViewById(R.id.saveInfo);
-                editWeight = dialogView.findViewById(R.id.weightInfo);
-
-                save.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String weight = editWeight.getText().toString();
-                        selectedDate=eventDay.getCalendar().getTime().toString();
-                        if (!TextUtils.isEmpty(weight)) {
-                            saveWeightDetails(weight, eventDay);
-                        }
-                    }
-                });
+            public void onClick(View v) {
+                if (ifExpand) {
+                    CellConfig.Month2WeekPos = CellConfig.middlePosition;
+                    CellConfig.ifMonth = false;
+                    expandIV.setImageResource(R.drawable.ic_arrow_right);
+                    expCalendarView.shrink();
+                } else {
+                    CellConfig.Week2MonthPos = CellConfig.middlePosition;
+                    CellConfig.ifMonth = true;
+                    expandIV.setImageResource(R.drawable.ic_arrow_left);
+                    expCalendarView.expand();
+                }
+                ifExpand = !ifExpand;
             }
         });
-
     }
 
-    private void createEvent(EventDay eventDay) {
-        List<EventDay> events = new ArrayList<>();
-        events.add(new EventDay(eventDay.getCalendar(), R.drawable.circle_indicator));
-        calendarView.setEvents(events);
-        alertDialog.dismiss();
-        alertDialog.cancel();
+    public void TravelToClick(View v) {
+        Calendar calendar = Calendar.getInstance();
+
+        expCalendarView.travelTo( new DateData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)));
     }
 
-    private String convertDate(Date date){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd ");
-        String strDate = dateFormat.format(date);
-        return strDate;
+    private void saveWeightDetails(String weight,DateData eventDay){
+
+        String userIdChild = "";
+        if (auth.getCurrentUser() != null) {
+            userIdChild = auth.getCurrentUser().getUid();
+        }
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild).child(eventDay.getYear()+"-"+eventDay.getMonth()+"-"+eventDay.getDay());
+
+        Map newUser = new HashMap();
+        newUser.put("weight", weight);
+        mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Log.e("DATABASE","Data could not be saved " + databaseError.getMessage());
+
+
+                } else {
+                    Log.e("DATABASE","Data saved successfully.");
+                    Toast.makeText(getApplicationContext(),"Info Saved Successfully",Toast.LENGTH_SHORT).show();
+                    alertDialog.dismiss();
+                    alertDialog.cancel();
+
+                }
+            }
+        });
     }
 }
-
-
-
-
-

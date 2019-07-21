@@ -12,19 +12,21 @@ public class SaveUserProgressViewModel extends AndroidViewModel {
 
     DataRepository dataRepository;
     String mWeight,selectedDate;
+    private LiveData<Boolean> status;
 
     public SaveUserProgressViewModel(Application mApplication,  String mWeight,String selectedDate) {
         super(mApplication);
         try {
             this.mWeight=mWeight;
             this.selectedDate=selectedDate;
-            dataRepository = DataRepository.getInstance(mApplication);
+            this.dataRepository = DataRepository.getInstance(mApplication);
+        //    this.status=dataRepository.saveUserProgress(mWeight,selectedDate);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public LiveData<Boolean> isSavedProgressStatus() {
-        return dataRepository.saveUserProgress(mWeight,selectedDate);
-    }
+   // public void isSavedProgressStatus() {
+   //     return status;
+
 }
