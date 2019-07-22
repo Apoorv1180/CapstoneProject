@@ -10,7 +10,7 @@ public class SaveUserProgressViewModelFactory extends ViewModelProvider.NewInsta
     private String mWeight,selectedDate;
 
     public SaveUserProgressViewModelFactory(Application application, String mWeight,String selectedDate) {
-        mApplication = application;
+        this.mApplication = application;
         this.mWeight = mWeight;
         this.selectedDate=selectedDate;
     }
