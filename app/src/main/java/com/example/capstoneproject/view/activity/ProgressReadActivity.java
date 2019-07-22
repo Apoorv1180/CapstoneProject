@@ -38,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,6 +69,8 @@ public class ProgressReadActivity extends AppCompatActivity {
     private static Context context;
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
+    ArrayList<DateData> dateArray = new ArrayList<>();
+
 
 
 
@@ -112,7 +115,19 @@ public class ProgressReadActivity extends AppCompatActivity {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null && dataSnapshot.getValue()!=null) {
+                    Map<String, String> newUserMap = new HashMap<>();
+                    Map<String, Map<String, String>> dateKey = (Map<String, Map<String, String>>) dataSnapshot.getValue();
+                    Log.e("date", dateKey.toString());
+                    dateArray.clear();
+                    for (Map.Entry<String, Map<String, String>> entry : dateKey.entrySet()) {
+                        dateArray.add(converttoDateData(entry.getKey()));
+                    }
 
+                    for (int i = 0; i < dateArray.size(); i++) {
+                        expCalendarView.markDate(dateArray.get(i));
+                    }
+                }
             }
 
             @Override
@@ -121,8 +136,16 @@ public class ProgressReadActivity extends AppCompatActivity {
             }
         });
 
-
         }
+
+
+
+    private DateData converttoDateData(String key) {
+        ArrayList<String> values = new ArrayList<>(Arrays.asList(key.split("-")));
+     //   List<String> values = (ArrayList<String>) Arrays.asList(key.split("-"));
+        DateData newDateData = new DateData(Integer.valueOf(values.get(0)),Integer.valueOf(values.get(1)),Integer.valueOf(values.get(2)));
+    return newDateData;
+    }
 
     private void setUpListeners() {
        // Set up listeners.
