@@ -7,16 +7,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SaveUserProgressViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private Application mApplication;
-    private String mWeight,selectedDate;
+    private String mWeight, selectedDate;
 
-    public SaveUserProgressViewModelFactory(Application application, String mWeight,String selectedDate) {
+    public SaveUserProgressViewModelFactory(Application application, String mWeight, String selectedDate) {
         this.mApplication = application;
         this.mWeight = mWeight;
-        this.selectedDate=selectedDate;
+        this.selectedDate = selectedDate;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new SaveUserProgressViewModel(mApplication,mWeight,selectedDate);
+        return (T) new SaveUserProgressViewModel(mApplication, mWeight, selectedDate);
     }
 }

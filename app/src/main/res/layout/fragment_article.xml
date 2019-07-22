@@ -4,74 +4,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/dimen16dp">
+
     <LinearLayout
         android:id="@+id/layout_button"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:weightSum="2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/dimen16dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <Button
             android:id="@+id/btnChoose"
-            android:text="Choose"
+            android:layout_width="@dimen/dimen0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen10dp"
             android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:layout_width="0dp"
-            android:textColor="@color/white"
             android:background="@color/colorAccent"
-            android:layout_height="wrap_content" />
+            android:text="@string/choose"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btnUpload"
-            android:text="Upload"
-            android:layout_margin="10dp"
-            android:textColor="@color/white"
+            android:layout_width="@dimen/dimen0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen10dp"
             android:layout_weight="1"
             android:background="@color/colorAccent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:text="@string/upload"
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/imgView"
-        android:layout_width="100dp"
-        android:scaleType="fitCenter"
+        android:layout_width="@dimen/dimen100dp"
+        android:layout_height="@dimen/dimen100dp"
         android:layout_gravity="center"
-        android:layout_height="100dp" />
+        android:scaleType="fitCenter" />
 
     <EditText
         android:id="@+id/articleDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="Write your Article Here!!"
+        android:layout_margin="@dimen/dimen16dp"
         android:gravity="center"
-        android:textSize="14dp"
-         />
+        android:hint="@string/write_your_article_here"
+        android:textSize="@dimen/text_15sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen16dp"
         android:orientation="horizontal">
-    <Button
-        android:id="@+id/SaveArticle"
-        android:layout_weight="1"
-        android:layout_margin="@dimen/dimen5dp"
-        android:background="@color/colorAccent"
-        android:textColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SAVE" />
-    <Button
-        android:layout_margin="@dimen/dimen5dp"
-        android:layout_weight="1"
-        android:id="@+id/RefreshPage"
-        android:background="@color/colorAccent"
-        android:layout_width="match_parent"
-        android:textColor="@color/white"
-        android:layout_height="wrap_content"
-        android:text="Reset" />
+
+        <Button
+            android:id="@+id/SaveArticle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen5dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:text="@string/save_btn"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/RefreshPage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen5dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:text="@string/reset"
+            android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>

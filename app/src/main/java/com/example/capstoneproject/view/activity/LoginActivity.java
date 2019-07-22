@@ -68,10 +68,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(FirebaseUser result) {
                 if (result != null) {
-                    Log.e("USER", "USER ALREADY LOGGED IN" + result.getEmail().toString());
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.loggedIn) + result.getEmail().toString());
                     sendUserToWelcomeScreen(result);
                 } else {
-                    Log.e("USER", "USER NOT LOGGED IN");
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.Not_logged_in));
                     initView();
                     setViewOnclickListerners();
                 }
@@ -101,13 +101,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getValues();
-                if (userName.equalsIgnoreCase("ekta@gmail.com") && password.equalsIgnoreCase("abcdefg")) {
-                    setRole(LoginActivity.this,"Admin");
-                    sendCredentialsForVerification(userName,password);
-                  //  Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                 //   startActivity(i);
+                if (userName.equalsIgnoreCase(getResources().getString(R.string.admin_email)) && password.equalsIgnoreCase(getResources().getString(R.string.admin_password))) {
+                    setRole(LoginActivity.this, getResources().getString(R.string.role_admin));
+                    sendCredentialsForVerification(userName, password);
                 } else {
-                    setRole(LoginActivity.this,"");
+                    setRole(LoginActivity.this, "");
                     getValues();
                     checkUsername(userName);
                     checkPassword(password);
@@ -129,10 +127,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable FirebaseUser result) {
                 if (result != null) {
-                    Log.e("USER", "USER LOGGED IN" + result.getEmail().toString());
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.loggedIn) + result.getEmail().toString());
                     fetchInformationInProfileDialog(result);
                 } else {
-                    Log.e("USER", "USER NOT LOGGED IN");
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.Not_logged_in));
                     initView();
                     setViewOnclickListerners();
                 }
@@ -152,10 +150,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable FirebaseUser result) {
                 if (result != null) {
-                    Log.e("USER", "USER REGISTERED AND LOGGED IN" + result.getEmail().toString());
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.loggedIn) + result.getEmail().toString());
                     fetchInformationInProfileDialog(result);
                 } else {
-                    Log.e("USER", "USER NOT REGISTERED");
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.Not_logged_in));
                 }
             }
         });
@@ -166,13 +164,13 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         btLogin = findViewById(R.id.bt_login);
         btSignUp = findViewById(R.id.bt_register);
-        cardView =findViewById(R.id.login_card);
+        cardView = findViewById(R.id.login_card);
     }
 
     private void sendUserToWelcomeScreen(FirebaseUser user) {
         Intent newIntent = new Intent(LoginActivity.this, MainActivity.class);
-        newIntent.putExtra(USER_UUID,user.getUid());
-        newIntent.putExtra(USER_CREDENTIAL,user.getEmail());
+        newIntent.putExtra(USER_UUID, user.getUid());
+        newIntent.putExtra(USER_CREDENTIAL, user.getEmail());
         startActivity(newIntent);
         finish();
     }
@@ -180,7 +178,7 @@ public class LoginActivity extends AppCompatActivity {
     private void fetchInformationInProfileDialog(final FirebaseUser result) {
         // get prompts.xml view
         cardView.setVisibility(View.GONE);
-        final  EditText userName,userPhoneNumber;
+        final EditText userName, userPhoneNumber;
 
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.custom_profile_input_dialog_box, null);
@@ -198,21 +196,21 @@ public class LoginActivity extends AppCompatActivity {
         // set dialog message
         alertDialogBuilder
                 .setCancelable(false)
-                .setPositiveButton("OK",
+                .setPositiveButton(getResources().getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 // get user input and set it to result
                                 // edit text
                                 Util.checkUsername(userName.getText().toString().trim());
                                 Util.checkPhoneNumber(userPhoneNumber.getText().toString().trim());
-                                saveUserValues(result.getUid(),userName.getText().toString().trim(),userPhoneNumber.getText().toString().trim(),result,dialog);
+                                saveUserValues(result.getUid(), userName.getText().toString().trim(), userPhoneNumber.getText().toString().trim(), result, dialog);
                             }
 
                         });
 
         // create alert dialog
         final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface arg0) {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.white));
@@ -224,12 +222,13 @@ public class LoginActivity extends AppCompatActivity {
         // show it
         alertDialog.show();
     }
+
     private void saveUserValues(String userId, String Uname, String Password, FirebaseUser result, DialogInterface dialog) {
         final SaveUserViewModel viewModelSignIn =
-                ViewModelProviders.of(this, new SaveUserViewModelFactory(this.getApplication(),userId, Uname, Password))
+                ViewModelProviders.of(this, new SaveUserViewModelFactory(this.getApplication(), userId, Uname, Password))
                         .get(SaveUserViewModel.class);
-        boolean status =observeViewModelSaveUserStatus(viewModelSignIn,dialog);
-        if(status){
+        boolean status = observeViewModelSaveUserStatus(viewModelSignIn, dialog);
+        if (status) {
             sendUserToWelcomeScreen(result);
         }
     }
@@ -238,12 +237,11 @@ public class LoginActivity extends AppCompatActivity {
         viewModelSaveUserStatus.isSavedStatus().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean result) {
-                if(result){
-                    Log.e("USER","SAVED SUCCESSFULLY");
+                if (result) {
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.saved_successful_msg));
                     dialog.cancel();
-                }
-                else
-                    Log.e("USER","NOT SAVED ");
+                } else
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.not_saved_successful_msg));
                 dialog.cancel();
             }
         });

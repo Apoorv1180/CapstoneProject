@@ -37,13 +37,15 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.capstoneproject.view.activity.MainActivity.MY_ARTICLES;
+import static com.example.capstoneproject.view.activity.MainActivity.MY_PLAN;
+import static com.example.capstoneproject.view.activity.MainActivity.MY_PROGRESS;
+
 public class MainFragment extends Fragment {
 
     private List<Action> actionList = new ArrayList<>();
     private RecyclerView recyclerView;
     private SendMessages sendMessages;
-
-
 
     public MainFragment() {
     }
@@ -53,20 +55,16 @@ public class MainFragment extends Fragment {
         super.onAttach(context);
         sendMessages = (SendMessages) context;
     }
+
     // Interface - fragment to activity
     public interface SendMessages {
         void sendAction(Action actionItem);
     }
 
-    //Receive message - activity to fragment
-    public void receiveAction(Action actionItem) {
-        //DO SOMETHING
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main,container,false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
         // bind your data here.
         return view;
     }
@@ -100,13 +98,13 @@ public class MainFragment extends Fragment {
     }
 
     private void prepareActionData() {
-        Action action = new Action("My Plans", "Schedule and view My Plans", R.drawable.ic_my_plan);
+        Action action = new Action(MY_PLAN, getResources().getString(R.string.schedule), R.drawable.ic_my_plan);
         actionList.add(action);
 
-        action= new Action("My Progress", "View my enrollements", R.drawable.ic_my_program);
+        action = new Action(MY_PROGRESS, getResources().getString(R.string.view_plans), R.drawable.ic_my_program);
         actionList.add(action);
 
-        action = new Action("Articles", "Read and be fit", R.drawable.ic_my_article);
+        action = new Action(MY_ARTICLES, getResources().getString(R.string.read_articles), R.drawable.ic_my_article);
         actionList.add(action);
     }
 

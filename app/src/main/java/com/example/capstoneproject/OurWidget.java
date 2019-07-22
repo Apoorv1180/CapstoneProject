@@ -40,9 +40,7 @@ public class OurWidget extends AppWidgetProvider {
     static private DatabaseReference mDatabase;
     static private List<Article> articleList = new ArrayList<>();
     private static final String SYNC_CLICKED = "automaticWidgetSyncButtonClick";
-
     private PendingIntent pendingIntent;
-
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -79,7 +77,7 @@ public class OurWidget extends AppWidgetProvider {
 
         if (SYNC_CLICKED.equals(intent.getAction())) {
 
-            Intent intentOne = new Intent(context,ProgressReadActivity.class);
+            Intent intentOne = new Intent(context, ProgressReadActivity.class);
             intentOne.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intentOne);
         }
@@ -90,7 +88,6 @@ public class OurWidget extends AppWidgetProvider {
         intent.setAction(action);
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
-
 
 
     public static class UpdateWidgetService extends IntentService {
@@ -107,7 +104,7 @@ public class OurWidget extends AppWidgetProvider {
                     INVALID_APPWIDGET_ID);
             if (incomingAppWidgetId != INVALID_APPWIDGET_ID) {
                 Log.e("intent-filter", "do nothing");
-                updateOneAppWidget(appWidgetManager,incomingAppWidgetId);
+                updateOneAppWidget(appWidgetManager, incomingAppWidgetId);
             }
         }
 
@@ -119,26 +116,24 @@ public class OurWidget extends AppWidgetProvider {
             mDatabase = FirebaseDatabase.getInstance().getReference();
 
             mDatabase = FirebaseDatabase.getInstance().getReference().child("ARTICLES");
-
-                Log.e("intent-filter", "do nothing");
-                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            Article article = postSnapshot.getValue(Article.class);
-                            articleList.add(article);
-                        }
-                        if (!articleList.isEmpty()) {
-                            views.setTextViewText(R.id.id_value, articleList.get(0).getArticleDescription());
-                           appWidgetManager.updateAppWidget(appWidgetId,views);
-                        }
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Article article = postSnapshot.getValue(Article.class);
+                        articleList.add(article);
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.e("Error",databaseError.getMessage());
+                    if (!articleList.isEmpty()) {
+                        views.setTextViewText(R.id.id_value, articleList.get(0).getArticleDescription());
+                        appWidgetManager.updateAppWidget(appWidgetId, views);
                     }
-                });
-            }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("Error", databaseError.getMessage());
+                }
+            });
+        }
     }
 }

@@ -13,8 +13,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:padding="16dp"
+            android:layout_marginTop="@dimen/dimen30dp"
+            android:padding="@dimen/dimen16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_my_plan" />
 
@@ -24,8 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/large_image"
             android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/dimen20dp"
             android:text="@string/app_name"
-            android:textSize="18sp" />
+            android:textSize="@dimen/dimen18sp" />
     </RelativeLayout>
 </ScrollView>

@@ -48,15 +48,15 @@ import static android.app.Activity.RESULT_OK;
 public class ArticleCreateFragment extends Fragment {
 
 
-    private Button btnChoose, btnUpload,btnSaveArticle,btnReset;
+    private Button btnChoose, btnUpload, btnSaveArticle, btnReset;
     private EditText articleDesc;
     private ImageView imageView;
     private Uri filePath;
     private byte[] byteData;
-     ProgressDialog progressDialog;
-     CoordinatorLayout coordinatorLayout;
-     private String mChildPath;
-     private Article article = new Article();
+    ProgressDialog progressDialog;
+    CoordinatorLayout coordinatorLayout;
+    private String mChildPath;
+    private Article article = new Article();
 
     private final int PICK_IMAGE_REQUEST = 71;
 
@@ -77,22 +77,18 @@ public class ArticleCreateFragment extends Fragment {
     private void initView(View view) {
         btnChoose = (Button) view.findViewById(R.id.btnChoose);
         btnUpload = (Button) view.findViewById(R.id.btnUpload);
-        btnSaveArticle=(Button)view.findViewById(R.id.SaveArticle);
-        btnReset=(Button)view.findViewById(R.id.RefreshPage);
+        btnSaveArticle = (Button) view.findViewById(R.id.SaveArticle);
+        btnReset = (Button) view.findViewById(R.id.RefreshPage);
         imageView = (ImageView) view.findViewById(R.id.imgView);
-        articleDesc=(EditText)view.findViewById(R.id.articleDescription);
+        articleDesc = (EditText) view.findViewById(R.id.articleDescription);
         articleDesc.setEnabled(false);
         btnSaveArticle.setEnabled(false);
         btnReset.setEnabled(false);
-
-     //   coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id
-       //         .coordinatorLayout);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initListeners();
     }
 
@@ -120,17 +116,17 @@ public class ArticleCreateFragment extends Fragment {
         btnSaveArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!TextUtils.isEmpty(articleDesc.getText()))
-                saveArticleInDatabase(article);
+                if (!TextUtils.isEmpty(articleDesc.getText()))
+                    saveArticleInDatabase(article);
             }
         });
     }
 
     private void chooseImage() {
         Intent intent = new Intent();
-        intent.setType("image/*");
+        intent.setType(getActivity().getResources().getString(R.string.image_type));
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, getActivity().getResources().getString(R.string.Select_pic)), PICK_IMAGE_REQUEST);
     }
 
 
@@ -144,7 +140,7 @@ public class ArticleCreateFragment extends Fragment {
                 imageView.setImageBitmap(bitmap);
                 imageView.setDrawingCacheEnabled(true);
                 imageView.buildDrawingCache();
-               // Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                // Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byteData = baos.toByteArray();
@@ -159,7 +155,7 @@ public class ArticleCreateFragment extends Fragment {
 
         if (byteData != null) {
             progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setTitle("Uploading...");
+            progressDialog.setTitle(getActivity().getResources().getString(R.string.Upload));
             progressDialog.show();
             checkUserLoggedInStatus(byteData);
         }
@@ -177,10 +173,9 @@ public class ArticleCreateFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser result) {
                 if (result != null) {
-                    Log.e("USER", "USER ALREADY LOGGED IN" + result.getEmail().toString());
-                    uploadImagetoStorage(byteData,result);
+                    uploadImagetoStorage(byteData, result);
                 } else {
-                    Log.e("USER", "USER NOT LOGGED IN");
+                    Log.e(getActivity().getResources().getString(R.string.key_user), getActivity().getResources().getString(R.string.not_logged_in));
                 }
             }
         });
@@ -190,9 +185,9 @@ public class ArticleCreateFragment extends Fragment {
     private void uploadImagetoStorage(byte[] byteData, FirebaseUser result) {
         mChildPath = Util.makePath();
         final UploadImageViewModel uploadImageViewModel =
-                ViewModelProviders.of(this, new UploadImageViewModelFactory(getActivity().getApplication(), byteData,result, mChildPath))
+                ViewModelProviders.of(this, new UploadImageViewModelFactory(getActivity().getApplication(), byteData, result, mChildPath))
                         .get(UploadImageViewModel.class);
-        observeViewModelUpload(uploadImageViewModel,mChildPath);
+        observeViewModelUpload(uploadImageViewModel, mChildPath);
     }
 
     private void observeViewModelUpload(UploadImageViewModel viewModelUploadStatus, final String mChildPath) {
@@ -202,54 +197,47 @@ public class ArticleCreateFragment extends Fragment {
                 if (result) {
                     progressDialog.dismiss();
                     progressDialog.cancel();
-                    Log.e("USER", " UPLOADED IMAGE  SUCCESSFUL" );
-                    fetchImageUrlsAndSaveInDatabase(mChildPath,filePath);
+                    fetchImageUrlsAndSaveInDatabase(mChildPath, filePath);
                 } else {
                     progressDialog.dismiss();
                     progressDialog.cancel();
-                    Log.e("USER", " UPLOADED IMAGE  UNSUCCESSFUL");
                 }
             }
         });
     }
 
-    private void fetchImageUrlsAndSaveInDatabase(String mChildPath,Uri filePath) {
-        progressDialog.setTitle("fetching Url ,Please Wait...");
+    private void fetchImageUrlsAndSaveInDatabase(String mChildPath, Uri filePath) {
+        progressDialog.setTitle(getActivity().getResources().getString(R.string.fetching_url));
         progressDialog.show();
         final SaveImageUrlViewModel saveImageUrlViewModel =
-                ViewModelProviders.of(this, new SaveImageUrlViewModelFactory(getActivity().getApplication(), mChildPath,filePath))
+                ViewModelProviders.of(this, new SaveImageUrlViewModelFactory(getActivity().getApplication(), mChildPath, filePath))
                         .get(SaveImageUrlViewModel.class);
         observeViewModelSaveImageUrl(saveImageUrlViewModel);
     }
 
     private void observeViewModelSaveImageUrl(SaveImageUrlViewModel saveImageUrlViewModel) {
-    saveImageUrlViewModel.isImageUrlSaved().observe(this, new Observer<Uri>() {
-        @Override
-        public void onChanged(Uri result) {
-            if(result!=null){
-        //        showAddMoreSnackBar();
-                Log.e("USER","add more"+result.toString());
-                progressDialog.dismiss();
-                progressDialog.cancel();
-                articleDesc.setEnabled(true);
-                btnReset.setEnabled(true);
-                createAnArticleObject(result);
-
+        saveImageUrlViewModel.isImageUrlSaved().observe(this, new Observer<Uri>() {
+            @Override
+            public void onChanged(Uri result) {
+                if (result != null) {
+                    progressDialog.dismiss();
+                    progressDialog.cancel();
+                    articleDesc.setEnabled(true);
+                    btnReset.setEnabled(true);
+                    createAnArticleObject(result);
+                } else
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.retry));
             }
-            else
-                Log.e("USER","retry");
-         //       showRetrySnackBar();
-        }
-    });
+        });
     }
 
     private void createAnArticleObject(Uri result) {
 
         String desc = articleDesc.getText().toString();
-        if(!TextUtils.isEmpty(desc))
+        if (!TextUtils.isEmpty(desc))
             article.setArticleDescription(desc);
-            article.setImageUrl(result.toString());
-            btnSaveArticle.setEnabled(true);
+        article.setImageUrl(result.toString());
+        btnSaveArticle.setEnabled(true);
 
     }
 
@@ -266,17 +254,17 @@ public class ArticleCreateFragment extends Fragment {
             @Override
             public void onChanged(Boolean aBoolean) {
 
-                if(aBoolean){
-                    Log.e("USER","Article Saved Successfully");
-                }else
-                    Log.e("USER","Article Saved UnSuccessful");
+                if (aBoolean) {
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.article_saved_succesfully));
+                } else
+                    Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.article_not__saved_succesfully));
 
             }
         });
     }
 
     private void resetPage() {
-                        imageView.setImageResource(android.R.color.transparent);
-                        articleDesc.setText(null);
+        imageView.setImageResource(android.R.color.transparent);
+        articleDesc.setText(null);
     }
 }

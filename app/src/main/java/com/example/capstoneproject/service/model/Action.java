@@ -40,24 +40,12 @@ public class Action implements Parcelable, Serializable {
         return actionName;
     }
 
-    public void setActionName(String actionName) {
-        this.actionName = actionName;
-    }
-
     public String getActionDescription() {
         return actionDescription;
     }
 
-    public void setActionDescription(String actionDescription) {
-        this.actionDescription = actionDescription;
-    }
-
     public int getActionPhotoId() {
         return actionPhotoId;
-    }
-
-    public void setActionPhotoId(int actionPhotoId) {
-        this.actionPhotoId = actionPhotoId;
     }
 
     @Override

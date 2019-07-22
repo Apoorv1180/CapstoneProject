@@ -14,7 +14,7 @@ public class SaveImageUrlViewModelFactory extends ViewModelProvider.NewInstanceF
     private Uri mFilePath;
 
 
-    public SaveImageUrlViewModelFactory(Application application, String childPath,Uri filePath) {
+    public SaveImageUrlViewModelFactory(Application application, String childPath, Uri filePath) {
         mApplication = application;
         mChildPath = childPath;
         mFilePath = filePath;
@@ -22,6 +22,6 @@ public class SaveImageUrlViewModelFactory extends ViewModelProvider.NewInstanceF
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new SaveImageUrlViewModel(mApplication,mChildPath,mFilePath);
+        return (T) new SaveImageUrlViewModel(mApplication, mChildPath, mFilePath);
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Not_logged_in">USER NOT LOGGED IN</string>
+    <string name="role_admin">Admin</string>
+    <string name="ok">OK</string>
+    <string name="saved_successful_msg">SAVED SUCCESSFULLY</string>
+    <string name="not_saved_successful_msg">data not saved</string>
+    <string name="image_type">image/*</string>
+    <string name="Select_pic">Select Picture</string>
+    <string name="Upload">Uploading...</string>
+    <string name="not_logged_in">USER NOT LOGGED IN</string>
+    <string name="fetching_url">fetching Url ,Please Wait...</string>
+    <string name="article_saved_succesfully">Article Saved Successfully</string>
+    <string name="article_not__saved_succesfully">Article could not be saved</string>
+    <string name="schedule">Schedule and view My Plans</string>
+    <string name="view_plans">View my Progress</string>
+    <string name="read_articles">Read and be fit</string>
+    <string name="months">Months</string>
+    <string name="save">Save</string>
+    <string name="plan_card">Plan</string>
+    <string name="my_program_card">My Program</string>
+    <string name="articles_card">Articles</string>
+    <string name="_12">12</string>
+    <string name="write_your_article_here">Write your Article Here!!</string>
+    <string name="choose">Choose</string>
+    <string name="upload">Upload</string>
+    <string name="save_btn">SAVE</string>
+    <string name="reset">Reset</string>
+    <string name="article_image_description">Article Image Description</string>
+    <string name="action_description">ACTION DESCRIPTION</string>
+</resources>

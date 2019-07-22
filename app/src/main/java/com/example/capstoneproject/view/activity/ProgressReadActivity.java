@@ -21,8 +21,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.applandeo.materialcalendarview.EventDay;
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.DateCellView;
 import com.example.capstoneproject.service.repository.DataRepository;
@@ -70,8 +68,6 @@ public class ProgressReadActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
     ArrayList<DateData> dateArray = new ArrayList<>();
-
-
 
 
     @Override
@@ -218,12 +214,12 @@ public class ProgressReadActivity extends AppCompatActivity {
                 if (ifExpand) {
                     CellConfig.Month2WeekPos = CellConfig.middlePosition;
                     CellConfig.ifMonth = false;
-                    expandIV.setImageResource(R.drawable.ic_arrow_right);
+                    expandIV.setImageResource(R.drawable.ic_arrow_down);
                     expCalendarView.shrink();
                 } else {
                     CellConfig.Week2MonthPos = CellConfig.middlePosition;
                     CellConfig.ifMonth = true;
-                    expandIV.setImageResource(R.drawable.ic_arrow_left);
+                    expandIV.setImageResource(R.drawable.ic_arrow_up);
                     expCalendarView.expand();
                 }
                 ifExpand = !ifExpand;
