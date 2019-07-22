@@ -36,4 +36,5 @@
     <string name="material_calendar_today_button">Today</string>
     <string name="material_calendar_positive_button">OK</string>
     <string name="material_calendar_negative_button">Cancel</string>
+    <string name="no_data">No data available for the date</string>
 </resources>

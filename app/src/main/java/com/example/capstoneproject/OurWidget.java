@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -22,7 +23,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Article;
+import com.example.capstoneproject.util.Util;
 import com.example.capstoneproject.view.activity.ProgressReadActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +33,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
@@ -38,11 +43,11 @@ import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
 
 public class OurWidget extends AppWidgetProvider {
     static private DatabaseReference mDatabase;
-    static private List<Article> articleList = new ArrayList<>();
     private static final String SYNC_CLICKED = "automaticWidgetSyncButtonClick";
 
     private PendingIntent pendingIntent;
-
+    private static FirebaseAuth auth;
+    static String weightForToday = "";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -61,6 +66,7 @@ public class OurWidget extends AppWidgetProvider {
         watchWidget = new ComponentName(context, OurWidget.class);
 
         remoteViews.setOnClickPendingIntent(R.id.editWeight, getPendingSelfIntent(context, SYNC_CLICKED));
+        remoteViews.setTextViewText(R.id.id_date, Util.getTodayDateInString());
         appWidgetManager.updateAppWidget(watchWidget, remoteViews);
         final AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         final Intent i = new Intent(context, UpdateWidgetService.class);
@@ -68,7 +74,7 @@ public class OurWidget extends AppWidgetProvider {
         if (pendingIntent == null) {
             pendingIntent = PendingIntent.getService(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
         }
-        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 600000, pendingIntent);
+        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 60000, pendingIntent);
 
     }
 
@@ -79,8 +85,11 @@ public class OurWidget extends AppWidgetProvider {
 
         if (SYNC_CLICKED.equals(intent.getAction())) {
 
-            Intent intentOne = new Intent(context,ProgressReadActivity.class);
+            Intent intentOne = new Intent(context, ProgressReadActivity.class);
             intentOne.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (!TextUtils.isEmpty(weightForToday)) {
+                intentOne.putExtra("weight", weightForToday);
+            }
             context.startActivity(intentOne);
         }
     }
@@ -90,7 +99,6 @@ public class OurWidget extends AppWidgetProvider {
         intent.setAction(action);
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
-
 
 
     public static class UpdateWidgetService extends IntentService {
@@ -107,7 +115,7 @@ public class OurWidget extends AppWidgetProvider {
                     INVALID_APPWIDGET_ID);
             if (incomingAppWidgetId != INVALID_APPWIDGET_ID) {
                 Log.e("intent-filter", "do nothing");
-                updateOneAppWidget(appWidgetManager,incomingAppWidgetId);
+                updateOneAppWidget(appWidgetManager, incomingAppWidgetId);
             }
         }
 
@@ -116,29 +124,44 @@ public class OurWidget extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(this.getPackageName(),
                     R.layout.new_app_widget);
 
-            mDatabase = FirebaseDatabase.getInstance().getReference();
+            auth = FirebaseAuth.getInstance();
 
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("ARTICLES");
-
-                Log.e("intent-filter", "do nothing");
-                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            Article article = postSnapshot.getValue(Article.class);
-                            articleList.add(article);
-                        }
-                        if (!articleList.isEmpty()) {
-                            views.setTextViewText(R.id.id_value, articleList.get(0).getArticleDescription());
-                           appWidgetManager.updateAppWidget(appWidgetId,views);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.e("Error",databaseError.getMessage());
-                    }
-                });
+            String userIdChild = "";
+            if (auth.getCurrentUser() != null) {
+                userIdChild = auth.getCurrentUser().getUid();
             }
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild);
+
+            String toDate = Util.getTodayDateInString();
+            mDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null && dataSnapshot.getValue() != null) {
+                        Map<String, Map<String, String>> dateKey = (Map<String, Map<String, String>>) dataSnapshot.getValue();
+                        Log.e("date", dateKey.toString());
+
+                        if (dateKey.containsKey(toDate)) {
+                            Map<String, String> weightMap = dateKey.get(toDate);
+                            weightForToday = weightMap.get("weight");
+
+                            if (!TextUtils.isEmpty(weightForToday)) {
+                                views.setTextViewText(R.id.id_value, weightForToday);
+                                appWidgetManager.updateAppWidget(appWidgetId, views);
+                            }
+                        } else {
+                            views.setTextViewText(R.id.id_value, getString(R.string.no_data));
+                            appWidgetManager.updateAppWidget(appWidgetId, views);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    views.setTextViewText(R.id.id_value, getString(R.string.no_data));
+                    appWidgetManager.updateAppWidget(appWidgetId, views);
+                }
+
+            });
+        }
     }
 }
