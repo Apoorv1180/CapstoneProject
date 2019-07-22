@@ -28,4 +28,5 @@
     <string name="reset">Reset</string>
     <string name="article_image_description">Article Image Description</string>
     <string name="action_description">ACTION DESCRIPTION</string>
+    <string name="login">login</string>
 </resources>

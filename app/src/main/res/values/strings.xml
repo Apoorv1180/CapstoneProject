@@ -77,4 +77,5 @@
     <string name="my_plan_imageview">My Plan Imageview</string>
     <string name="action_title">ACTION TITLE</string>
     <string name="action_description">ACTION DESCRIPTION</string>
+    <string name="login">login</string>
 </resources>
