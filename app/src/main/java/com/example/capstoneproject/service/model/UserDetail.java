@@ -8,6 +8,18 @@ import java.io.Serializable;
 public class UserDetail implements Serializable,Parcelable {
 
     protected String name;
+    protected String phone;
+    protected String uid;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+
 
     public String getName() {
         return name;
@@ -25,19 +37,21 @@ public class UserDetail implements Serializable,Parcelable {
         this.phone = phone;
     }
 
-    protected String phone;
+
 
     public UserDetail() {
     }
 
-    public UserDetail(String userName, String phno) {
+    public UserDetail(String userName, String phno,String uid) {
         name = userName;
         phone = phno;
+        this.uid=uid;
     }
 
     protected UserDetail(Parcel in) {
         name=in.readString();
         phone=in.readString();
+        uid=in.readString();
     }
 
     public static final Creator<UserDetail> CREATOR = new Creator<UserDetail>() {
@@ -62,5 +76,6 @@ public class UserDetail implements Serializable,Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
         parcel.writeString(phone);
+        parcel.writeString(uid);
     }
 }

@@ -20,7 +20,6 @@
             <intent-filter>
                 <action android:name="APPWIDGET_ONCLICK_UPDATE" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="APPWIDGET_REGULAR_UPDATE" />
             </intent-filter>
@@ -30,7 +29,7 @@
                 android:resource="@xml/new_app_widget_info" />
         </receiver>
 
-        <service android:name=".OurWidget$UpdateWidgetService"/>
+        <service android:name=".OurWidget$UpdateWidgetService" />
 
         <activity android:name=".view.activity.ProgressReadActivity" />
         <activity android:name=".view.activity.ArticleReadActivity" />
@@ -46,7 +45,9 @@
             android:name=".view.adapter.UserDataAdapter"
             android:label="@string/title_activity_user_data_adapter"
             android:theme="@style/AppTheme" />
-        <activity android:name=".view.activity.UserDetailActivity"></activity>
+        <activity android:name=".view.activity.UserDetailActivity" />
+        <activity android:name=".view.activity.PlanViewActivity" />
+        <activity android:name=".view.adapter.ViewPlanAdapter"></activity>
     </application>
 
 </manifest>

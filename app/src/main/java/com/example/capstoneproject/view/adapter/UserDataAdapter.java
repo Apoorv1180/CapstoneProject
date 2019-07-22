@@ -56,6 +56,7 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHo
             public void onClick(View v) {
                 Intent newIntent = new Intent(context,UserDetailActivity.class);
                 newIntent.putExtra("name",holder.userName.getText().toString());
+                newIntent.putExtra("uid",model.getUid());
                 context.startActivity(newIntent);
               //  listener.onItemClick(position);
             }

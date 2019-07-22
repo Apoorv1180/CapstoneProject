@@ -12,7 +12,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.capstoneproject.service.model.Article;
-import com.example.capstoneproject.service.model.UserProgress;
+import com.example.capstoneproject.service.model.PlanDetail;
 import com.example.capstoneproject.service.model.UserDetail;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,7 +42,7 @@ public class DataRepository {
     private static DataRepository dataRepository;
     private static Context context;
     private FirebaseAuth auth;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase, mDatabase1;
     FirebaseStorage storage;
     StorageReference storageReference;
     UploadTask uploadTask;
@@ -262,18 +262,18 @@ public class DataRepository {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if (databaseError != null) {
-                    Log.e("DATABASE","Data could not be saved " + databaseError.getMessage());
+                    Log.e("DATABASE", "Data could not be saved " + databaseError.getMessage());
                     Bstatus.setValue(Boolean.FALSE);
 
 
                 } else {
-                    Log.e("DATABASE","Data saved successfully.");
+                    Log.e("DATABASE", "Data saved successfully.");
                     Bstatus.setValue(Boolean.TRUE);
 
                 }
             }
         });
-     //   return Bstatus;
+        //   return Bstatus;
     }
 
     public LiveData<List<Article>> getArticles() {
@@ -303,15 +303,16 @@ public class DataRepository {
 
     public LiveData<List<UserDetail>> getUserRecord() {
         final MutableLiveData<List<UserDetail>> userData = new MutableLiveData<>();
-        final List<UserDetail> userList =new ArrayList<>();
+        final List<UserDetail> userList = new ArrayList<>();
 
-        mDatabase=FirebaseDatabase.getInstance().getReference().child("USERS");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     UserDetail userDetail = postSnapshot.getValue(UserDetail.class);
+                    userDetail.setUid(postSnapshot.getKey());
                     userList.add(userDetail);
                 }
                 userData.setValue(userList);
@@ -324,5 +325,57 @@ public class DataRepository {
         });
 
         return userData;
+    }
+
+
+    public LiveData<Boolean> saveUserDetails(String Uname, String joiningDate, String renewDate, String fees, String planname, String uid) {
+        final MutableLiveData<Boolean> status = new MutableLiveData<>();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USER_DETAILS").child(uid);
+
+        Map newUser = new HashMap();
+        newUser.put("uname", Uname);
+        newUser.put("joiningdate", joiningDate);
+        newUser.put("renewdate", renewDate);
+        newUser.put("fees", fees);
+        newUser.put("planname", planname);
+        mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    status.setValue(Boolean.FALSE);
+                } else
+                    status.setValue(Boolean.TRUE);
+            }
+        });
+        return status;
+
+    }
+
+    public LiveData<List<PlanDetail>> getPlanDetail() {
+        final MutableLiveData<List<PlanDetail>> planDetail = new MutableLiveData<>();
+        final List<PlanDetail> userList = new ArrayList<>();
+//        String userIdChild = "";
+//        if (auth.getCurrentUser() != null) {
+//            userIdChild = auth.getCurrentUser().getUid();
+//        }
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USER_DETAILS");
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    PlanDetail planDetail = postSnapshot.getValue(PlanDetail.class);
+                    userList.add(planDetail);
+                }
+                planDetail.setValue(userList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return planDetail;
     }
 }

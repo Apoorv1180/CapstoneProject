@@ -57,7 +57,7 @@ public class Util {
 
     public static String parseDateToddMMyyyy(String time) {
         String inputPattern = "yyyy-MM-dd HH:mm:ss";
-        String outputPattern = "dd-MMM-yy h:mm a";
+        String outputPattern = "dd-MM-yy";
         SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
         SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
 

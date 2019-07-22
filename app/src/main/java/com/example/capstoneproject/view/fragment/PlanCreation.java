@@ -117,6 +117,7 @@ public class PlanCreation extends Fragment {
                 if (!User.isEmpty()) {
                     userDataAdapter=new UserDataAdapter(User,getActivity());
                     plancreationUserRecyclerview.setAdapter(userDataAdapter);
+                    userDataAdapter.notifyDataSetChanged();
                     //recyclerView.setItemsCanFocus(true);
                     int resId = R.anim.list_fall_down;
 

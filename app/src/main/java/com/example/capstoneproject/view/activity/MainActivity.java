@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     public void sendAction(Action actionItem) {
         switch (actionItem.getActionName()) {
             case "My Plans":
+                openViePlanActivity();
                 break;
             case "My Progress":
                 openProgressReadActivity();
@@ -91,7 +92,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
                 break;
         }
     }
-
+    private void openViePlanActivity() {
+        Intent newIntent = new Intent(this,PlanViewActivity.class);
+        startActivity(newIntent);
+        finish();
+    }
     private void openProgressReadActivity() {
         Intent newIntent = new Intent(this,ProgressReadActivity.class);
         startActivity(newIntent);
