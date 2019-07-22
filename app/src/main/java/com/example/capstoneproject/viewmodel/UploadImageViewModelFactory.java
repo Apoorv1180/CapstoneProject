@@ -15,16 +15,15 @@ public class UploadImageViewModelFactory extends ViewModelProvider.NewInstanceFa
     private String mChildPath;
 
 
-
-    public UploadImageViewModelFactory(Application application, byte[] filePath, FirebaseUser result,String childPath) {
+    public UploadImageViewModelFactory(Application application, byte[] filePath, FirebaseUser result, String childPath) {
         mApplication = application;
         mFilePath = filePath;
-        mUser=result;
+        mUser = result;
         mChildPath = childPath;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new UploadImageViewModel(mApplication,mFilePath,mUser,mChildPath);
+        return (T) new UploadImageViewModel(mApplication, mFilePath, mUser, mChildPath);
     }
 }

@@ -12,17 +12,16 @@ import sun.bob.mcalendarview.vo.DayData;
 import static sun.bob.mcalendarview.MarkStyle.text;
 
 public class DateCellView extends BaseCellView {
-      public DateCellView(Context context) {
-          super(context);
-      }
-  
-      public DateCellView(Context context, AttributeSet attrs) {
-          super(context, attrs);
-      }
+    public DateCellView(Context context) {
+        super(context);
+    }
+
+    public DateCellView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
     @Override
     public void setDisplayText(DayData day) {
         ((TextView) this.findViewById(R.id.id_cell_text)).setText(day.getText());
-
     }
-  }
+}

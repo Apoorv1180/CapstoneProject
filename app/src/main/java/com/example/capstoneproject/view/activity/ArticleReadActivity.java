@@ -46,7 +46,6 @@ public class ArticleReadActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // overridePendingTransition(R.anim.blink,R.anim.fade_in_activity);
         setContentView(R.layout.activity_article_read);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
@@ -80,12 +79,9 @@ public class ArticleReadActivity extends AppCompatActivity {
 
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
-
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowTitleEnabled(true);
         }
-
-
     }
 
     @Override
@@ -124,7 +120,7 @@ public class ArticleReadActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case android.R.id.home:
                 onBackPressed();
                 return true;

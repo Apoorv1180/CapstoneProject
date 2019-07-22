@@ -17,12 +17,12 @@ public class LogoutViewModel extends AndroidViewModel {
         super(mApplication);
         try {
             dataRepository = DataRepository.getInstance(mApplication);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public LiveData<Boolean> isLoggedOutStatus() {
-        return (LiveData<Boolean>)dataRepository.logout();
+        return (LiveData<Boolean>) dataRepository.logout();
     }
 }

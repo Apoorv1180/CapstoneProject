@@ -11,22 +11,22 @@ import com.example.capstoneproject.service.repository.DataRepository;
 public class SaveUserProgressViewModel extends AndroidViewModel {
 
     DataRepository dataRepository;
-    String mWeight,selectedDate;
+    String mWeight, selectedDate;
     private LiveData<Boolean> status;
 
-    public SaveUserProgressViewModel(Application mApplication,  String mWeight,String selectedDate) {
+    public SaveUserProgressViewModel(Application mApplication, String mWeight, String selectedDate) {
         super(mApplication);
         try {
-            this.mWeight=mWeight;
-            this.selectedDate=selectedDate;
+            this.mWeight = mWeight;
+            this.selectedDate = selectedDate;
             this.dataRepository = DataRepository.getInstance(mApplication);
-        //    this.status=dataRepository.saveUserProgress(mWeight,selectedDate);
+            //    this.status=dataRepository.saveUserProgress(mWeight,selectedDate);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-   // public void isSavedProgressStatus() {
-   //     return status;
+    // public void isSavedProgressStatus() {
+    //     return status;
 
 }

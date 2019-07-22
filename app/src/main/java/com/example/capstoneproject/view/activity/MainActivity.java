@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.content.SearchRecentSuggestionsProvider;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,14 +25,18 @@ import com.example.capstoneproject.viewmodel.LogoutViewModel;
 
 import static com.example.capstoneproject.view.activity.LoginActivity.USER_CREDENTIAL;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.SendMessages ,AdminDashboardFragment.SendMessages{
+public class MainActivity extends AppCompatActivity implements MainFragment.SendMessages, AdminDashboardFragment.SendMessages {
 
     private static final String MAIN_FRAG = "TAG_MAIN_FRAG";
     private static final String ARTICLE_FRAG = "TAG_ARTICLE_FRAG";
     private static final String ARTICLE_FRAG_CREATE = "TAG_ARTICLE_CREATE_FRAG";
+    public static final String MY_PLAN = "My Plans";
+    public static final String MY_PROGRESS = "My Progress";
+    public static final String MY_ARTICLES = "Articles";
     String credential;
 
     Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,13 +66,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     }
 
     private void openMainFragment() {
-        if(credential.equalsIgnoreCase("ekta@gmail.com")) {
-           // if (getRole(MainActivity.this).equalsIgnoreCase("Admin")) {
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.fragment_container, new AdminDashboardFragment());
-                ft.commit();
-        }else {
+        if (credential.equalsIgnoreCase(getResources().getString(R.string.admin_email))) {
+            // if (getRole(MainActivity.this).equalsIgnoreCase("Admin")) {
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.fragment_container, new AdminDashboardFragment());
+            ft.commit();
+        } else {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.add(R.id.fragment_container, new MainFragment());
@@ -79,25 +84,25 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     @Override
     public void sendAction(Action actionItem) {
         switch (actionItem.getActionName()) {
-            case "My Plans":
+            case MY_PLAN:
                 break;
-            case "My Progress":
+            case MY_PROGRESS:
                 openProgressReadActivity();
                 break;
-            case "Articles":
+            case MY_ARTICLES:
                 openArticleReadActivity();
                 break;
         }
     }
 
     private void openProgressReadActivity() {
-        Intent newIntent = new Intent(this,ProgressReadActivity.class);
+        Intent newIntent = new Intent(this, ProgressReadActivity.class);
         startActivity(newIntent);
         finish();
     }
 
     private void openArticleReadActivity() {
-        Intent newIntent = new Intent(this,ArticleReadActivity.class);
+        Intent newIntent = new Intent(this, ArticleReadActivity.class);
         startActivity(newIntent);
         finish();
     }
@@ -113,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.logout:
                 logout();
                 return true;
@@ -137,12 +142,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     private void observeViewModelLogout(LogoutViewModel viewModelSignIn) {
         viewModelSignIn.isLoggedOutStatus().observe(this, new Observer<Boolean>() {
             public void onChanged(@Nullable Boolean result) {
-              if(result){
-                  Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                  loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                  loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                  startActivity(loginPageIntent);
-              }
+                if (result) {
+                    Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(loginPageIntent);
+                }
             }
         });
     }
@@ -150,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     @Override
     public void sendAction(int actionItem) {
 
-        switch (actionItem){
+        switch (actionItem) {
             case 0:
                 break;
             case 1:
@@ -162,6 +167,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
                 ft.addToBackStack(ARTICLE_FRAG_CREATE);
                 ft.commit();
                 break;
-            }
+        }
     }
 }

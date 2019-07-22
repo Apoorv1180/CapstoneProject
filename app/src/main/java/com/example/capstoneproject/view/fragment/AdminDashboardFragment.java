@@ -19,17 +19,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class AdminDashboardFragment extends Fragment {
 
     private SendMessages sendMessages;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         sendMessages = (AdminDashboardFragment.SendMessages) context;
     }
+
     // Interface - fragment to activity
     public interface SendMessages {
         void sendAction(int actionItem);
@@ -96,21 +99,21 @@ public class AdminDashboardFragment extends Fragment {
     }
 
     private void initView(View view) {
-         tvCountApporved=view.findViewById(R.id.tv_count_apporved);
-         cardApproved=view.findViewById(R.id.card_plan);
-         tvCountOpen=view.findViewById(R.id.tv_count_open);
-         cardOpen=view.findViewById(R.id.card_program);
-         mainGrid=view.findViewById(R.id.mainGrid);
-         tvCountClose=view.findViewById(R.id.tv_count_close);
-         cardClose=view.findViewById(R.id.card_article);
-         dashboardItemValueTv=view.findViewById(R.id.dashboard_item_value_tv);
-         dashboardItemNameTv=view.findViewById(R.id.dashboard_item_name_tv);
+        tvCountApporved = view.findViewById(R.id.tv_count_apporved);
+        cardApproved = view.findViewById(R.id.card_plan);
+        tvCountOpen = view.findViewById(R.id.tv_count_open);
+        cardOpen = view.findViewById(R.id.card_program);
+        mainGrid = view.findViewById(R.id.mainGrid);
+        tvCountClose = view.findViewById(R.id.tv_count_close);
+        cardClose = view.findViewById(R.id.card_article);
+        dashboardItemValueTv = view.findViewById(R.id.dashboard_item_value_tv);
+        dashboardItemNameTv = view.findViewById(R.id.dashboard_item_name_tv);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        checkUserLoggedInStatus(view,savedInstanceState);
+        checkUserLoggedInStatus(view, savedInstanceState);
         initViewListeners();
     }
 
@@ -118,21 +121,18 @@ public class AdminDashboardFragment extends Fragment {
         cardClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("USER","Clicked close");
                 sendMessages.sendAction(2);
             }
         });
         cardOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("USER","Clicked open");
                 sendMessages.sendAction(1);
             }
         });
         cardApproved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("USER","Clicked approved");
                 sendMessages.sendAction(0);
             }
         });

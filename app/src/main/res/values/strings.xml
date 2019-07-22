@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">CapstoneProject</string>
-    <string name="login">Login</string>
     <string name="register">Register</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -36,5 +35,48 @@
     <string name="material_calendar_today_button">Today</string>
     <string name="material_calendar_positive_button">OK</string>
     <string name="material_calendar_negative_button">Cancel</string>
+    <string name="Users">USERS</string>
+    <string name="name">name</string>
+    <string name="phone">phone</string>
+    <string name="imageUrl">imageUrl</string>
+    <string name="ARTICLEdESCRIPTION">articleDescription</string>
+    <string name="articles">ARTICLES</string>
+    <string name="loggedIn">USER ALREADY LOGGED IN</string>
+    <string name="key_user">USER</string>
+    <string name="Not_logged_in">USER NOT LOGGED IN</string>
+    <string name="admin_email">ekta@gmail.com</string>
+    <string name="admin_password">abcdefg</string>
+    <string name="role_admin">Admin</string>
+    <string name="ok">OK</string>
+    <string name="saved_successful_msg">SAVED SUCCESSFULLY</string>
+    <string name="not_saved_successful_msg">data not saved</string>
+    <string name="image_type">image/*</string>
+    <string name="Select_pic">Select Picture</string>
+    <string name="Upload">Uploading...</string>
+    <string name="not_logged_in">USER NOT LOGGED IN</string>
+    <string name="fetching_url">fetching Url ,Please Wait...</string>
+    <string name="retry">retry</string>
+    <string name="article_saved_succesfully">Article Saved Successfully</string>
+    <string name="article_not__saved_succesfully">Article could not be saved</string>
+    <string name="schedule">Schedule and view My Plans</string>
+    <string name="view_plans">View my Progress</string>
+    <string name="read_articles">Read and be fit</string>
+    <string name="months">Months</string>
+    <string name="enter_weight_kg">Enter Weight (kg)</string>
+    <string name="save">Save</string>
+    <string name="plan_card">Plan</string>
+    <string name="my_program_card">My Program</string>
+    <string name="articles_card">Articles</string>
+    <string name="_12">12</string>
+    <string name="write_your_article_here">Write your Article Here!!</string>
+    <string name="choose">Choose</string>
+    <string name="upload">Upload</string>
+    <string name="save_btn">SAVE</string>
+    <string name="reset">Reset</string>
+    <string name="article_image_description">Article Image Description</string>
+    <string name="my_plan_imageview">My Plan Imageview</string>
+    <string name="action_title">ACTION TITLE</string>
+    <string name="action_description">ACTION DESCRIPTION</string>
+    <string name="login">login</string>
     <string name="no_data">No data available for the date</string>
 </resources>

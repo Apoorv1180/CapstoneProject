@@ -12,13 +12,13 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignUpListViewModel extends AndroidViewModel {
 
     DataRepository dataRepository;
-    String mUserName,mPassword;
+    String mUserName, mPassword;
 
     public SignUpListViewModel(Application mApplication, String mUserName, String mPassword) {
         super(mApplication);
         try {
             this.mUserName = mUserName;
-            this.mPassword =mPassword;
+            this.mPassword = mPassword;
             dataRepository = DataRepository.getInstance(mApplication);
         } catch (Exception e) {
             e.printStackTrace();
@@ -26,6 +26,6 @@ public class SignUpListViewModel extends AndroidViewModel {
     }
 
     public LiveData<FirebaseUser> isRegisteredStatus() {
-        return dataRepository.registerUser(mUserName,mPassword);
+        return dataRepository.registerUser(mUserName, mPassword);
     }
 }

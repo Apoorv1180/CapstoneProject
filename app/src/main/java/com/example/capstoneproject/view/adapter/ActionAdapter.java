@@ -18,6 +18,7 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
     public interface OnItemClickListener {
         void onItemClick(Action item);
     }
+
     private final List<Action> items;
     private final OnItemClickListener listener;
 
@@ -37,13 +38,14 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
         holder.bind(items.get(position), listener);
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return items.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView actionTitle,actionDescription;
+        private TextView actionTitle, actionDescription;
         private ImageView actionImage;
 
         public ViewHolder(View itemView) {
@@ -58,7 +60,8 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ViewHolder
             actionDescription.setText(item.getActionDescription());
             actionImage.setBackgroundResource(item.getActionPhotoId());
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     listener.onItemClick(item);
                 }
             });

@@ -17,12 +17,12 @@ public class CheckUserLoggedInViewModel extends AndroidViewModel {
         super(mApplication);
         try {
             dataRepository = DataRepository.getInstance(mApplication);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public LiveData<FirebaseUser> isAlreadyLoggedInStatus() {
-        return (LiveData<FirebaseUser>)dataRepository.checkIfUserIsLoggedIn();
+        return (LiveData<FirebaseUser>) dataRepository.checkIfUserIsLoggedIn();
     }
 }

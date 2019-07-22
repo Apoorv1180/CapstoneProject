@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Article;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,7 +51,6 @@ public class DataRepository {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
         mDatabase.keepSynced(true);
-//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         storageReference = storage.getReference();
     }
 
@@ -121,11 +121,10 @@ public class DataRepository {
         final MutableLiveData<Boolean> status = new MutableLiveData<>();
         String userIdChild = userId;
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS").child(userIdChild);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.Users)).child(userIdChild);
         Map newUser = new HashMap();
-        newUser.put("name", mUserName);
-        newUser.put("phone", mPhoneNumber);
-        FirebaseUser user = auth.getCurrentUser();
+        newUser.put(context.getResources().getString(R.string.name), mUserName);
+        newUser.put(context.getResources().getString(R.string.phone), mPhoneNumber);
 
         mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
             @Override
@@ -142,32 +141,19 @@ public class DataRepository {
 
     public LiveData<Boolean> logout() {
         final MutableLiveData<Boolean> status = new MutableLiveData<>();
-
         auth.signOut();
-
         auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() == null) {
                     status.setValue(Boolean.TRUE);
-//                    auth = null;
-//                    mDatabase = null;
-//                    storage = null;
-//                    storageReference = null;
                 } else {
                     status.setValue(Boolean.FALSE);
-//                    auth = null;
-//                    auth = null;
-//                    mDatabase = null;
-//                    storage = null;
-//                    storageReference = null;
                 }
             }
         });
-
         return status;
     }
-    //"ARTICLE_IMAGES/"+ UUID.randomUUID().toString()
 
     public LiveData<Boolean> saveImage(byte[] byteData, FirebaseUser mUser, String childPath) {
         final MutableLiveData<Boolean> status = new MutableLiveData<>();
@@ -221,8 +207,6 @@ public class DataRepository {
                 }
             }
         });
-
-//        uri.setValue(urlTask.getResult());
         return uri;
     }
 
@@ -230,10 +214,10 @@ public class DataRepository {
         final MutableLiveData<Boolean> status = new MutableLiveData<>();
         String userIdChild = UUID.randomUUID().toString();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("ARTICLES").child(userIdChild);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.articles)).child(userIdChild);
         Map newUser = new HashMap();
-        newUser.put("imageUrl", mImageUrl);
-        newUser.put("articleDescription", mArticleDescripton);
+        newUser.put(context.getResources().getString(R.string.imageUrl), mImageUrl);
+        newUser.put(context.getResources().getString(R.string.ARTICLEdESCRIPTION), mArticleDescripton);
         mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
@@ -244,34 +228,6 @@ public class DataRepository {
             }
         });
         return status;
-    }
-
-    public void saveUserProgress(String mWeight, String selectedDate) {
-        final MutableLiveData<Boolean> Bstatus = new MutableLiveData<>();
-        String userIdChild = "";
-        if (auth.getCurrentUser() != null) {
-            userIdChild = auth.getCurrentUser().getUid();
-        }
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild).child(selectedDate);
-
-        Map newUser = new HashMap();
-        newUser.put("weight", mWeight);
-        mDatabase.updateChildren(newUser, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                if (databaseError != null) {
-                    Log.e("DATABASE","Data could not be saved " + databaseError.getMessage());
-                    Bstatus.setValue(Boolean.FALSE);
-
-
-                } else {
-                    Log.e("DATABASE","Data saved successfully.");
-                    Bstatus.setValue(Boolean.TRUE);
-
-                }
-            }
-        });
-     //   return Bstatus;
     }
 
     public LiveData<List<Article>> getArticles() {
@@ -295,7 +251,6 @@ public class DataRepository {
 
             }
         });
-
         return articleData;
     }
 }

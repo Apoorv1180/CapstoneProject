@@ -12,14 +12,14 @@ import com.google.firebase.auth.FirebaseUser;
 public class SaveUserViewModel extends AndroidViewModel {
 
     DataRepository dataRepository;
-    String mUserId, mUserName,mPhoneNumber;
+    String mUserId, mUserName, mPhoneNumber;
 
-    public SaveUserViewModel(Application mApplication, String mUserId,String mUserName, String mPhoneNumber) {
+    public SaveUserViewModel(Application mApplication, String mUserId, String mUserName, String mPhoneNumber) {
         super(mApplication);
         try {
-            this.mUserId=mUserId;
+            this.mUserId = mUserId;
             this.mUserName = mUserName;
-            this.mPhoneNumber =mPhoneNumber;
+            this.mPhoneNumber = mPhoneNumber;
             dataRepository = DataRepository.getInstance(mApplication);
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,6 +27,6 @@ public class SaveUserViewModel extends AndroidViewModel {
     }
 
     public LiveData<Boolean> isSavedStatus() {
-        return dataRepository.saveUser(mUserId,mUserName,mPhoneNumber);
+        return dataRepository.saveUser(mUserId, mUserName, mPhoneNumber);
     }
 }

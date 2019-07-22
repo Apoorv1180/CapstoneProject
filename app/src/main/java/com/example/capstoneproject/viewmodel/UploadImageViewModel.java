@@ -17,7 +17,7 @@ public class UploadImageViewModel extends AndroidViewModel {
     FirebaseUser mUser;
     String mChildPath;
 
-    public UploadImageViewModel(Application mApplication, byte[] mFilePath, FirebaseUser mUser,String childPath) {
+    public UploadImageViewModel(Application mApplication, byte[] mFilePath, FirebaseUser mUser, String childPath) {
         super(mApplication);
         try {
             this.mFilePath = mFilePath;
@@ -30,6 +30,6 @@ public class UploadImageViewModel extends AndroidViewModel {
     }
 
     public LiveData<Boolean> isImageUploaded() {
-        return dataRepository.saveImage(mFilePath,mUser,mChildPath);
+        return dataRepository.saveImage(mFilePath, mUser, mChildPath);
     }
 }

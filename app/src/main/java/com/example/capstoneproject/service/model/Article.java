@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 // Created by apoorv on 12/7/19.
-public class Article implements Serializable,Parcelable{
+public class Article implements Serializable, Parcelable {
 
     int imageId;
     String imageUrl;
@@ -51,14 +51,6 @@ public class Article implements Serializable,Parcelable{
         this.imageUrl = imageUrl;
     }
 
-    public int getImageId() {
-        return imageId;
-    }
-
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
-    }
-
     public String getArticleDescription() {
         return articleDescription;
     }
@@ -66,7 +58,6 @@ public class Article implements Serializable,Parcelable{
     public void setArticleDescription(String articleDescription) {
         this.articleDescription = articleDescription;
     }
-
 
     @Override
     public int describeContents() {

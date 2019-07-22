@@ -20,6 +20,6 @@ public class SaveArticleViewModelFactory extends ViewModelProvider.NewInstanceFa
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new SaveArticleViewModel(mApplication,mImageUrl,mArticleDesc);
+        return (T) new SaveArticleViewModel(mApplication, mImageUrl, mArticleDesc);
     }
 }
