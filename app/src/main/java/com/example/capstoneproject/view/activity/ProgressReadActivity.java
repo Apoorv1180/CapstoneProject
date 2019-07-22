@@ -3,8 +3,10 @@ package com.example.capstoneproject.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -62,6 +64,7 @@ public class ProgressReadActivity extends AppCompatActivity {
     private AlertDialog alertDialog;
     private boolean ifExpand = true;
     private AlertDialog.Builder builder;
+    Toolbar mToolbar;
 
     private static DataRepository dataRepository;
     private static Context context;
@@ -76,6 +79,8 @@ public class ProgressReadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_progress_read);
 
         initViews();
+        setSupportActionBar(mToolbar);
+        initToolbar();
         imageInit();
         initDatabase();
         setAlreadyMarkedDates();
@@ -86,6 +91,19 @@ public class ProgressReadActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         selectedDate = new DateData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
         expCalendarView.unMarkDate(selectedDate);
+    }
+
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(R.string.progress_read_title);
+        setSupportActionBar(mToolbar);
+
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+
+            //  supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(true);
+        }
     }
 
     private void initDatabase() {

@@ -29,4 +29,7 @@
     <string name="article_image_description">Article Image Description</string>
     <string name="action_description">ACTION DESCRIPTION</string>
     <string name="login">login</string>
+    <string name="title_login">Pune Dance Fitness</string>
+    <string name="enter_your_phone_number">Enter your Phone Number</string>
+    <string name="enter_your_name">Enter Your Name</string>
 </resources>

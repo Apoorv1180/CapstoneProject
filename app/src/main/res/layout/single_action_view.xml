@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen2dp"
         android:background="@color/cardview_dark_background"
         app:cardCornerRadius="@dimen/cardview_default_radius"
@@ -19,7 +19,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen60dp"
+            android:layout_margin="@dimen/dimen50dp"
             android:orientation="horizontal"
             android:weightSum="2">
 

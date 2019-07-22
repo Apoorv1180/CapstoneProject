@@ -75,6 +75,7 @@ public class ArticleReadActivity extends AppCompatActivity {
 
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(R.string.article_read_title);
         setSupportActionBar(mToolbar);
 
         ActionBar supportActionBar = getSupportActionBar();

@@ -78,4 +78,9 @@
     <string name="action_title">ACTION TITLE</string>
     <string name="action_description">ACTION DESCRIPTION</string>
     <string name="login">login</string>
+    <string name="title_login">Pune Dance Fitness</string>
+    <string name="enter_your_phone_number">Enter your Phone Number</string>
+    <string name="enter_your_name">Enter Your Name</string>
+    <string name="progress_read_title">My Progress</string>
+    <string name="article_read_title">Read My Articles</string>
 </resources>

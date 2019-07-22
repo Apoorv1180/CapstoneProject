@@ -1,8 +1,10 @@
 package com.example.capstoneproject.view.activity;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -48,14 +50,28 @@ public class LoginActivity extends AppCompatActivity {
     Button btLogin;
     String userName = "";
     String password = "";
-
+    Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSupportActionBar(mToolbar);
+        initToolbar();
         checkUserLoggedInStatus();
     }
 
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(R.string.title_login);
+        setSupportActionBar(mToolbar);
+
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+
+          //  supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(true);
+        }
+    }
     private void checkUserLoggedInStatus() {
         final CheckUserLoggedInViewModel viewModelLoggedInStatus =
                 ViewModelProviders.of(this)
