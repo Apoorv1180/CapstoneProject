@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.DateCellView;
 import com.example.capstoneproject.service.repository.DataRepository;
+import com.example.capstoneproject.util.Util;
 import com.example.capstoneproject.viewmodel.SaveUserProgressViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserProgressViewModelFactory;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +38,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -71,21 +74,21 @@ public class ProgressReadActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
     ArrayList<DateData> dateArray = new ArrayList<>();
-
+    static String weightForToday = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress_read);
 
-        initViews();
         setSupportActionBar(mToolbar);
         initToolbar();
+        getExtras();
+        initViews();
         imageInit();
         initDatabase();
         setAlreadyMarkedDates();
         setUpListeners();
-
 
 
         Calendar calendar = Calendar.getInstance();
@@ -103,6 +106,15 @@ public class ProgressReadActivity extends AppCompatActivity {
 
             //  supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowTitleEnabled(true);
+        }
+    }
+
+    private void getExtras() {
+        if (getIntent().getExtras() != null) {
+            weightForToday = getIntent().getExtras().getString("weight");
+            if (!TextUtils.isEmpty(weightForToday)) {
+                addInfoOnSelectedDate(converttoDateData(Util.getTodayDateInString()));
+            }
         }
     }
 
@@ -129,7 +141,7 @@ public class ProgressReadActivity extends AppCompatActivity {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null && dataSnapshot.getValue()!=null) {
+                if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                     Map<String, String> newUserMap = new HashMap<>();
                     Map<String, Map<String, String>> dateKey = (Map<String, Map<String, String>>) dataSnapshot.getValue();
                     Log.e("date", dateKey.toString());
@@ -150,20 +162,19 @@ public class ProgressReadActivity extends AppCompatActivity {
             }
         });
 
-        }
-
+    }
 
 
     private DateData converttoDateData(String key) {
         ArrayList<String> values = new ArrayList<>(Arrays.asList(key.split("-")));
-     //   List<String> values = (ArrayList<String>) Arrays.asList(key.split("-"));
-        DateData newDateData = new DateData(Integer.valueOf(values.get(0)),Integer.valueOf(values.get(1)),Integer.valueOf(values.get(2)));
-    return newDateData;
+        //   List<String> values = (ArrayList<String>) Arrays.asList(key.split("-"));
+        DateData newDateData = new DateData(Integer.valueOf(values.get(2)), Integer.valueOf(values.get(1)), Integer.valueOf(values.get(0)));
+        return newDateData;
     }
 
     private void setUpListeners() {
-       // Set up listeners.
-                expCalendarView.setOnDateClickListener(new OnExpDateClickListener()).setOnMonthScrollListener(new OnMonthScrollListener() {
+        // Set up listeners.
+        expCalendarView.setOnDateClickListener(new OnExpDateClickListener()).setOnMonthScrollListener(new OnMonthScrollListener() {
             @Override
             public void onMonthChange(int year, int month) {
                 YearMonthTv.setText(String.format("%dY%dM", year, month));
@@ -179,16 +190,16 @@ public class ProgressReadActivity extends AppCompatActivity {
         expCalendarView.setOnDateClickListener(new OnDateClickListener() {
             @Override
             public void onDateClick(View view, DateData date) {
-              //  expCalendarView.getMarkedDates().removeAdd();
-               // expCalendarView.markDate(date);
-               // selectedDate = date;
+                //  expCalendarView.getMarkedDates().removeAdd();
+                // expCalendarView.markDate(date);
+                // selectedDate = date;
                 addInfoOnSelectedDate(date);
             }
         });
     }
 
     private void addInfoOnSelectedDate(DateData date) {
-         builder = new AlertDialog.Builder(ProgressReadActivity.this)
+        builder = new AlertDialog.Builder(ProgressReadActivity.this)
                 .setMessage("Please enter your calculated weight");
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_weight, null);
@@ -223,7 +234,6 @@ public class ProgressReadActivity extends AppCompatActivity {
     }
 
 
-
     private void imageInit() {
         final ImageView expandIV = (ImageView) findViewById(R.id.main_expandIV);
         expandIV.setOnClickListener(new View.OnClickListener() {
@@ -232,12 +242,12 @@ public class ProgressReadActivity extends AppCompatActivity {
                 if (ifExpand) {
                     CellConfig.Month2WeekPos = CellConfig.middlePosition;
                     CellConfig.ifMonth = false;
-                    expandIV.setImageResource(R.drawable.ic_arrow_down);
+                    expandIV.setImageResource(R.drawable.ic_arrow_right);
                     expCalendarView.shrink();
                 } else {
                     CellConfig.Week2MonthPos = CellConfig.middlePosition;
                     CellConfig.ifMonth = true;
-                    expandIV.setImageResource(R.drawable.ic_arrow_up);
+                    expandIV.setImageResource(R.drawable.ic_arrow_left);
                     expCalendarView.expand();
                 }
                 ifExpand = !ifExpand;
@@ -248,16 +258,26 @@ public class ProgressReadActivity extends AppCompatActivity {
     public void TravelToClick(View v) {
         Calendar calendar = Calendar.getInstance();
 
-        expCalendarView.travelTo( new DateData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)));
+        expCalendarView.travelTo(new DateData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)));
     }
 
-    private void saveWeightDetails(String weight,DateData eventDay){
+    private void saveWeightDetails(String weight, DateData eventDay) {
 
         String userIdChild = "";
         if (auth.getCurrentUser() != null) {
             userIdChild = auth.getCurrentUser().getUid();
         }
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild).child(eventDay.getYear()+"-"+eventDay.getMonth()+"-"+eventDay.getDay());
+
+        Date date = null;
+        String dateString = eventDay.getDay() + "-" + eventDay.getMonth() + "-" + eventDay.getYear();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            date = simpleDateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild).child(simpleDateFormat.format(date));
 
         Map newUser = new HashMap();
         newUser.put("weight", weight);
@@ -265,12 +285,12 @@ public class ProgressReadActivity extends AppCompatActivity {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if (databaseError != null) {
-                    Log.e("DATABASE","Data could not be saved " + databaseError.getMessage());
+                    Log.e("DATABASE", "Data could not be saved " + databaseError.getMessage());
 
 
                 } else {
-                    Log.e("DATABASE","Data saved successfully.");
-                    Toast.makeText(getApplicationContext(),"Info Saved Successfully",Toast.LENGTH_SHORT).show();
+                    Log.e("DATABASE", "Data saved successfully.");
+                    Toast.makeText(getApplicationContext(), "Info Saved Successfully", Toast.LENGTH_SHORT).show();
                     alertDialog.dismiss();
                     alertDialog.cancel();
 

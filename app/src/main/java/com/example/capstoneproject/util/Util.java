@@ -7,6 +7,8 @@ import android.text.TextUtils;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class Util {
@@ -45,6 +47,13 @@ public class Util {
         } else
             return true;
 
+    }
+
+    public static String getTodayDateInString()
+    {
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        return simpleDateFormat.format(date);
     }
 
     public static String makePath() {
