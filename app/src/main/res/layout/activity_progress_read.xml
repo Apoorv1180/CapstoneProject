@@ -7,7 +7,6 @@
     tools:context=".view.activity.ProgressReadActivity">
 
     <include layout="@layout/toolbar" />
-
     <TextView
         android:id="@+id/main_YYMM_Tv"
         android:layout_width="match_parent"

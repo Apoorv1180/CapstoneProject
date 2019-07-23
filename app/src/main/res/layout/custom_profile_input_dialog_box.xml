@@ -48,9 +48,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dimen20dp"
+                android:hint="@string/enter_your_phone_number"
                 android:inputType="phone"
                 android:maxLength="10"
-                android:hint="@string/enter_your_phone_number"
                 android:textColor="@color/colorPrimaryDark"
                 tools:targetApi="o" />
 

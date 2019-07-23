@@ -7,6 +7,7 @@
     android:background="@drawable/gradient_background"
     android:orientation="vertical"
     tools:context=".view.activity.LoginActivity">
+
     <include layout="@layout/toolbar" />
 
     <androidx.cardview.widget.CardView

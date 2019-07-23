@@ -13,7 +13,6 @@
         android:text="MY PROGRESS "
         android:textColor="@color/white" />
 
-
     <TextView
         android:id="@+id/id_date"
         android:layout_width="match_parent"

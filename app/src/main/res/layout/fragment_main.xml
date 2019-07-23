@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
     android:orientation="horizontal"
-    tools:context=".view.fragment.MainFragment"
-    android:focusable="true">
-
+    tools:context=".view.fragment.MainFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/actions_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/darkgrey"
-        android:id="@+id/actions_recyclerview"
-        android:descendantFocusability="afterDescendants"/>
+        android:descendantFocusability="afterDescendants" />
 
 </LinearLayout>
