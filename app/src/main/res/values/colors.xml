@@ -13,5 +13,9 @@
     <color name="orange400">#ff7043</color>
     <color name="red700">#d32f2f</color>
     <color name="redA700">#d50000</color>
+    <color name="border">#d78585</color>
+    <color name="strok">#c48f8f</color>
     <color name="black">#000000</color>
+    <color name="md_green_200">#b3da93</color>
+    <color name="md_grey_600">#b4b0b0</color>
 </resources>

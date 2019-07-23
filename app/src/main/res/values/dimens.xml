@@ -17,7 +17,14 @@
     <dimen name="margin8dp">8dp</dimen>
     <dimen name="padding8dp">8dp</dimen>
     <dimen name="padding10dp">10dp</dimen>
-    <dimen name="dimen20dp">20dp</dimen>
+    <dimen name="dimen20sp">20sp</dimen>
     <dimen name="dimen10dp">10dp</dimen>
     <dimen name="dimen30dp">30dp</dimen>
+    <dimen name="dimen40dp">40dp</dimen>
+    <dimen name="dimen90dp">90dp</dimen>
+    <dimen name="dimen12dp">12dp</dimen>
+    <dimen name="dimen1px">1px</dimen>
+    <dimen name="dimen100dp">100dp</dimen>
+    <dimen name="dimen0dp">0dp</dimen>
+    <dimen name="dimen20dp">20dp</dimen>
 </resources>
