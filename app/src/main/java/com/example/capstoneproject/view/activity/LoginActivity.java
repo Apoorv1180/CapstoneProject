@@ -275,6 +275,7 @@ public class LoginActivity extends AppCompatActivity {
 
         alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.cornered_card_layout));
         // show it
+
         alertDialog.show();
     }
 
