@@ -2,46 +2,59 @@ package com.example.capstoneproject.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.PlanDetail;
 import com.example.capstoneproject.view.activity.MainActivity;
+import com.example.capstoneproject.view.activity.ProgressReadActivity;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import sun.bob.mcalendarview.vo.DateData;
 
-public class ViewPlanAdapter extends RecyclerView.Adapter<ViewPlanAdapter.ViewHolder>{
+public class ViewPlanAdapter extends RecyclerView.Adapter<ViewPlanAdapter.ViewHolder> {
 
     private final List<PlanDetail> items;
     private Context context;
-    java.sql.Date date;
+    Date date, dates;
+
+    private boolean ifExpand = true;
 
     private OnItemClicked listener;
+    private onItemDialog onItemDialog;
 
     //make interface like this
     public interface OnItemClicked {
         void onItemClick(int position);
     }
 
-    public ViewPlanAdapter(List<PlanDetail> items, Context context) {
+    public interface onItemDialog {
+        void onClick(int position,Date date);
+    }
+
+    public ViewPlanAdapter(List<PlanDetail> items, Context context, onItemDialog onItemDialog) {
         this.items = items;
         this.context = context;
+        this.onItemDialog = onItemDialog;
     }
 
     @Override
@@ -60,20 +73,32 @@ public class ViewPlanAdapter extends RecyclerView.Adapter<ViewPlanAdapter.ViewHo
         holder.renewDate.setText(model.getRenewdate());
         holder.fees.setText(model.getFees());
 
-        long millis=System.currentTimeMillis();
-       date=new java.sql.Date(millis);
 
-        holder.compareDates(String.valueOf(date),model.getRenewdate());
+        String date2 = model.getRenewdate();
+        Calendar cal = Calendar.getInstance();
 
+        SimpleDateFormat input = new SimpleDateFormat("dd-MMM-yy h:mm a");
+        SimpleDateFormat output = new SimpleDateFormat("dd-MM-YYYY");
+        String strs = input.format(cal.getTime());
+        try {
+            date = input.parse(date2);
+            dates = input.parse(strs);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String str = output.format(date);
+        System.out.println("hiii" + str);
+
+        if (dates.compareTo(date) <= 0) {
+            holder.btnrenew.setVisibility(View.VISIBLE);
+        }
         holder.btnrenew.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent newIntent = new Intent(context,MainActivity.class);
-                //newIntent.putExtra("name",holder.userName.getText().toString());
-                context.startActivity(newIntent);
-                //  listener.onItemClick(position);
+            public void onClick(View view) {
+                onItemDialog.onClick(position,date);
             }
         });
+
     }
 
     @Override
@@ -83,7 +108,7 @@ public class ViewPlanAdapter extends RecyclerView.Adapter<ViewPlanAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView planName, joiningDate,renewDate,fees;
+        private TextView planName, joiningDate, renewDate, fees;
         private ImageView UserImage;
         private CardView usercard;
         private Button btnrenew;
@@ -99,21 +124,6 @@ public class ViewPlanAdapter extends RecyclerView.Adapter<ViewPlanAdapter.ViewHo
 
         }
 
-        public  int compareDates(String date, String date2) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            return sdf.format(date).compareTo(sdf.format(date2));
-        }
-//        private String converttoDateData(String date) {
-//            ArrayList<String> values = new ArrayList<>(Arrays.asList(date.split("-")));
-//            String day=values.get(0);
-//            //   List<String> values = (ArrayList<String>) Arrays.asList(key.split("-"));
-//           // DateData newDateData = new DateData(Integer.valueOf(values.get(0)),Integer.valueOf(values.get(1)),Integer.valueOf(values.get(2)));
-//            return day;
-//        }
-    }
-
-    public void setOnClick(OnItemClicked listener) {
-        this.listener = listener;
     }
 
 }

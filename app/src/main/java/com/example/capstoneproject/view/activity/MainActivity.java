@@ -24,6 +24,7 @@ import com.example.capstoneproject.view.fragment.PlanCreation;
 import com.example.capstoneproject.viewmodel.LogoutViewModel;
 
 import static com.example.capstoneproject.view.activity.LoginActivity.USER_CREDENTIAL;
+import static com.example.capstoneproject.view.activity.LoginActivity.USER_UUID;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.SendMessages ,AdminDashboardFragment.SendMessages{
 
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     private static final String ARTICLE_FRAG = "TAG_ARTICLE_FRAG";
     private static final String ARTICLE_FRAG_CREATE = "TAG_ARTICLE_CREATE_FRAG";
     private static final String PLAN_FRAG_CREATE = "TAG_PLAN_CREATE_FRAG";
-    String credential;
+    String credential,uuid;
 
     Toolbar mToolbar;
     @Override
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
 
         if (getIntent() != null) {
             credential = getIntent().getStringExtra(USER_CREDENTIAL);
+            uuid = getIntent().getStringExtra(USER_UUID);
         }
         openMainFragment();
         setSupportActionBar(mToolbar);
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     }
     private void openViePlanActivity() {
         Intent newIntent = new Intent(this,PlanViewActivity.class);
+        newIntent.putExtra(USER_UUID,uuid);
         startActivity(newIntent);
         finish();
     }

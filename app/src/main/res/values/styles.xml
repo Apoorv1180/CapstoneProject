@@ -10,7 +10,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-
+    <style name="myDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        ...
+    </style>
     <style name="textViews">
         <item name="android:textSize">@dimen/text_15sp</item>
         <item name="android:textStyle">bold</item>

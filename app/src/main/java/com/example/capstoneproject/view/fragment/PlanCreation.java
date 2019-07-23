@@ -3,11 +3,16 @@ package com.example.capstoneproject.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Action;
@@ -15,6 +20,7 @@ import com.example.capstoneproject.service.model.UserDetail;
 import com.example.capstoneproject.view.activity.UserDetailActivity;
 import com.example.capstoneproject.view.adapter.ActionAdapter;
 import com.example.capstoneproject.view.adapter.UserDataAdapter;
+import com.example.capstoneproject.view.adapter.ViewPlanAdapter;
 import com.example.capstoneproject.viewmodel.GetUserListViewModel;
 
 import java.util.ArrayList;
@@ -22,6 +28,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,7 +40,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 
-public class PlanCreation extends Fragment {
+public class PlanCreation extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,6 +52,7 @@ public class PlanCreation extends Fragment {
     private List<Action> actionList = new ArrayList<>();
     List<UserDetail> userList = new ArrayList<>();
     UserDataAdapter userDataAdapter;
+
 
 
     // TODO: Rename and change types of parameters
@@ -129,12 +137,6 @@ public class PlanCreation extends Fragment {
 
         });
     }
-//    @Override
-//    public void onItemClick(int position) {
-//        UserDetail userDetail = userList.get(position);
-//        Intent newIntent = new Intent(getActivity(),UserDetailActivity.class);
-//        newIntent.putExtra("name",userDetail.getName());
-//        startActivity(newIntent);
-//    }
+
 
 }

@@ -23,26 +23,6 @@ public class PlanDetail implements Serializable,Parcelable{
     public PlanDetail() {
     }
 
-    protected PlanDetail(Parcel in) {
-        uname = in.readString();
-        planname = in.readString();
-        renewdate = in.readString();
-        joiningdate = in.readString();
-        fees = in.readString();
-    }
-
-    public static final Creator<PlanDetail> CREATOR = new Creator<PlanDetail>() {
-        @Override
-        public PlanDetail createFromParcel(Parcel in) {
-            return new PlanDetail(in);
-        }
-
-        @Override
-        public PlanDetail[] newArray(int size) {
-            return new PlanDetail[size];
-        }
-    };
-
     public String getUname() {
         return uname;
     }
@@ -90,10 +70,6 @@ public class PlanDetail implements Serializable,Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(uname);
-        parcel.writeString(planname);
-        parcel.writeString(renewdate);
-        parcel.writeString(joiningdate);
-        parcel.writeString(fees);
+
     }
 }
