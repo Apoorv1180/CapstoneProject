@@ -37,10 +37,11 @@
                 android:id="@+id/editTextDialogUserInputName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_margin="20dp"
-                android:autofillHints=""
-                android:inputType="">
+                android:layout_margin="@dimen/dimen20dp"
+                android:hint="@string/enter_your_name"
+                android:inputType="text"
+                android:textColor="@color/colorPrimaryDark">
+
 
                 <requestFocus />
             </EditText>
@@ -49,10 +50,12 @@
                 android:id="@+id/editTextDialogUserPhoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:textColor="@color/white"
                 android:autofillHints=""
-                android:inputType=""
+                android:layout_margin="@dimen/dimen20dp"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:hint="@string/enter_your_phone_number"
+                android:textColor="@color/colorPrimaryDark"
                 tools:targetApi="o" />
 
 
