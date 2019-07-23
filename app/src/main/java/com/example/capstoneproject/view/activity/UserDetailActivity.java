@@ -185,6 +185,7 @@ public class UserDetailActivity extends AppCompatActivity {
                 joining_date.setText("");
                 renew_date.setText("");
                 fees.setText("");
+                plan_name.setText("");
 
             }
         });
@@ -253,10 +254,14 @@ public class UserDetailActivity extends AppCompatActivity {
                     loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     loginPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(loginPageIntent);
+                    finish();
                 }
             }
         });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

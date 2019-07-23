@@ -35,7 +35,7 @@ public class ViewPlanAdapter extends RecyclerView.Adapter<ViewPlanAdapter.ViewHo
 
     private final List<PlanDetail> items;
     private Context context;
-    Date date, dates;
+    Date date, Cdates;
 
     private boolean ifExpand = true;
 
@@ -48,7 +48,7 @@ public class ViewPlanAdapter extends RecyclerView.Adapter<ViewPlanAdapter.ViewHo
     }
 
     public interface onItemDialog {
-        void onClick(int position,Date date);
+        void onClick(int position,Date date,PlanDetail model);
     }
 
     public ViewPlanAdapter(List<PlanDetail> items, Context context, onItemDialog onItemDialog) {
@@ -79,23 +79,25 @@ public class ViewPlanAdapter extends RecyclerView.Adapter<ViewPlanAdapter.ViewHo
 
         SimpleDateFormat input = new SimpleDateFormat("dd-MMM-yy h:mm a");
         SimpleDateFormat output = new SimpleDateFormat("dd-MM-YYYY");
-        String strs = input.format(cal.getTime());
+        String currentdate = input.format(cal.getTime());
         try {
             date = input.parse(date2);
-            dates = input.parse(strs);
+            Cdates = input.parse(currentdate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         String str = output.format(date);
         System.out.println("hiii" + str);
 
-        if (dates.compareTo(date) <= 0) {
+        if (Cdates.compareTo(date) <= 0) {
             holder.btnrenew.setVisibility(View.VISIBLE);
+        }else {
+            holder.btnrenew.setVisibility(View.GONE);
         }
         holder.btnrenew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onItemDialog.onClick(position,date);
+                onItemDialog.onClick(position,date,model);
             }
         });
 

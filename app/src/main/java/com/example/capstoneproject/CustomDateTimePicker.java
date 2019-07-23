@@ -163,11 +163,11 @@ public class CustomDateTimePicker implements View.OnClickListener {
             datePicker.updateDate(calendar_date.get(Calendar.YEAR),
                     calendar_date.get(Calendar.MONTH),
                     calendar_date.get(Calendar.DATE));
-            calendar_date.add(Calendar.DATE,2);
+            calendar_date.add(Calendar.DATE,30);
 
             datePicker.setMaxDate(calendar_date.getTimeInMillis());
 
-            calendar_date.add(Calendar.DATE,-2);
+            calendar_date.add(Calendar.DATE,-30);
             datePicker.setMinDate(calendar_date.getTimeInMillis());
 
             dialog.show();

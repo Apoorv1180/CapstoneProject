@@ -20,22 +20,34 @@ import com.example.capstoneproject.view.adapter.ViewPlanAdapter;
 import com.example.capstoneproject.viewmodel.GetUserPlanViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserDetailViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserDetailViewModelFactory;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import sun.bob.mcalendarview.vo.DateData;
 
 import static com.example.capstoneproject.view.activity.LoginActivity.USER_CREDENTIAL;
 import static com.example.capstoneproject.view.activity.LoginActivity.USER_UUID;
@@ -52,8 +64,11 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
     private AlertDialog.Builder builder;
     private AlertDialog alertDialog;
     View dialogView;
-    PlanDetail planDetail=new PlanDetail();
     String uuid;
+
+    private FirebaseAuth auth;
+    private DatabaseReference mDatabase;
+    ArrayList<DateData> dateArray = new ArrayList<>();
 
 
     @Override
@@ -63,6 +78,7 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
 
         if (getIntent() != null) {
             uuid = getIntent().getStringExtra(USER_UUID);
+            Log.d("uuid", uuid);
         }
         //viewplanuser=findViewById(R.id.viewplan_user);
         initViews();
@@ -76,14 +92,55 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
         viewplanuser.setItemAnimator(new DefaultItemAnimator());
         viewplanuser.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL));
         getPlanList();
-        viewPlanAdapter=new ViewPlanAdapter(planList,getApplicationContext(),this);
+        viewPlanAdapter = new ViewPlanAdapter(planList, getApplicationContext(), this);
     }
 
     private void getPlanList() {
-            final GetUserPlanViewModel myModel =
-                    ViewModelProviders.of(this)
-                            .get(GetUserPlanViewModel.class);
-            ObserveGetUserPlanViewModel(myModel);
+        auth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.keepSynced(true);
+        setAlreadyMarkedDates();
+
+        final GetUserPlanViewModel myModel =
+                ViewModelProviders.of(this)
+                        .get(GetUserPlanViewModel.class);
+        ObserveGetUserPlanViewModel(myModel);
+
+    }
+
+
+    private LiveData<List<PlanDetail>> setAlreadyMarkedDates() {
+        final MutableLiveData<List<PlanDetail>> articleData = new MutableLiveData<>();
+        final List<PlanDetail> userList = new ArrayList<>();
+        String userIdChild = "";
+        if (auth.getCurrentUser() != null) {
+            userIdChild = auth.getCurrentUser().getUid();
+        }
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("USER_DETAILS").child(userIdChild);
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null && dataSnapshot.getValue() != null) {
+
+                    PlanDetail planDetail = dataSnapshot.getValue(PlanDetail.class);
+                    userList.add(planDetail);
+                    articleData.setValue(userList);
+                    viewPlanAdapter = new ViewPlanAdapter(userList, getApplicationContext(), PlanViewActivity.this);
+                    //recyclerView.setItemsCanFocus(true);
+                    int resId = R.anim.list_fall_down;
+                    LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(
+                            getApplicationContext(), resId);
+                    viewplanuser.setLayoutAnimation(animation);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return articleData;
     }
 
     private void ObserveGetUserPlanViewModel(GetUserPlanViewModel myModel) {
@@ -91,11 +148,10 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
             @Override
             public void onChanged(List<PlanDetail> User) {
                 if (!User.isEmpty()) {
-                    viewPlanAdapter=new ViewPlanAdapter(User,getApplicationContext(),PlanViewActivity.this);
+                   // viewPlanAdapter = new ViewPlanAdapter(User, getApplicationContext(), PlanViewActivity.this);
                     viewplanuser.setAdapter(viewPlanAdapter);
                     //recyclerView.setItemsCanFocus(true);
                     int resId = R.anim.list_fall_down;
-
                     LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(
                             getApplicationContext(), resId);
                     viewplanuser.setLayoutAnimation(animation);
@@ -106,7 +162,7 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
     }
 
     @Override
-    public void onClick(int position, Date date) {
+    public void onClick(int position, Date date, PlanDetail planDetail) {
         builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog))
                 .setMessage("Please enter your Fees");
 
@@ -131,17 +187,16 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
                 String fees = planfees.getText().toString();
                 String newDate = newrenewDate.getText().toString();
                 if (!TextUtils.isEmpty(fees)) {
-                    UpdatePlanDetails(planDetail.getUname() , planDetail.getJoiningdate(),newDate,fees,planDetail.getPlanname(),uuid);
-                    //  saveWeightDetails(weight, date);
+                    UpdatePlanDetails(planDetail.getUname(), planDetail.getJoiningdate(), newDate, fees, planDetail.getPlanname(), uuid);
                 }
             }
         });
 
     }
 
-    private void UpdatePlanDetails(String uname,String joiningdate,String newDate, String fees,String planname,String uuid) {
+    private void UpdatePlanDetails(String uname, String joiningdate, String newDate, String fees, String planname, String uuid) {
         final SaveUserDetailViewModel saveUserDetailViewModel =
-                ViewModelProviders.of(this, new SaveUserDetailViewModelFactory(getApplication(),uname , joiningdate,newDate,fees,planname,uuid))
+                ViewModelProviders.of(this, new SaveUserDetailViewModelFactory(getApplication(), uname, joiningdate, newDate, fees, planname, uuid))
                         .get(SaveUserDetailViewModel.class);
         observeViewModelSaveUserStatu(saveUserDetailViewModel);
     }
@@ -151,19 +206,18 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
             @Override
             public void onChanged(Boolean aBoolean) {
 
-                if(aBoolean){
-                    Log.e("USER","UserRecord Update Successfully");
+                if (aBoolean) {
+                    Log.e("USER", "UserRecord Update Successfully");
                     alertDialog.dismiss();
                     alertDialog.cancel();
-                }else
-                    Log.e("USER","UserRecord Update UnSuccessful");
+                } else
+                    Log.e("USER", "UserRecord Update UnSuccessful");
 
             }
         });
     }
 
-    public static String addOneMonth(Date date)
-    {
+    public static String addOneMonth(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.MONTH, 1);

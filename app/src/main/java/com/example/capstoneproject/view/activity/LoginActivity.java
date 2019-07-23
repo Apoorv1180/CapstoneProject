@@ -1,8 +1,10 @@
 package com.example.capstoneproject.view.activity;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -49,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setSupportActionBar(mToolbar);
-        initToolbar();
+        //setSupportActionBar(mToolbar);
+        //initToolbar();
         checkUserLoggedInStatus();
     }
 
@@ -109,20 +111,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getValues();
-                if (userName.equalsIgnoreCase("ekta@gmail.com") && password.equalsIgnoreCase("abcdefg")) {
-                    setRole(LoginActivity.this,"Admin");
-                    sendCredentialsForVerification(userName,password);
-                  //  Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                 //   startActivity(i);
-                } else {
-                    setRole(LoginActivity.this,"");
-                    getValues();
-                    checkUsername(userName);
-                    checkPassword(password);
-                    loginWithGivenCredentials(userName, password);
-                }
-            }
-        });
                 validateLogin();
             }
         });
@@ -259,12 +247,6 @@ public class LoginActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 // get user input and set it to result
-                                // edit text
-                                Util.checkUsername(userName.getText().toString().trim());
-                                Util.checkPhoneNumber(userPhoneNumber.getText().toString().trim());
-                                saveUserValues(result.getUid(),userName.getText().toString().trim(),userPhoneNumber.getText().toString().trim(),result,dialog);
-                            public void onClick(DialogInterface dialog, int id) {
-                                //listener added in show listener
                             }
 
                         });
@@ -316,11 +298,9 @@ public class LoginActivity extends AppCompatActivity {
                 if(result){
                     Log.e("USER","SAVED SUCCESSFULLY");
                     dialog.cancel();
+                    dialog.dismiss();
                 }
                 else
-                    Log.e("USER","NOT SAVED ");
-                    dialog.dismiss();
-                } else
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.not_saved_successful_msg));
                 dialog.cancel();
                 dialog.dismiss();

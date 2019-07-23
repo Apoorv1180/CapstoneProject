@@ -98,8 +98,6 @@ public class AdminDashboardFragment extends Fragment {
     private void initView(View view) {
          tvCountApporved=view.findViewById(R.id.tv_count_apporved);
          cardApproved=view.findViewById(R.id.card_plan);
-         tvCountOpen=view.findViewById(R.id.tv_count_open);
-         cardOpen=view.findViewById(R.id.card_program);
          mainGrid=view.findViewById(R.id.mainGrid);
          tvCountClose=view.findViewById(R.id.tv_count_close);
          cardClose=view.findViewById(R.id.card_article);
@@ -119,13 +117,6 @@ public class AdminDashboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.e("USER","Clicked close");
-                sendMessages.sendAction(2);
-            }
-        });
-        cardOpen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("USER","Clicked open");
                 sendMessages.sendAction(1);
             }
         });

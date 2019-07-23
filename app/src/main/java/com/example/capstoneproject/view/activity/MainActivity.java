@@ -169,8 +169,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
                 frt.commit();
                 break;
             case 1:
-                break;
-            case 2:
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.replace(R.id.fragment_container, new ArticleCreateFragment());
