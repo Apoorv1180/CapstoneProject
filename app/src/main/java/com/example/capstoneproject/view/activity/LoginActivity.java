@@ -11,21 +11,15 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.capstoneproject.R;
-import com.example.capstoneproject.service.model.Action;
 import com.example.capstoneproject.util.Util;
-import com.example.capstoneproject.view.adapter.ActionAdapter;
 import com.example.capstoneproject.viewmodel.CheckUserLoggedInViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserViewModel;
 import com.example.capstoneproject.viewmodel.SaveUserViewModelFactory;
@@ -35,8 +29,9 @@ import com.example.capstoneproject.viewmodel.SignUpListViewModel;
 import com.example.capstoneproject.viewmodel.SignUpListViewModelFactory;
 import com.google.firebase.auth.FirebaseUser;
 
-import static com.example.capstoneproject.util.Util.checkPassword;
-import static com.example.capstoneproject.util.Util.checkUsername;
+import static com.example.capstoneproject.util.Util.isValidPassword;
+import static com.example.capstoneproject.util.Util.isValidUsername;
+import static com.example.capstoneproject.util.Util.isEmptyText;
 import static com.example.capstoneproject.util.Util.setRole;
 
 public class LoginActivity extends AppCompatActivity {
@@ -51,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     String userName = "";
     String password = "";
     Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +64,11 @@ public class LoginActivity extends AppCompatActivity {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
 
-          //  supportActionBar.setDisplayHomeAsUpEnabled(true);
+            //  supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowTitleEnabled(true);
         }
     }
+
     private void checkUserLoggedInStatus() {
         final CheckUserLoggedInViewModel viewModelLoggedInStatus =
                 ViewModelProviders.of(this)
@@ -106,10 +103,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getValues();
-                checkUsername(userName);
-                checkPassword(password);
-
-                sendCredentialsForVerification(userName, password);
+                validateSignup();
             }
         });
 
@@ -117,18 +111,47 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getValues();
-                if (userName.equalsIgnoreCase(getResources().getString(R.string.admin_email)) && password.equalsIgnoreCase(getResources().getString(R.string.admin_password))) {
-                    setRole(LoginActivity.this, getResources().getString(R.string.role_admin));
-                    sendCredentialsForVerification(userName, password);
-                } else {
-                    setRole(LoginActivity.this, "");
-                    getValues();
-                    checkUsername(userName);
-                    checkPassword(password);
-                    loginWithGivenCredentials(userName, password);
-                }
+                validateLogin();
             }
         });
+    }
+
+    private void doLogin() {
+        if (userName.equalsIgnoreCase(getResources().getString(R.string.admin_email)) && password.equalsIgnoreCase(getResources().getString(R.string.admin_password))) {
+            setRole(LoginActivity.this, getResources().getString(R.string.role_admin));
+            sendCredentialsForVerification(userName, password);
+        } else {
+            setRole(LoginActivity.this, "");
+            getValues();
+            loginWithGivenCredentials(userName, password);
+        }
+    }
+
+    private void validateLogin() {
+        if (isEmptyText(userName)) {
+            etUsername.setError(getString(R.string.username_empty));
+        } else if (isEmptyText(password)) {
+            etPassword.setError(getString(R.string.password_empty));
+        } else {
+            doLogin();
+        }
+    }
+
+    private void validateSignup() {
+        if (isEmptyText(userName)) {
+            etUsername.setError(getString(R.string.username_empty));
+        } else if (isEmptyText(password)) {
+            etPassword.setError(getString(R.string.password_empty));
+        } else if (!isValidUsername(userName)) {
+            Util.displaySnackBar(btSignUp, getString(R.string.invalid_username));
+        } else if (!isValidPassword(password)) {
+            Util.displaySnackBar(btSignUp, getString(R.string.invalid_password));
+        } else if ((isValidUsername(userName)) && (isValidPassword(password))) {
+            sendCredentialsForVerification(userName, password);
+        } else {
+            Util.displaySnackBar(btSignUp, getString(R.string.invalid_username_password));
+        }
+
     }
 
     private void loginWithGivenCredentials(String userName, String password) {
@@ -143,9 +166,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable FirebaseUser result) {
                 if (result != null) {
+                    Util.displaySnackBar(btLogin, getString(R.string.loggedIn));
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.loggedIn) + result.getEmail().toString());
                     fetchInformationInProfileDialog(result);
                 } else {
+                    Util.displaySnackBar(btLogin, getString(R.string.Not_logged_in));
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.Not_logged_in));
                     initView();
                     setViewOnclickListerners();
@@ -166,9 +191,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable FirebaseUser result) {
                 if (result != null) {
+                    Util.displaySnackBar(btSignUp, getString(R.string.loggedIn));
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.loggedIn) + result.getEmail().toString());
                     fetchInformationInProfileDialog(result);
                 } else {
+                    Util.displaySnackBar(btSignUp, getString(R.string.Not_logged_in));
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.Not_logged_in));
                 }
             }
@@ -215,11 +242,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setPositiveButton(getResources().getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                // get user input and set it to result
-                                // edit text
-                                Util.checkUsername(userName.getText().toString().trim());
-                                Util.checkPhoneNumber(userPhoneNumber.getText().toString().trim());
-                                saveUserValues(result.getUid(), userName.getText().toString().trim(), userPhoneNumber.getText().toString().trim(), result, dialog);
+                                //listener added in show listener
                             }
 
                         });
@@ -229,7 +252,23 @@ public class LoginActivity extends AppCompatActivity {
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface arg0) {
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.white));
+                Button btn_ok = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                btn_ok.setTextColor(getResources().getColor(R.color.white));
+
+                btn_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (Util.isEmptyText(userName.getText().toString().trim())) {
+                            userName.setError(getString(R.string.name_empty));
+                        } else if (Util.isEmptyText(userPhoneNumber.getText().toString().trim())) {
+                            userPhoneNumber.setError(getString(R.string.phone_no_empty));
+                        } else if (!Util.isValidPhoneNumber(userPhoneNumber.getText().toString().trim())) {
+                            Util.displaySnackBar(userName, getString(R.string.invalid_phone_no));
+                        } else {
+                            saveUserValues(result.getUid(), userName.getText().toString().trim(), userPhoneNumber.getText().toString().trim(), result, alertDialog);
+                        }
+                    }
+                });
             }
         });
 
@@ -256,9 +295,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (result) {
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.saved_successful_msg));
                     dialog.cancel();
+                    dialog.dismiss();
                 } else
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.not_saved_successful_msg));
                 dialog.cancel();
+                dialog.dismiss();
             }
         });
 

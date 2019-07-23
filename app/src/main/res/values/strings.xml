@@ -41,9 +41,9 @@
     <string name="imageUrl">imageUrl</string>
     <string name="ARTICLEdESCRIPTION">articleDescription</string>
     <string name="articles">ARTICLES</string>
-    <string name="loggedIn">USER ALREADY LOGGED IN</string>
+    <string name="loggedIn">User logged in successfully</string>
     <string name="key_user">USER</string>
-    <string name="Not_logged_in">USER NOT LOGGED IN</string>
+    <string name="Not_logged_in">User not logged in successfully</string>
     <string name="admin_email">ekta@gmail.com</string>
     <string name="admin_password">abcdefg</string>
     <string name="role_admin">Admin</string>
@@ -84,4 +84,14 @@
     <string name="enter_your_name">Enter Your Name</string>
     <string name="progress_read_title">My Progress</string>
     <string name="article_read_title">Read My Articles</string>
+    <string name="invalid_username_password">Invalid username or password</string>
+    <string name="username_empty">Please enter username</string>
+    <string name="password_empty">Please enter password</string>
+    <string name="invalid_password">Password must contain 1 upper and lower case character,1 digit and 1 special character</string>
+    <string name="invalid_username">Please enter the valid Email-Id</string>
+    <string name="name_empty">Please enter name</string>
+    <string name="phone_no_empty">Please enter phone number</string>
+    <string name="invalid_phone_no">Please enter valid phone number</string>
+    <string name="username_hint">Enter Email-Id</string>
+    <string name="password_hint">Enter Password</string>
 </resources>

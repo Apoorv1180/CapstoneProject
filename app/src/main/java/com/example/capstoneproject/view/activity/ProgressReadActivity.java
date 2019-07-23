@@ -242,12 +242,12 @@ public class ProgressReadActivity extends AppCompatActivity {
                 if (ifExpand) {
                     CellConfig.Month2WeekPos = CellConfig.middlePosition;
                     CellConfig.ifMonth = false;
-                    expandIV.setImageResource(R.drawable.ic_arrow_right);
+                    expandIV.setImageResource(R.drawable.ic_arrow_down);
                     expCalendarView.shrink();
                 } else {
                     CellConfig.Week2MonthPos = CellConfig.middlePosition;
                     CellConfig.ifMonth = true;
-                    expandIV.setImageResource(R.drawable.ic_arrow_left);
+                    expandIV.setImageResource(R.drawable.ic_arrow_up);
                     expCalendarView.expand();
                 }
                 ifExpand = !ifExpand;
