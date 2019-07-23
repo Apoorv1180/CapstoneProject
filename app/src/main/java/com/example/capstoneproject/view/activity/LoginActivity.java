@@ -279,6 +279,7 @@ public class LoginActivity extends AppCompatActivity {
 
         alertDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.cornered_card_layout));
         // show it
+
         alertDialog.show();
     }
     private void saveUserValues(String userId, String Uname, String Password, FirebaseUser result, DialogInterface dialog) {
