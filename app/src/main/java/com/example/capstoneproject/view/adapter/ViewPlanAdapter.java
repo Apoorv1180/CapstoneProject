@@ -89,7 +89,7 @@ public class ViewPlanAdapter extends RecyclerView.Adapter<ViewPlanAdapter.ViewHo
         String str = output.format(date);
         System.out.println("hiii" + str);
 
-        if (Cdates.compareTo(date) <= 0) {
+        if (Cdates.compareTo(date) >= 0) {
             holder.btnrenew.setVisibility(View.VISIBLE);
         }else {
             holder.btnrenew.setVisibility(View.GONE);

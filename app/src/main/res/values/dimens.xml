@@ -22,4 +22,6 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="padding8dp">8dp</dimen>
     <dimen name="padding10dp">10dp</dimen>
     <dimen name="dimen20dp">20dp</dimen>
+    <dimen name="dimen10dp">10dp</dimen>
+    <dimen name="dimen30dp">30dp</dimen>
 </resources>
