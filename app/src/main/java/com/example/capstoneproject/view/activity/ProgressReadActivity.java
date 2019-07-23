@@ -66,6 +66,7 @@ public class ProgressReadActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
 
     private static DataRepository dataRepository;
+
     private static Context context;
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
