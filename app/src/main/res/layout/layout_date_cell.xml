@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.capstoneproject.service.model.DateCellView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
-    android:background="#00ADA3">
+<com.example.capstoneproject.service.model.DateCellView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dimen100dp"
+    android:layout_height="@dimen/dimen100dp"
+    android:background="#00ADA3"
+    android:orientation="vertical">
     <TextView
+        android:id="@+id/id_cell_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="#FFFFFF"
-        android:id="@+id/id_cell_text"/>
+        android:textColor="#FFFFFF" />
 </com.example.capstoneproject.service.model.DateCellView>

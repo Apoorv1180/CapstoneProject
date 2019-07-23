@@ -5,15 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/red700"
-    app:contentInsetRight="0dp"
-    app:contentInsetStart="0dp"
-    app:layout_collapseMode="pin">
-
-    <!--<ImageView-->
-        <!--android:id="@+id/backerror"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="8dp"-->
-        <!--android:src="@drawable/ic_previous" />-->
-
-</androidx.appcompat.widget.Toolbar>
+    app:contentInsetRight="@dimen/dimen0dp"
+    app:contentInsetStart="@dimen/dimen0dp"
+    app:layout_collapseMode="pin"></androidx.appcompat.widget.Toolbar>

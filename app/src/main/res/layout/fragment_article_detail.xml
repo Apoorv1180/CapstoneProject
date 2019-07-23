@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:id="@+id/containor"
-    tools:context=".view.fragment.ArticleDetailFragment">
-<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/image_article"
-        android:background="@drawable/ic_my_article"/>
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    tools:context=".view.fragment.ArticleDetailFragment">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/black"
-        android:textStyle="italic"
-        style="@style/textViews"
-        android:text="@string/hello_blank_fragment" />
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/save"
-    android:textStyle="italic"
-    android:text="Save"
-    android:layout_gravity="end"/>
-</LinearLayout>
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/image_article"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_my_article"
+            android:contentDescription="@string/article_image_description" />
+
+        <TextView
+            style="@style/textViews"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/save"
+            android:textStyle="italic" />
+    </LinearLayout>
 </FrameLayout>
