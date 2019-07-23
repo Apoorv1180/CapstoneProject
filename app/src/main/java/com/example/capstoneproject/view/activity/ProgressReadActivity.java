@@ -70,6 +70,7 @@ public class ProgressReadActivity extends AppCompatActivity {
     Toolbar mToolbar;
 
     private static DataRepository dataRepository;
+
     private static Context context;
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
