@@ -41,13 +41,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.adapter.UserDataAdapter"
-            android:label="@string/title_activity_user_data_adapter"
-            android:theme="@style/AppTheme" />
         <activity android:name=".view.activity.UserDetailActivity" />
         <activity android:name=".view.activity.PlanViewActivity" />
-        <activity android:name=".view.adapter.ViewPlanAdapter"></activity>
     </application>
 
 </manifest>
