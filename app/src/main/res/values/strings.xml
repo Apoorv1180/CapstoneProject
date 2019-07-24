@@ -85,6 +85,8 @@
     <string name="enter_your_name">Enter Your Name</string>
     <string name="progress_read_title">My Progress</string>
     <string name="article_read_title">Read My Articles</string>
+    <string name="admin_panel">Admin Panel</string>
+    <string name="user_panel">My DashBoard</string>
     <string name="invalid_username_password">Invalid username or password</string>
     <string name="username_empty">Please enter username</string>
     <string name="password_empty">Please enter password</string>
