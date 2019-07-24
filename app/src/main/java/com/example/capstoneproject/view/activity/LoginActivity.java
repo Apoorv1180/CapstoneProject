@@ -9,14 +9,17 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.util.Util;
@@ -47,27 +50,15 @@ public class LoginActivity extends AppCompatActivity {
     String password = "";
     Toolbar mToolbar;
 
+    ProgressDialog progressBar,progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //setSupportActionBar(mToolbar);
-        //initToolbar();
         checkUserLoggedInStatus();
     }
 
-    private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle(R.string.title_login);
-        setSupportActionBar(mToolbar);
-
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-
-            //  supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setDisplayShowTitleEnabled(true);
-        }
-    }
 
     private void checkUserLoggedInStatus() {
         final CheckUserLoggedInViewModel viewModelLoggedInStatus =
@@ -102,6 +93,9 @@ public class LoginActivity extends AppCompatActivity {
         btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar = ProgressDialog.show(LoginActivity.this, getString(R.string.loading),
+                        "Please Wait" == null ? getString(R.string.wait) : "Please Wait", true, false);
+
                 getValues();
                 validateSignup();
             }
@@ -110,6 +104,9 @@ public class LoginActivity extends AppCompatActivity {
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog = ProgressDialog.show(LoginActivity.this, getString(R.string.loading),
+                        "Please Wait" == null ? getString(R.string.wait) : "Please Wait", true, false);
+
                 getValues();
                 validateLogin();
             }
@@ -203,6 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e("USER", "USER NOT REGISTERED");
                 }
             }
+
         });
     }
 
@@ -223,6 +221,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void fetchInformationInProfileDialog(final FirebaseUser result) {
+        if(progressDialog!=null) {
+            progressDialog.dismiss();
+            progressDialog.cancel();
+        }
+        if(progressBar!=null) {
+            progressBar.cancel();
+            progressBar.dismiss();
+        }
         // get prompts.xml view
         cardView.setVisibility(View.GONE);
         final  EditText userName,userPhoneNumber;

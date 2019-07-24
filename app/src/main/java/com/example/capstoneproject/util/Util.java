@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 public class Util {
 
     private static final String KEY_ROLE = "Admin";
+    private static final String KEY_CREDENTIAL = "UserName";
 
 
     public static String getRole(Context context) {
@@ -29,6 +30,17 @@ public class Util {
     public static void setRole(Context context, String role) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putString(KEY_ROLE, role);
+        editor.commit();
+    }
+
+    public static String getCredential(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(KEY_CREDENTIAL, "");
+    }
+
+    public static void setCredential(Context context, String credential) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putString(KEY_CREDENTIAL, credential);
         editor.commit();
     }
 

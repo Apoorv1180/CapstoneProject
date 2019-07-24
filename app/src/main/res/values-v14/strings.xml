@@ -35,4 +35,5 @@
     <string name="enter_your_name">Enter Your Name</string>
     <string name="admin_panel">Admin Panel</string>
     <string name="user_panel">My DashBoard</string>
+    <string name="no_record_found">No Plans Enrolled</string>
 </resources>

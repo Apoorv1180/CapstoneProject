@@ -1,17 +1,22 @@
 package com.example.capstoneproject.view.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.PlanDetail;
@@ -37,8 +42,11 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -60,12 +68,12 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
     ViewPlanAdapter viewPlanAdapter;
 
     LinearLayoutManager layoutManager;
-
+    TextView emptyView;
     private AlertDialog.Builder builder;
     private AlertDialog alertDialog;
     View dialogView;
     String uuid;
-
+    Toolbar mToolbar;
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
     ArrayList<DateData> dateArray = new ArrayList<>();
@@ -75,13 +83,27 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_view);
-
+        initToolbar();
+        setSupportActionBar(mToolbar);
         if (getIntent() != null) {
             uuid = getIntent().getStringExtra(USER_UUID);
-            Log.d("uuid", uuid);
         }
         //viewplanuser=findViewById(R.id.viewplan_user);
         initViews();
+
+    }
+
+    private void initToolbar() {
+        mToolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(true);
+        }
+
 
     }
 
@@ -90,6 +112,7 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
         layoutManager = new LinearLayoutManager(getApplicationContext());
         viewplanuser.setLayoutManager(layoutManager);
         viewplanuser.setItemAnimator(new DefaultItemAnimator());
+        emptyView =findViewById(R.id.emptyView);
         viewplanuser.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL));
         getPlanList();
         viewPlanAdapter = new ViewPlanAdapter(planList, getApplicationContext(), this);
@@ -132,6 +155,11 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
                     LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(
                             getApplicationContext(), resId);
                     viewplanuser.setLayoutAnimation(animation);
+                    emptyView.setVisibility(View.GONE);
+                }
+                else {
+                    emptyView.setVisibility(View.VISIBLE);
+                    viewplanuser.setVisibility(View.GONE);
                 }
             }
 
@@ -225,4 +253,25 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
         String strs = input.format(cal.getTime());
         return strs;
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent newIntent = new Intent(this,MainActivity.class);
+        startActivity(newIntent);
+        finish();
+    }
+
 }

@@ -98,4 +98,7 @@
     <string name="username_hint">Enter Email-Id</string>
     <string name="password_hint">Enter Password</string>
     <string name="title_activity_user_data_adapter">UserDataAdapter</string>
+    <string name="loading">Loading</string>
+    <string name="wait">Wait</string>
+    <string name="no_record_found">No Plans Enrolled</string>
 </resources>

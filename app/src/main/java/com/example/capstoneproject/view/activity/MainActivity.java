@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Action;
+import com.example.capstoneproject.util.Util;
 import com.example.capstoneproject.view.fragment.AdminDashboardFragment;
 import com.example.capstoneproject.view.fragment.ArticleCreateFragment;
 import com.example.capstoneproject.view.fragment.MainFragment;
@@ -40,14 +41,15 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
         super.onCreate(savedInstanceState);
         //overridePendingTransition(R.anim.blink,R.anim.fade_in_activity);
         setContentView(R.layout.activity_main2);
-
+        initToolbar();
+        setSupportActionBar(mToolbar);
         if (getIntent() != null) {
             credential = getIntent().getStringExtra(USER_CREDENTIAL);
+            Util.setCredential(this,credential);
             uuid = getIntent().getStringExtra(USER_UUID);
         }
         openMainFragment();
-        setSupportActionBar(mToolbar);
-        initToolbar();
+
     }
 
     private void initToolbar() {
@@ -65,15 +67,17 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
     }
 
     private void openMainFragment() {
-        if(credential.equalsIgnoreCase("ekta@gmail.com")) {
+        if(Util.getCredential(this).equalsIgnoreCase("ekta@gmail.com")) {
            // if (getRole(MainActivity.this).equalsIgnoreCase("Admin")) {
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
+                mToolbar.setTitle(R.string.admin_panel);
                 ft.add(R.id.fragment_container, new AdminDashboardFragment());
                 ft.commit();
         }else {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
+            mToolbar.setTitle(R.string.user_panel);
             ft.add(R.id.fragment_container, new MainFragment());
             ft.commit();
         }
@@ -126,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
         switch (id){
             case R.id.logout:
                 logout();
+                finish();
                 return true;
             case android.R.id.home:
                 onBackPressed();
