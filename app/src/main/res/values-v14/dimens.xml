@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="widget_margin">0dp</dimen>
+    <dimen name="padding16dp">16dp</dimen>
+    <dimen name="dimen5dp">5dp</dimen>
+    <dimen name="dimen_10dp">10dp</dimen>
+    <dimen name="text_15sp">15sp</dimen>
 
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_12sp">12sp</dimen>
+    <dimen name="dimen_1dp">1dp</dimen>
+    <dimen name="text_18sp">18sp</dimen>
+    <dimen name="text_14sp">14sp</dimen>
+    <dimen name="margin10dp">10dp</dimen>
+    <dimen name="text_16sp">16sp</dimen>
+    <dimen name="padding5dp">5dp</dimen>
+    <dimen name="margin8dp">8dp</dimen>
+    <dimen name="padding8dp">8dp</dimen>
+    <dimen name="padding10dp">10dp</dimen>
+    <dimen name="dimen20sp">20sp</dimen>
+    <dimen name="dimen10dp">10dp</dimen>
+    <dimen name="dimen30dp">30dp</dimen>
+    <dimen name="dimen40dp">40dp</dimen>
+    <dimen name="dimen90dp">90dp</dimen>
+    <dimen name="dimen12dp">12dp</dimen>
+    <dimen name="dimen1px">1px</dimen>
+    <dimen name="dimen100dp">100dp</dimen>
+    <dimen name="dimen0dp">0dp</dimen>
+    <dimen name="dimen20dp">20dp</dimen>
+    <dimen name="dimen50dp">50dp</dimen>
+    <dimen name="dimen8dp">8dp</dimen>
+    <dimen name="dimen16dp">16dp</dimen>
+    <dimen name="dimen25sp">25sp</dimen>
+    <dimen name="dimen18sp">18sp</dimen>
+    <dimen name="dimen60dp">60dp</dimen>
+    <dimen name="dimen2dp">2dp</dimen>
+    <dimen name="dimen14sp">14sp</dimen>
+    <dimen name="dimen80dp">80dp</dimen>
 </resources>
