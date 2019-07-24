@@ -98,4 +98,5 @@
     <string name="username_hint">Enter Email-Id</string>
     <string name="password_hint">Enter Password</string>
     <string name="title_activity_user_data_adapter">UserDataAdapter</string>
+    <string name="updateWeightErrorMessage">Please login to update your weight</string>
 </resources>
