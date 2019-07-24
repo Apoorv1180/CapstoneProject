@@ -6,12 +6,19 @@
     android:orientation="vertical"
     tools:context=".view.activity.ProgressReadActivity">
 
-    <include layout="@layout/toolbar" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar" />
+    </LinearLayout>
     <TextView
         android:id="@+id/main_YYMM_Tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#A777BE"
+        android:background="@color/orange_red"
         android:gravity="center_vertical"
         android:padding="@dimen/dimen10dp"
         android:text="@string/months"

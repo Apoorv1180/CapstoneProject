@@ -133,6 +133,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
                 finish();
                 return true;
             case android.R.id.home:
+                if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+                    if (Util.getCredential(this).equalsIgnoreCase("ekta@gmail.com")) {
+                        mToolbar.setTitle(R.string.admin_panel);
+                    } else
+                        mToolbar.setTitle(R.string.user_panel);
+                }
                 onBackPressed();
                 return true;
             default:
@@ -168,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
         switch (actionItem){
             case 0:
                 FragmentManager frm = getSupportFragmentManager();
+                mToolbar.setTitle(R.string.create_plan);
                 FragmentTransaction frt = frm.beginTransaction();
                 frt.replace(R.id.fragment_container, new PlanCreation());
                 frt.addToBackStack(PLAN_FRAG_CREATE);
@@ -176,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Send
             case 1:
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
+                mToolbar.setTitle(R.string.create_article);
                 ft.replace(R.id.fragment_container, new ArticleCreateFragment());
                 ft.addToBackStack(ARTICLE_FRAG_CREATE);
                 ft.commit();

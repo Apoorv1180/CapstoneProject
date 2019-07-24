@@ -9,13 +9,6 @@
     tools:context=".view.activity.LoginActivity">
 
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content" />
-
-
     <androidx.cardview.widget.CardView
         android:id="@+id/login_card"
         android:layout_width="match_parent"

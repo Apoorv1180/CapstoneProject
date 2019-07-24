@@ -5,12 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
+
     <ImageView
         android:id="@+id/imgView"
         android:layout_width="120dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
         android:adjustViewBounds="true"
         android:background="@drawable/ic_camera_alt_black_24dp"
         android:clickable="true"

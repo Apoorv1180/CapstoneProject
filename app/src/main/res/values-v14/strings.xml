@@ -36,4 +36,9 @@
     <string name="admin_panel">Admin Panel</string>
     <string name="user_panel">My DashBoard</string>
     <string name="no_record_found">No Plans Enrolled</string>
+    <string name="enter_weight">Enter Weight (Kg)</string>
+    <string name="desc_article">Enter Article Description</string>
+    <string name="create_article">Create Article</string>
+    <string name="create_plan">Create Plan</string>
+    <string name="user_plan_creation">Create User\'s Plan</string>
 </resources>

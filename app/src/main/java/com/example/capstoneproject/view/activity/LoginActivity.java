@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     String password = "";
     Toolbar mToolbar;
 
-    ProgressDialog progressBar,progressDialog;
+    ProgressDialog progressBar, progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,13 +91,19 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setViewOnclickListerners() {
         btSignUp.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                progressBar = ProgressDialog.show(LoginActivity.this, getString(R.string.loading),
-                        "Please Wait" == null ? getString(R.string.wait) : "Please Wait", true, false);
+                if (userName.equalsIgnoreCase(getResources().getString(R.string.admin_email)) && password.equalsIgnoreCase(getResources().getString(R.string.admin_password))) {
+                    btSignUp.setEnabled(false);
+                } else {
 
-                getValues();
-                validateSignup();
+                    progressBar = ProgressDialog.show(LoginActivity.this, getString(R.string.loading),
+                            "Please Wait" == null ? getString(R.string.wait) : "Please Wait", true, false);
+                    btSignUp.setEnabled(true);
+                    getValues();
+                    validateSignup();
+                }
             }
         });
 
@@ -195,6 +201,14 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e("USER", "USER REGISTERED AND LOGGED IN" + result.getEmail().toString());
                     fetchInformationInProfileDialog(result);
                 } else {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                        progressDialog.cancel();
+                    }
+                    if (progressBar != null) {
+                        progressBar.dismiss();
+                        progressBar.cancel();
+                    }
                     Util.displaySnackBar(btSignUp, getString(R.string.Not_logged_in));
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.Not_logged_in));
                     Log.e("USER", "USER NOT REGISTERED");
@@ -209,29 +223,29 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         btLogin = findViewById(R.id.bt_login);
         btSignUp = findViewById(R.id.bt_register);
-        cardView =findViewById(R.id.login_card);
+        cardView = findViewById(R.id.login_card);
     }
 
     private void sendUserToWelcomeScreen(FirebaseUser user) {
         Intent newIntent = new Intent(LoginActivity.this, MainActivity.class);
-        newIntent.putExtra(USER_UUID,user.getUid());
-        newIntent.putExtra(USER_CREDENTIAL,user.getEmail());
+        newIntent.putExtra(USER_UUID, user.getUid());
+        newIntent.putExtra(USER_CREDENTIAL, user.getEmail());
         startActivity(newIntent);
         finish();
     }
 
     private void fetchInformationInProfileDialog(final FirebaseUser result) {
-        if(progressDialog!=null) {
+        if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog.cancel();
         }
-        if(progressBar!=null) {
+        if (progressBar != null) {
             progressBar.cancel();
             progressBar.dismiss();
         }
         // get prompts.xml view
         cardView.setVisibility(View.GONE);
-        final  EditText userName,userPhoneNumber;
+        final EditText userName, userPhoneNumber;
 
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.custom_profile_input_dialog_box, null);
@@ -251,7 +265,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 // get user input and set it to result
                             }
 
@@ -259,7 +273,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // create alert dialog
         final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface arg0) {
                 Button btn_ok = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -288,12 +302,13 @@ public class LoginActivity extends AppCompatActivity {
 
         alertDialog.show();
     }
+
     private void saveUserValues(String userId, String Uname, String Password, FirebaseUser result, DialogInterface dialog) {
         final SaveUserViewModel viewModelSignIn =
-                ViewModelProviders.of(this, new SaveUserViewModelFactory(this.getApplication(),userId, Uname, Password))
+                ViewModelProviders.of(this, new SaveUserViewModelFactory(this.getApplication(), userId, Uname, Password))
                         .get(SaveUserViewModel.class);
-        boolean status =observeViewModelSaveUserStatus(viewModelSignIn,dialog);
-        if(status){
+        boolean status = observeViewModelSaveUserStatus(viewModelSignIn, dialog);
+        if (status) {
             sendUserToWelcomeScreen(result);
         }
     }
@@ -302,12 +317,11 @@ public class LoginActivity extends AppCompatActivity {
         viewModelSaveUserStatus.isSavedStatus().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean result) {
-                if(result){
-                    Log.e("USER","SAVED SUCCESSFULLY");
+                if (result) {
+                    Log.e("USER", "SAVED SUCCESSFULLY");
                     dialog.cancel();
                     dialog.dismiss();
-                }
-                else
+                } else
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.not_saved_successful_msg));
                 dialog.cancel();
                 dialog.dismiss();

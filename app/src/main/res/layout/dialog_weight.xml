@@ -19,7 +19,8 @@
                 android:id="@+id/weightInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Your Calculated Weight" />
+                android:hint="@string/enter_weight"
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/saveInfo"

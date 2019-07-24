@@ -14,21 +14,28 @@
         <include layout="@layout/toolbar" />
     </LinearLayout>
 
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/ll_main"
         android:layout_marginStart="@dimen/dimen40dp"
-        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginTop="@dimen/dimen_20dp"
         android:layout_marginEnd="@dimen/dimen40dp"
-        android:layout_marginBottom="@dimen/dimen_10dp"
+        android:layout_marginBottom="@dimen/dimen_20dp"
         app:cardCornerRadius="@dimen/dimen5dp"
         app:cardElevation="@dimen/dimen_10dp">
+        >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <Button

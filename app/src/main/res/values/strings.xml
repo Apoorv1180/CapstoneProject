@@ -47,7 +47,7 @@
     <string name="key_user">USER</string>
     <string name="Not_logged_in">User not logged in successfully</string>
     <string name="admin_email">ekta@gmail.com</string>
-    <string name="admin_password">abcdefg</string>
+    <string name="admin_password">Xpress@123</string>
     <string name="role_admin">Admin</string>
     <string name="ok">OK</string>
     <string name="saved_successful_msg">SAVED SUCCESSFULLY</string>
@@ -102,4 +102,10 @@
     <string name="wait">Wait</string>
     <string name="no_record_found">No Plans Enrolled</string>
     <string name="updateWeightErrorMessage">Please login to update your weight</string>
+    <string name="my_plan">My Plan</string>
+    <string name="enter_weight">Enter Weight (Kg)</string>
+    <string name="desc_article">Enter Article Description</string>
+    <string name="create_article">Create Article</string>
+    <string name="create_plan">Create Plan</string>
+    <string name="user_plan_creation">Create User\'s Plan</string>
 </resources>

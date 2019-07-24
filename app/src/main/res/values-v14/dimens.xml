@@ -37,4 +37,5 @@
     <dimen name="dimen2dp">2dp</dimen>
     <dimen name="dimen14sp">14sp</dimen>
     <dimen name="dimen80dp">80dp</dimen>
+    <dimen name="dimen_20dp">20dp</dimen>
 </resources>

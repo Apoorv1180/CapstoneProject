@@ -9,11 +9,13 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Article;
@@ -38,6 +40,7 @@ public class ArticleReadActivity extends AppCompatActivity {
      */
     private ViewPager mPager;
 
+
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
@@ -51,6 +54,7 @@ public class ArticleReadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_article_read);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
+
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
 
@@ -59,6 +63,7 @@ public class ArticleReadActivity extends AppCompatActivity {
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (mPager.getCurrentItem() != 0)
                     mPager.setCurrentItem(mPager.getCurrentItem() - 1);
             }
@@ -67,6 +72,7 @@ public class ArticleReadActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (mPager.getCurrentItem() < mPager.getAdapter().getCount())
                     mPager.setCurrentItem(mPager.getCurrentItem() + 1);
             }
@@ -85,7 +91,6 @@ public class ArticleReadActivity extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowTitleEnabled(true);
         }
-
 
     }
 
@@ -116,12 +121,14 @@ public class ArticleReadActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Article> articles) {
                 if (!articles.isEmpty()) {
+
                     mPager.setPageTransformer(true, new ZoomOutPageTransformer());
                     pagerAdapter = new CustomPageAdapter(ArticleReadActivity.this, articles);
                     mPager.setAdapter(pagerAdapter);
                 }
             }
         });
+
     }
 
 

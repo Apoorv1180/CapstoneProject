@@ -53,7 +53,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-
+        setTitle(R.string.user_plan_creation);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
 

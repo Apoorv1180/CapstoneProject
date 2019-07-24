@@ -95,6 +95,7 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
 
     private void initToolbar() {
         mToolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(R.string.my_plan);
         setSupportActionBar(mToolbar);
 
         ActionBar supportActionBar = getSupportActionBar();
@@ -116,6 +117,8 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
         viewplanuser.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL));
         getPlanList();
         viewPlanAdapter = new ViewPlanAdapter(planList, getApplicationContext(), this);
+
+
     }
 
     private void getPlanList() {
@@ -145,7 +148,8 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
-
+                    emptyView.setVisibility(View.GONE);
+                    viewplanuser.setVisibility(View.VISIBLE);
                     PlanDetail planDetail = dataSnapshot.getValue(PlanDetail.class);
                     userList.add(planDetail);
                     articleData.setValue(userList);
@@ -155,11 +159,7 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
                     LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(
                             getApplicationContext(), resId);
                     viewplanuser.setLayoutAnimation(animation);
-                    emptyView.setVisibility(View.GONE);
-                }
-                else {
-                    emptyView.setVisibility(View.VISIBLE);
-                    viewplanuser.setVisibility(View.GONE);
+
                 }
             }
 
@@ -175,6 +175,7 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
         myModel.getUserPlanData().observe(this, new Observer<List<PlanDetail>>() {
             @Override
             public void onChanged(List<PlanDetail> User) {
+
                 if (!User.isEmpty()) {
                    // viewPlanAdapter = new ViewPlanAdapter(User, getApplicationContext(), PlanViewActivity.this);
                     viewplanuser.setAdapter(viewPlanAdapter);
@@ -187,7 +188,12 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
             }
 
         });
+        if (planList.size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            viewplanuser.setVisibility(View.GONE);
+        }
     }
+
 
     @Override
     public void onClick(int position, Date date, PlanDetail planDetail) {

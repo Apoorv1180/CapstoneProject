@@ -168,9 +168,7 @@ public class ArticleCreateFragment extends Fragment {
     private void uploadImage() {
 
         if (byteData != null) {
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
+
             checkUserLoggedInStatus(byteData);
         }
     }
@@ -198,11 +196,20 @@ public class ArticleCreateFragment extends Fragment {
 
 
     private void uploadImagetoStorage(byte[] byteData, FirebaseUser result) {
-        mChildPath = Util.makePath();
-        final UploadImageViewModel uploadImageViewModel =
-                ViewModelProviders.of(this, new UploadImageViewModelFactory(getActivity().getApplication(), byteData,result, mChildPath))
-                        .get(UploadImageViewModel.class);
-        observeViewModelUpload(uploadImageViewModel,mChildPath);
+        if (!TextUtils.isEmpty(articleDesc.getText().toString())) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setCancelable(false);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+            mChildPath = Util.makePath();
+            final UploadImageViewModel uploadImageViewModel =
+                    ViewModelProviders.of(this, new UploadImageViewModelFactory(getActivity().getApplication(), byteData, result, mChildPath))
+                            .get(UploadImageViewModel.class);
+            observeViewModelUpload(uploadImageViewModel, mChildPath);
+        } else {
+            articleDesc.setError(getResources().getString(R.string.desc_article));
+
+        }
     }
 
     private void observeViewModelUpload(UploadImageViewModel viewModelUploadStatus, final String mChildPath) {
@@ -256,16 +263,6 @@ public class ArticleCreateFragment extends Fragment {
         });
     }
 
-    private void createAnArticleObject(Uri result) {
-
-//        String desc = articleDesc.getText().toString();
-//        if(!TextUtils.isEmpty(desc))
-//            article.setArticleDescription(desc);
-//            article.setImageUrl(result.toString());
-//            btnSaveArticle.setEnabled(true);
-
-    }
-
     private void saveArticleInDatabase(Article article) {
         final SaveArticleViewModel articleViewModel =
                 ViewModelProviders.of(this, new SaveArticleViewModelFactory(getActivity().getApplication(), article.getImageUrl(), article.getArticleDescription()))
@@ -281,9 +278,12 @@ public class ArticleCreateFragment extends Fragment {
 
                 if(aBoolean){
                     Log.e("USER","Article Saved Successfully");
-                }else
-                    Log.e("USER","Article Saved UnSuccessful");
-
+                    Util.displaySnackBar(imageView, "Image Saved Successfully");
+                    resetPage();
+                } else {
+                    Util.displaySnackBar(imageView, "Image Could Not be Saved Successfully");
+                    Log.e("USER", "Article Saved UnSuccessful");
+                }
             }
         });
     }
