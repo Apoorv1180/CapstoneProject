@@ -1,7 +1,6 @@
 package com.example.capstoneproject.viewmodel;
 
 import android.app.Application;
-import android.net.Uri;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,6 +19,6 @@ public class SaveArticleViewModelFactory extends ViewModelProvider.NewInstanceFa
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new SaveArticleViewModel(mApplication,mImageUrl,mArticleDesc);
+        return (T) new SaveArticleViewModel(mApplication, mImageUrl, mArticleDesc);
     }
 }

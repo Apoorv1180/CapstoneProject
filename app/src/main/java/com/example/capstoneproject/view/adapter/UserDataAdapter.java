@@ -8,17 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.capstoneproject.R;
-import com.example.capstoneproject.service.model.Action;
 import com.example.capstoneproject.service.model.UserDetail;
 import com.example.capstoneproject.view.activity.UserDetailActivity;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHolder> {
 
@@ -54,11 +51,10 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHo
         holder.usercard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent newIntent = new Intent(context,UserDetailActivity.class);
-                newIntent.putExtra("name",holder.userName.getText().toString());
-                newIntent.putExtra("uid",model.getUid());
+                Intent newIntent = new Intent(context, UserDetailActivity.class);
+                newIntent.putExtra(context.getResources().getString(R.string.name_key), holder.userName.getText().toString());
+                newIntent.putExtra(context.getResources().getString(R.string.uid_key), model.getUid());
                 context.startActivity(newIntent);
-              //  listener.onItemClick(position);
             }
         });
     }

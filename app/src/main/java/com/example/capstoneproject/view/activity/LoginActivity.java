@@ -1,25 +1,21 @@
 package com.example.capstoneproject.view.activity;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.util.Util;
@@ -32,23 +28,30 @@ import com.example.capstoneproject.viewmodel.SignUpListViewModel;
 import com.example.capstoneproject.viewmodel.SignUpListViewModelFactory;
 import com.google.firebase.auth.FirebaseUser;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static com.example.capstoneproject.util.Util.isEmptyText;
 import static com.example.capstoneproject.util.Util.isValidPassword;
 import static com.example.capstoneproject.util.Util.isValidUsername;
-import static com.example.capstoneproject.util.Util.isEmptyText;
 import static com.example.capstoneproject.util.Util.setRole;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static final String USER_CREDENTIAL = "credential";
     public static final String USER_UUID = "uuid";
+    @BindView(R.id.et_username)
     EditText etUsername;
+    @BindView(R.id.et_password)
     EditText etPassword;
+    @BindView(R.id.login_card)
     CardView cardView;
+    @BindView(R.id.bt_register)
     Button btSignUp;
+    @BindView(R.id.bt_login)
     Button btLogin;
     String userName = "";
     String password = "";
-    Toolbar mToolbar;
 
     ProgressDialog progressBar, progressDialog;
 
@@ -56,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         checkUserLoggedInStatus();
     }
 
@@ -72,10 +76,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(FirebaseUser result) {
                 if (result != null) {
-                    Log.e("USER", "USER ALREADY LOGGED IN" + result.getEmail().toString());
                     sendUserToWelcomeScreen(result);
                 } else {
-                    Log.e("USER", "USER NOT LOGGED IN");
                     initView();
                     setViewOnclickListerners();
                 }
@@ -99,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
 
                     progressBar = ProgressDialog.show(LoginActivity.this, getString(R.string.loading),
-                            "Please Wait" == null ? getString(R.string.wait) : "Please Wait", true, false);
+                            getString(R.string.please_wait) == null ? getString(R.string.wait) : getString(R.string.please_wait), true, false);
                     btSignUp.setEnabled(true);
                     getValues();
                     validateSignup();
@@ -111,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressDialog = ProgressDialog.show(LoginActivity.this, getString(R.string.loading),
-                        "Please Wait" == null ? getString(R.string.wait) : "Please Wait", true, false);
+                        getString(R.string.please_wait) == null ? getString(R.string.wait) : getString(R.string.please_wait), true, false);
 
                 getValues();
                 validateLogin();
@@ -169,14 +171,20 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable FirebaseUser result) {
                 if (result != null) {
-                    Log.e("USER", "USER LOGGED IN" + result.getEmail().toString());
                     Util.displaySnackBar(btLogin, getString(R.string.loggedIn));
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.loggedIn) + result.getEmail().toString());
                     fetchInformationInProfileDialog(result);
                 } else {
-                    Log.e("USER", "USER NOT LOGGED IN");
                     Util.displaySnackBar(btLogin, getString(R.string.Not_logged_in));
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.Not_logged_in));
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                        progressDialog.cancel();
+                    }
+                    if (progressBar != null) {
+                        progressBar.dismiss();
+                        progressBar.cancel();
+                    }
                     initView();
                     setViewOnclickListerners();
                 }
@@ -198,7 +206,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (result != null) {
                     Util.displaySnackBar(btSignUp, getString(R.string.loggedIn));
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.loggedIn) + result.getEmail().toString());
-                    Log.e("USER", "USER REGISTERED AND LOGGED IN" + result.getEmail().toString());
                     fetchInformationInProfileDialog(result);
                 } else {
                     if (progressDialog != null) {
@@ -211,7 +218,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     Util.displaySnackBar(btSignUp, getString(R.string.Not_logged_in));
                     Log.e(getResources().getString(R.string.key_user), getResources().getString(R.string.Not_logged_in));
-                    Log.e("USER", "USER NOT REGISTERED");
                 }
             }
 
@@ -219,11 +225,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        etUsername = findViewById(R.id.et_username);
-        etPassword = findViewById(R.id.et_password);
-        btLogin = findViewById(R.id.bt_login);
-        btSignUp = findViewById(R.id.bt_register);
-        cardView = findViewById(R.id.login_card);
+        ButterKnife.bind(LoginActivity.this);
     }
 
     private void sendUserToWelcomeScreen(FirebaseUser user) {
@@ -264,6 +266,7 @@ public class LoginActivity extends AppCompatActivity {
         alertDialogBuilder
                 .setCancelable(false)
                 .setPositiveButton("OK",
+
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // get user input and set it to result
@@ -318,7 +321,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(Boolean result) {
                 if (result) {
-                    Log.e("USER", "SAVED SUCCESSFULLY");
                     dialog.cancel();
                     dialog.dismiss();
                 } else

@@ -79,7 +79,6 @@ public class CustomDateTimePicker implements View.OnClickListener {
         linear_main.setGravity(Gravity.CENTER);
 
 
-
         LinearLayout linear_child = new LinearLayout(activity);
         linear_child.setLayoutParams(linear_wrap_wrap);
         linear_child.setOrientation(LinearLayout.VERTICAL);
@@ -159,15 +158,14 @@ public class CustomDateTimePicker implements View.OnClickListener {
             timePicker.setCurrentMinute(selectedMinute);
 
 
-
             datePicker.updateDate(calendar_date.get(Calendar.YEAR),
                     calendar_date.get(Calendar.MONTH),
                     calendar_date.get(Calendar.DATE));
-            calendar_date.add(Calendar.DATE,30);
+            calendar_date.add(Calendar.DATE, 30);
 
             datePicker.setMaxDate(calendar_date.getTimeInMillis());
 
-            calendar_date.add(Calendar.DATE,-30);
+            calendar_date.add(Calendar.DATE, -30);
             datePicker.setMinDate(calendar_date.getTimeInMillis());
 
             dialog.show();
@@ -192,7 +190,7 @@ public class CustomDateTimePicker implements View.OnClickListener {
     }
 
     public void setDate(Date date) {
-        if (date != null){
+        if (date != null) {
             calendar_date = Calendar.getInstance();
             calendar_date.setTime(date);
         }
@@ -212,8 +210,6 @@ public class CustomDateTimePicker implements View.OnClickListener {
                 && minute < 60) {
             if (calendar_date == null)
                 calendar_date = Calendar.getInstance();
-
-
 
 
             calendar_date.set(calendar_date.get(Calendar.YEAR),
@@ -377,7 +373,7 @@ public class CustomDateTimePicker implements View.OnClickListener {
 
     }
 
-    private String getMonthFullName(int  monthNumber) {
+    private String getMonthFullName(int monthNumber) {
 
         Calendar calendar = Calendar.getInstance();
 

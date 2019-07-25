@@ -1,20 +1,8 @@
 package com.example.capstoneproject.view.activity;
 
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,20 +14,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.capstoneproject.R;
-import com.example.capstoneproject.service.model.DateCellView;
 import com.example.capstoneproject.service.repository.DataRepository;
 import com.example.capstoneproject.util.Util;
-import com.example.capstoneproject.viewmodel.SaveUserProgressViewModel;
-import com.example.capstoneproject.viewmodel.SaveUserProgressViewModelFactory;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,14 +43,12 @@ import java.util.List;
 import java.util.Map;
 
 import sun.bob.mcalendarview.CellConfig;
-import sun.bob.mcalendarview.MCalendarView;
 import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.listeners.OnExpDateClickListener;
 import sun.bob.mcalendarview.listeners.OnMonthScrollListener;
 import sun.bob.mcalendarview.views.ExpCalendarView;
 import sun.bob.mcalendarview.vo.DateData;
-import sun.bob.mcalendarview.vo.DayData;
 
 
 public class ProgressReadActivity extends AppCompatActivity {
@@ -94,7 +83,6 @@ public class ProgressReadActivity extends AppCompatActivity {
         setAlreadyMarkedDates();
         setUpListeners();
 
-
         Calendar calendar = Calendar.getInstance();
         selectedDate = new DateData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
         expCalendarView.unMarkDate(selectedDate);
@@ -115,7 +103,7 @@ public class ProgressReadActivity extends AppCompatActivity {
 
     private void getExtras() {
         if (getIntent().getExtras() != null) {
-            weightForToday = getIntent().getExtras().getString("weight");
+            weightForToday = getIntent().getExtras().getString(getString(R.string.weight_key));
             if (!TextUtils.isEmpty(weightForToday)) {
                 addInfoOnSelectedDate(converttoDateData(Util.getTodayDateInString()));
             }
@@ -130,17 +118,13 @@ public class ProgressReadActivity extends AppCompatActivity {
 
     private void setAlreadyMarkedDates() {
         //Fetch details from database of dates for particular user and display
-        int year;
-        int month;
-        int day;
-
         final MutableLiveData<List<String>> articleData = new MutableLiveData<>();
         final List<DateData> articleList = new ArrayList<>();
         String userIdChild = "";
         if (auth.getCurrentUser() != null) {
             userIdChild = auth.getCurrentUser().getUid();
         }
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(getResources().getString(R.string.user_progress_child)).child(userIdChild);
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -148,7 +132,6 @@ public class ProgressReadActivity extends AppCompatActivity {
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                     Map<String, String> newUserMap = new HashMap<>();
                     Map<String, Map<String, String>> dateKey = (Map<String, Map<String, String>>) dataSnapshot.getValue();
-                    Log.e("date", dateKey.toString());
                     dateArray.clear();
                     for (Map.Entry<String, Map<String, String>> entry : dateKey.entrySet()) {
                         dateArray.add(converttoDateData(entry.getKey()));
@@ -171,7 +154,6 @@ public class ProgressReadActivity extends AppCompatActivity {
 
     private DateData converttoDateData(String key) {
         ArrayList<String> values = new ArrayList<>(Arrays.asList(key.split("-")));
-        //   List<String> values = (ArrayList<String>) Arrays.asList(key.split("-"));
         DateData newDateData = new DateData(Integer.valueOf(values.get(2)), Integer.valueOf(values.get(1)), Integer.valueOf(values.get(0)));
         return newDateData;
     }
@@ -187,16 +169,12 @@ public class ProgressReadActivity extends AppCompatActivity {
 
             @Override
             public void onMonthScroll(float positionOffset) {
-//                Log.i("listener", "onMonthScroll:" + positionOffset);
             }
         });
 
         expCalendarView.setOnDateClickListener(new OnDateClickListener() {
             @Override
             public void onDateClick(View view, DateData date) {
-                //  expCalendarView.getMarkedDates().removeAdd();
-                // expCalendarView.markDate(date);
-                // selectedDate = date;
                 addInfoOnSelectedDate(date);
             }
         });
@@ -204,7 +182,7 @@ public class ProgressReadActivity extends AppCompatActivity {
 
     private void addInfoOnSelectedDate(DateData date) {
         builder = new AlertDialog.Builder(ProgressReadActivity.this)
-                .setMessage("Please enter your calculated weight");
+                .setMessage(getResources().getString(R.string.weight_msg));
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_weight, null);
         builder.setView(dialogView).create();
@@ -281,20 +259,17 @@ public class ProgressReadActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild).child(simpleDateFormat.format(date));
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(getResources().getString(R.string.user_progress_child)).child(userIdChild).child(simpleDateFormat.format(date));
 
         Map newUser = new HashMap();
-        newUser.put("weight", weight);
+        newUser.put(getResources().getString(R.string.weight_key), weight);
         mDatabase.setValue(newUser, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if (databaseError != null) {
-                    Log.e("DATABASE", "Data could not be saved " + databaseError.getMessage());
-
-
+                    Log.e(getResources().getString(R.string.data_key), getResources().getString(R.string.unsuccess) + databaseError.getMessage());
                 } else {
-                    Log.e("DATABASE", "Data saved successfully.");
-                    Toast.makeText(getApplicationContext(), "Info Saved Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.info_saved), Toast.LENGTH_SHORT).show();
                     alertDialog.dismiss();
                     alertDialog.cancel();
 

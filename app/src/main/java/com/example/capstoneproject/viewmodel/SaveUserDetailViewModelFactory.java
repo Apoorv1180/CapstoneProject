@@ -5,14 +5,14 @@ import android.app.Application;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-public class SaveUserDetailViewModelFactory  extends ViewModelProvider.NewInstanceFactory {
+public class SaveUserDetailViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private Application mApplication;
-    private String uname, joiningdate,renewdate,fees,planname,uid;
+    private String uname, joiningdate, renewdate, fees, planname, uid;
 
 
-    public SaveUserDetailViewModelFactory(Application application, String uname, String joiningdate,String renewdate,String fees,String planname,String uid) {
+    public SaveUserDetailViewModelFactory(Application application, String uname, String joiningdate, String renewdate, String fees, String planname, String uid) {
         mApplication = application;
-        this.uname=uname;
+        this.uname = uname;
         this.joiningdate = joiningdate;
         this.renewdate = renewdate;
         this.fees = fees;
@@ -22,6 +22,6 @@ public class SaveUserDetailViewModelFactory  extends ViewModelProvider.NewInstan
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new SaveUserDetailViewModel(mApplication,uname,joiningdate,renewdate,fees,planname,uid);
+        return (T) new SaveUserDetailViewModel(mApplication, uname, joiningdate, renewdate, fees, planname, uid);
     }
 }

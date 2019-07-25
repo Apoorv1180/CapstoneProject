@@ -16,7 +16,7 @@ public class SaveArticleViewModel extends AndroidViewModel {
     public SaveArticleViewModel(Application mApplication, String mImageUrl, String mArticleDescripton) {
         super(mApplication);
         try {
-            this.mImageUrl=mImageUrl;
+            this.mImageUrl = mImageUrl;
             this.mArticleDescripton = mArticleDescripton;
             dataRepository = DataRepository.getInstance(mApplication);
         } catch (Exception e) {
@@ -25,6 +25,6 @@ public class SaveArticleViewModel extends AndroidViewModel {
     }
 
     public LiveData<Boolean> isArticleSaved() {
-        return dataRepository.saveArticle(mImageUrl,mArticleDescripton);
+        return dataRepository.saveArticle(mImageUrl, mArticleDescripton);
     }
 }

@@ -3,7 +3,7 @@ package com.example.capstoneproject.view.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -11,6 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.capstoneproject.CustomDateTimePicker;
 import com.example.capstoneproject.R;
@@ -21,13 +28,6 @@ import com.example.capstoneproject.viewmodel.SaveUserDetailViewModelFactory;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 public class UserDetailActivity extends AppCompatActivity {
     TextView uname;
@@ -43,8 +43,8 @@ public class UserDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
         if(getIntent()!=null){
-            Uname=getIntent().getStringExtra("name");
-            uid=getIntent().getStringExtra("uid");
+            Uname = getIntent().getStringExtra(getResources().getString(R.string.name_key));
+            uid = getIntent().getStringExtra(getResources().getString(R.string.uid_key));
         }
         setSupportActionBar(mToolbar);
         initToolbar();
@@ -60,8 +60,6 @@ public class UserDetailActivity extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowTitleEnabled(true);
         }
-
-
     }
 
     private void initViews() {
@@ -71,8 +69,6 @@ public class UserDetailActivity extends AppCompatActivity {
         plan_name = findViewById(R.id.et_plan_name);
         fees=findViewById(R.id.et_fees);
         save = findViewById(R.id.save);
-
-
         uname.setText(Uname);
 
         joining_date.setOnTouchListener(new View.OnTouchListener() {
@@ -181,12 +177,6 @@ public class UserDetailActivity extends AppCompatActivity {
                 planname=plan_name.getText().toString();
 
                 saveUserDetailsinDB();
-
-                joining_date.setText("");
-                renew_date.setText("");
-                fees.setText("");
-                plan_name.setText("");
-
             }
         });
 
@@ -195,10 +185,12 @@ public class UserDetailActivity extends AppCompatActivity {
 
 
     private void saveUserDetailsinDB() {
-        final SaveUserDetailViewModel saveUserDetailViewModel =
-                ViewModelProviders.of(this, new SaveUserDetailViewModelFactory(getApplication(), Uname, joiningdate,renewdate,fee,planname,uid))
-                        .get(SaveUserDetailViewModel.class);
-        observeViewModelSaveUserStatu(saveUserDetailViewModel);
+        if (!TextUtils.isEmpty(joiningdate) && !TextUtils.isEmpty(renewdate) && !TextUtils.isEmpty(fee) && !TextUtils.isEmpty(planname)) {
+            final SaveUserDetailViewModel saveUserDetailViewModel =
+                    ViewModelProviders.of(this, new SaveUserDetailViewModelFactory(getApplication(), Uname, joiningdate, renewdate, fee, planname, uid))
+                            .get(SaveUserDetailViewModel.class);
+            observeViewModelSaveUserStatu(saveUserDetailViewModel);
+        } else Util.displaySnackBar(joining_date, "Enter All the details to Proceed");
 
     }
 
@@ -208,12 +200,20 @@ public class UserDetailActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
 
                 if(aBoolean){
-                    Log.e("USER","UserRecord Saved Successfully");
-                }else
-                    Log.e("USER","UserRecord Saved UnSuccessful");
-
+                    Util.displaySnackBar(joining_date, "UserRecord Saved Successfully");
+                    clearData();
+                } else {
+                    Util.displaySnackBar(joining_date, "UserRecord Saved UnSuccessful");
+                }
             }
         });
+    }
+
+    private void clearData() {
+        joining_date.setText("");
+        renew_date.setText("");
+        fees.setText("");
+        plan_name.setText("");
     }
 
     @Override

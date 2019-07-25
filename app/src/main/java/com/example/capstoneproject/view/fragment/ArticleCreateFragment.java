@@ -6,14 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,6 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.capstoneproject.R;
 import com.example.capstoneproject.service.model.Article;
@@ -75,18 +74,12 @@ public class ArticleCreateFragment extends Fragment {
     }
 
     private void initView(View view) {
-        // btnChoose = (Button) view.findViewById(R.id.btnChoose);
         btnUpload = (Button) view.findViewById(R.id.btnUpload);
         btnSaveArticle=(Button)view.findViewById(R.id.SaveArticle);
         btnReset=(Button)view.findViewById(R.id.RefreshPage);
         imageView = (ImageView) view.findViewById(R.id.imgView);
         articleDesc=(EditText)view.findViewById(R.id.articleDescription);
         articleDesc.setEnabled(false);
-//        btnSaveArticle.setEnabled(false);
-//        btnReset.setEnabled(false);
-
-        //   coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id
-        //         .coordinatorLayout);
     }
 
     @Override
@@ -135,7 +128,7 @@ public class ArticleCreateFragment extends Fragment {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.select_picture)), PICK_IMAGE_REQUEST);
     }
 
 
@@ -154,7 +147,6 @@ public class ArticleCreateFragment extends Fragment {
                 imageView.setImageBitmap(bitmap);
                 imageView.setDrawingCacheEnabled(true);
                 imageView.buildDrawingCache();
-                // Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byteData = baos.toByteArray();
@@ -185,10 +177,9 @@ public class ArticleCreateFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser result) {
                 if (result != null) {
-                    Log.e("USER", "USER ALREADY LOGGED IN" + result.getEmail().toString());
                     uploadImagetoStorage(byteData,result);
                 } else {
-                    Log.e("USER", "USER NOT LOGGED IN");
+                    Log.e(getString(R.string.key_user), getString(R.string.not_logged_in));
                 }
             }
         });
@@ -199,7 +190,7 @@ public class ArticleCreateFragment extends Fragment {
         if (!TextUtils.isEmpty(articleDesc.getText().toString())) {
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setCancelable(false);
-            progressDialog.setTitle("Uploading...");
+            progressDialog.setTitle(getResources().getString(R.string.Upload_));
             progressDialog.show();
             mChildPath = Util.makePath();
             final UploadImageViewModel uploadImageViewModel =
@@ -219,19 +210,17 @@ public class ArticleCreateFragment extends Fragment {
                 if (result) {
                     progressDialog.dismiss();
                     progressDialog.cancel();
-                    Log.e("USER", " UPLOADED IMAGE  SUCCESSFUL" );
                     fetchImageUrlsAndSaveInDatabase(mChildPath,filePath);
                 } else {
                     progressDialog.dismiss();
                     progressDialog.cancel();
-                    Log.e("USER", " UPLOADED IMAGE  UNSUCCESSFUL");
                 }
             }
         });
     }
 
     private void fetchImageUrlsAndSaveInDatabase(String mChildPath,Uri filePath) {
-        progressDialog.setTitle("fetching Url ,Please Wait...");
+        progressDialog.setTitle(getResources().getString(R.string.url_fetch));
         progressDialog.show();
         final SaveImageUrlViewModel saveImageUrlViewModel =
                 ViewModelProviders.of(this, new SaveImageUrlViewModelFactory(getActivity().getApplication(), mChildPath,filePath))
@@ -243,9 +232,8 @@ public class ArticleCreateFragment extends Fragment {
         saveImageUrlViewModel.isImageUrlSaved().observe(this, new Observer<Uri>() {
             @Override
             public void onChanged(Uri result) {
-                if(result!=null){
+                if (result != null) {
                     //        showAddMoreSnackBar();
-                    Log.e("USER","add more"+result.toString());
                     progressDialog.dismiss();
                     progressDialog.cancel();
                     btnSaveArticle.setVisibility(View.VISIBLE);
@@ -255,10 +243,12 @@ public class ArticleCreateFragment extends Fragment {
                     btnReset.setEnabled(true);
                     article.setImageUrl(result.toString());
 
+                } else {
+                    Log.e("USER", "retry");
+                    //       showRetrySnackBar();
+                    imageView.setImageResource(android.R.color.transparent);
+                    Util.displaySnackBar(btnReset, getResources().getString(R.string.retry_msg));
                 }
-                else
-                    Log.e("USER","retry");
-                //       showRetrySnackBar();
             }
         });
     }
@@ -277,12 +267,10 @@ public class ArticleCreateFragment extends Fragment {
             public void onChanged(Boolean aBoolean) {
 
                 if(aBoolean){
-                    Log.e("USER","Article Saved Successfully");
                     Util.displaySnackBar(imageView, "Image Saved Successfully");
                     resetPage();
                 } else {
                     Util.displaySnackBar(imageView, "Image Could Not be Saved Successfully");
-                    Log.e("USER", "Article Saved UnSuccessful");
                 }
             }
         });

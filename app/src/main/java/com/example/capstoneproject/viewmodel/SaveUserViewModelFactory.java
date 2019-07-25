@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SaveUserViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private Application mApplication;
-    private String mUserName,mPassword,mUserId;
+    private String mUserName, mPassword, mUserId;
 
-    public SaveUserViewModelFactory(Application application,String mUserid, String userName, String password) {
+    public SaveUserViewModelFactory(Application application, String mUserid, String userName, String password) {
         mApplication = application;
         mUserName = userName;
         mUserId = mUserid;
@@ -18,6 +18,6 @@ public class SaveUserViewModelFactory extends ViewModelProvider.NewInstanceFacto
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new SaveUserViewModel(mApplication,mUserId, mUserName,mPassword);
+        return (T) new SaveUserViewModel(mApplication, mUserId, mUserName, mPassword);
     }
 }

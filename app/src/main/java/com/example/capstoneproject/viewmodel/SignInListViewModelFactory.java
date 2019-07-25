@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SignInListViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private Application mApplication;
-    private String mUserName,mPassword;
+    private String mUserName, mPassword;
 
     public SignInListViewModelFactory(Application application, String userName, String password) {
         mApplication = application;
@@ -17,6 +17,6 @@ public class SignInListViewModelFactory extends ViewModelProvider.NewInstanceFac
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        return (T) new SignInListViewModel(mApplication, mUserName,mPassword);
+        return (T) new SignInListViewModel(mApplication, mUserName, mPassword);
     }
 }

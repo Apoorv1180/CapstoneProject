@@ -3,7 +3,6 @@
 
     <string name="Not_logged_in">USER NOT LOGGED IN</string>
     <string name="role_admin">Admin</string>
-    <string name="ok">OK</string>
     <string name="saved_successful_msg">SAVED SUCCESSFULLY</string>
     <string name="not_saved_successful_msg">data not saved</string>
     <string name="image_type">image/*</string>
@@ -41,4 +40,31 @@
     <string name="create_article">Create Article</string>
     <string name="create_plan">Create Plan</string>
     <string name="user_plan_creation">Create User\'s Plan</string>
+    <string name="article_detail">article detail</string>
+    <string name="expand">expand calendar</string>
+    <string name="user_data">user data</string>
+    <string name="icon">icon</string>
+    <string name="ok">OK</string>
+    <string name="admin_email">ekta@gmail.com</string>
+    <string name="please_wait">Please Wait</string>
+    <string name="user_details_child">USER_DETAILS</string>
+    <string name="enter_fee">Please enter your Fees</string>
+    <string name="record_success">UserRecord Update Successfully</string>
+    <string name="record_unsuccess">UserRecord Update UnSuccessful</string>
+    <string name="weight_key">weight</string>
+    <string name="user_progress_child">USERS_PROGRESS</string>
+    <string name="weight_msg">Please enter your calculated weight</string>
+    <string name="info_saved">Info Saved Successfully</string>
+    <string name="data_key">DATABASE</string>
+    <string name="unsuccess">Data could not be saved</string>
+    <string name="name_key">name</string>
+    <string name="uid_key">uid</string>
+    <string name="select_picture">Select Picture</string>
+    <string name="Upload_">Uploading...</string>
+    <string name="url_fetch">fetching Url ,Please Wait...</string>
+    <string name="retry_msg">Retry!!</string>
+    <string name="schedule_msg">Schedule and view My Plans</string>
+    <string name="enrollment_msg">View my enrollements</string>
+    <string name="read_msg">Read and be fit</string>
+
 </resources>

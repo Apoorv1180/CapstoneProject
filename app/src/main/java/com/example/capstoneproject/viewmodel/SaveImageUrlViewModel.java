@@ -7,16 +7,15 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.capstoneproject.service.repository.DataRepository;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class SaveImageUrlViewModel extends AndroidViewModel {
 
     DataRepository dataRepository;
-   String mChildPath;
-   Uri mFilePath;
+    String mChildPath;
+    Uri mFilePath;
 
-    public SaveImageUrlViewModel(Application mApplication, String mChildPath,Uri mFilePath) {
+    public SaveImageUrlViewModel(Application mApplication, String mChildPath, Uri mFilePath) {
         super(mApplication);
         try {
             this.mChildPath = mChildPath;
@@ -28,6 +27,6 @@ public class SaveImageUrlViewModel extends AndroidViewModel {
     }
 
     public LiveData<Uri> isImageUrlSaved() {
-        return dataRepository.saveImageUrl(mChildPath,mFilePath);
+        return dataRepository.saveImageUrl(mChildPath, mFilePath);
     }
 }

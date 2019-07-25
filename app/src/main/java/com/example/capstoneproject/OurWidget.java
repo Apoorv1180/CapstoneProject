@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -26,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
-
 
 import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
 import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -79,7 +77,7 @@ public class OurWidget extends AppWidgetProvider {
                 Intent intentOne = new Intent(context, ProgressReadActivity.class);
                 intentOne.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 if (!TextUtils.isEmpty(weightForToday)) {
-                    intentOne.putExtra("weight", weightForToday);
+                    intentOne.putExtra(context.getResources().getString(R.string.weight_key), weightForToday);
                 }
                 context.startActivity(intentOne);
             } else {
@@ -102,13 +100,11 @@ public class OurWidget extends AppWidgetProvider {
 
         @Override
         protected void onHandleIntent(Intent intent) {
-            Log.e("intent-filter", "do nothing");
             AppWidgetManager appWidgetManager = AppWidgetManager
                     .getInstance(this);
             int incomingAppWidgetId = intent.getIntExtra(EXTRA_APPWIDGET_ID,
                     INVALID_APPWIDGET_ID);
             if (incomingAppWidgetId != INVALID_APPWIDGET_ID) {
-                Log.e("intent-filter", "do nothing");
                 updateOneAppWidget(appWidgetManager, incomingAppWidgetId);
             }
         }
@@ -124,7 +120,7 @@ public class OurWidget extends AppWidgetProvider {
             if (auth.getCurrentUser() != null) {
                 userIdChild = auth.getCurrentUser().getUid();
             }
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("USERS_PROGRESS").child(userIdChild);
+            mDatabase = FirebaseDatabase.getInstance().getReference().child(getString(R.string.user_progress_child)).child(userIdChild);
 
             String toDate = Util.getTodayDateInString();
             mDatabase.addValueEventListener(new ValueEventListener() {
@@ -132,11 +128,10 @@ public class OurWidget extends AppWidgetProvider {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                         Map<String, Map<String, String>> dateKey = (Map<String, Map<String, String>>) dataSnapshot.getValue();
-                        Log.e("date", dateKey.toString());
 
                         if (dateKey.containsKey(toDate)) {
                             Map<String, String> weightMap = dateKey.get(toDate);
-                            weightForToday = weightMap.get("weight");
+                            weightForToday = weightMap.get(getString(R.string.weight_key));
 
                             if (!TextUtils.isEmpty(weightForToday)) {
                                 views.setTextViewText(R.id.id_value, weightForToday);

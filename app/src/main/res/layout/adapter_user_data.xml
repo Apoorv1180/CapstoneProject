@@ -30,6 +30,7 @@
                 android:layout_gravity="center"
                 android:layout_height="60dp"
                 android:layout_margin="5dp"
+                android:contentDescription="@string/user_data"
                 android:background="@drawable/ic_person_outline_black_24dp"
                 android:scaleType="centerCrop" />
 

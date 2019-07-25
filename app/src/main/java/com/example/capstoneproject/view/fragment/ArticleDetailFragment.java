@@ -1,16 +1,13 @@
 package com.example.capstoneproject.view.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.capstoneproject.R;
-import com.example.capstoneproject.service.model.Action;
-
 import androidx.fragment.app.Fragment;
+
+import com.example.capstoneproject.R;
 
 
 public class ArticleDetailFragment extends Fragment {
@@ -60,7 +57,5 @@ public class ArticleDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_article_detail, container, false);
     }
-
-
 
 }

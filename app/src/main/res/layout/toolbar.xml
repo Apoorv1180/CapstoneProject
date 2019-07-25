@@ -4,7 +4,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/red700"
+    android:background="@color/colorPrimary"
     app:contentInsetRight="@dimen/dimen0dp"
     app:contentInsetStart="@dimen/dimen0dp"
     app:layout_collapseMode="pin"></androidx.appcompat.widget.Toolbar>
