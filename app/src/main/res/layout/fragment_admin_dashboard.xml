@@ -39,8 +39,8 @@
                     android:layout_height="80dp"
                     android:layout_gravity="center"
                     android:layout_weight="2"
-                    android:gravity="center"
                     android:background="@drawable/ic_my_plan"
+                    android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="25sp"
                     android:textStyle="normal" />
@@ -54,6 +54,7 @@
                     android:gravity="center">
 
                     <TextView
+                        style="@style/textViews"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
@@ -62,7 +63,6 @@
                         android:padding="@dimen/dimen_10dp"
                         android:text="Plan"
                         android:textSize="@dimen/text_15sp"
-                        style="@style/textViews"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -76,10 +76,11 @@
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:layout_weight="2"
             android:layout_margin="@dimen/dimen_10dp"
+            android:layout_weight="2"
             app:cardCornerRadius="@dimen/dimen5dp"
             app:cardElevation="@dimen/dimen_10dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,8 +94,8 @@
                     android:layout_height="80dp"
                     android:layout_gravity="center"
                     android:layout_weight="2"
-                    android:gravity="center"
                     android:background="@drawable/ic_my_article"
+                    android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="25sp"
                     android:textStyle="normal" />
@@ -108,6 +109,7 @@
                     android:gravity="center">
 
                     <TextView
+                        style="@style/textViews"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
@@ -115,7 +117,6 @@
                         android:minLines="2"
                         android:padding="@dimen/dimen_10dp"
                         android:text="Articles"
-                        style="@style/textViews"
                         android:textSize="@dimen/text_15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -142,15 +143,14 @@
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:layout_weight="2"
             android:layout_margin="@dimen/dimen_10dp"
+            android:layout_weight="2"
             app:cardCornerRadius="@dimen/dimen5dp"
             app:cardElevation="@dimen/dimen_10dp">
 
 
-
         </androidx.cardview.widget.CardView>
-        
+
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

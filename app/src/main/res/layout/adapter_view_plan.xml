@@ -3,23 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/white_bg"
-    android:orientation="vertical"
-    >
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="View  Plan"
-    android:gravity="center"
-    android:textColor="@color/white"
-    android:textSize="25dp"
-    android:layout_marginTop="20dp"/>
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="View  Plan"
+        android:textColor="@color/white"
+        android:textSize="25dp" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="@dimen/dimen_10dp"
         android:layout_marginLeft="@dimen/dimen_10dp"
-        android:layout_marginRight="@dimen/dimen_10dp">
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="@dimen/dimen_10dp"
+        android:layout_marginBottom="@dimen/dimen_10dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_user"
@@ -47,8 +48,8 @@
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
                     android:layout_weight="0.2"
-                    android:contentDescription="@string/icon"
                     android:background="@drawable/ic_my_plan"
+                    android:contentDescription="@string/icon"
                     android:scaleType="centerCrop" />
 
                 <LinearLayout
@@ -146,5 +147,5 @@
         android:elevation="15dp"
         android:text="Renew"
         android:textAllCaps="false"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </LinearLayout>

@@ -19,14 +19,16 @@
                 android:id="@+id/tv_renew_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Renew Date"
-                android:textSize="20dp"
-                android:gravity="center"/>
+                android:textSize="20dp" />
+
             <EditText
                 android:id="@+id/edt_plan_fee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Your fee"/>
+                android:hint="Enter Your fee" />
+
             <Button
                 android:id="@+id/saveInfo"
                 android:layout_width="match_parent"

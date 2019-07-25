@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
     android:orientation="horizontal"
-    tools:context=".view.fragment.MainFragment"
-    android:focusable="true">
+    tools:context=".view.fragment.MainFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/plancreation_user_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/plancreation_user_recyclerview" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

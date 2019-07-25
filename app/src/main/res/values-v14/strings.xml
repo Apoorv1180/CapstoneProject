@@ -21,7 +21,7 @@
     <string name="my_program_card">My Program</string>
     <string name="articles_card">Articles</string>
     <string name="_12">12</string>
-    <string name="write_your_article_here">Write your Article Here!!</string>
+
     <string name="choose">Choose</string>
     <string name="upload">Upload</string>
     <string name="save_btn">SAVE</string>
@@ -66,5 +66,21 @@
     <string name="schedule_msg">Schedule and view My Plans</string>
     <string name="enrollment_msg">View my enrollements</string>
     <string name="read_msg">Read and be fit</string>
+    <string name="enter_joining_date">Enter Joining Date</string>
+    <string name="enter_renew_date">Enter Renew Date</string>
+
+    <string name="save_key">SAVE</string>
+    <string name="reset_key">Reset</string>
+    <string name="my_progress_wid">MY PROGRESS</string>
+    <string name="date_wid">Date</string>
+    <string name="weight_wid">WEIGHT</string>
+    <string name="update_wid">Update</string>
+    <string name="my_progress_">MY PROGRESS</string>
+    <string name="date_">Date</string>
+    <string name="weight_">WEIGHT</string>
+    <string name="update_">Update</string>
+    <string name="action_title_">ACTION TITLE</string>
+    <string name="action_description_">ACTION DESCRIPTION</string>
+    <string name="write_your_article_here">Write Your Article Here</string>
 
 </resources>

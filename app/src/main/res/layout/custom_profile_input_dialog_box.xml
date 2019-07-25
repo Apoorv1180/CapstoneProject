@@ -54,7 +54,6 @@
                 android:textColor="@color/colorPrimaryDark"
                 tools:targetApi="o" />
 
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

@@ -8,7 +8,6 @@
     android:orientation="vertical"
     tools:context=".view.activity.LoginActivity">
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/login_card"
         android:layout_width="match_parent"

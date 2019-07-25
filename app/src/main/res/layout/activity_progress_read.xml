@@ -14,6 +14,7 @@
 
         <include layout="@layout/toolbar" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/main_YYMM_Tv"
         android:layout_width="match_parent"
