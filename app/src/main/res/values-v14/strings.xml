@@ -89,6 +89,13 @@
     <string name="renew_date_">Renew Date</string>
     <string name="fees_">Fees</string>
     <string name="renew_">Renew</string>
+    <string name="plan_creation_form_">Plan Creation Form</string>
+    <string name="full_name_">Full Name</string>
+    <string name="enter_fees_">Enter Fees</string>
+    <string name="enter_plan_name_">Enter Plan Name</string>
+    <string name="save_">Save</string>
+    <string name="user_name_">User Name</string>
+    <string name="phone_number_">Phone Number</string>
     <string name="renew_date">Renew Date</string>
     <string name="enter_your_fee">Enter Your fee</string>
     <string name="save">Save</string>

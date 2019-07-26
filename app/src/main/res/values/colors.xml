@@ -19,4 +19,5 @@
     <color name="md_green_200">#b3da93</color>
     <color name="md_grey_600">#b4b0b0</color>
     <color name="orange_red">#cee24730</color>
+    <color name="color_linear">#e0e0e0</color>
 </resources>
