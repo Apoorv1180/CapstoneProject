@@ -35,14 +35,14 @@
 
                 <TextView
                     android:id="@+id/tv_count_apporved"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/dimen80dp"
+                    android:layout_height="@dimen/dimen80dp"
                     android:layout_gravity="center"
                     android:layout_weight="2"
                     android:background="@drawable/ic_my_plan"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="25sp"
+                    android:textSize="@dimen/text_25sp"
                     android:textStyle="normal" />
 
                 <LinearLayout
@@ -61,7 +61,7 @@
                         android:gravity="center"
                         android:minLines="2"
                         android:padding="@dimen/dimen_10dp"
-                        android:text="Plan"
+                        android:text="@string/plan"
                         android:textSize="@dimen/text_15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -90,14 +90,14 @@
 
                 <TextView
                     android:id="@+id/tv_count_close"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/dimen80dp"
+                    android:layout_height="@dimen/dimen80dp"
                     android:layout_gravity="center"
                     android:layout_weight="2"
                     android:background="@drawable/ic_my_article"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="25sp"
+                    android:textSize="@dimen/text_25sp"
                     android:textStyle="normal" />
 
                 <LinearLayout
@@ -116,7 +116,7 @@
                         android:gravity="center"
                         android:minLines="2"
                         android:padding="@dimen/dimen_10dp"
-                        android:text="Articles"
+                        android:text="@string/article"
                         android:textSize="@dimen/text_15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -171,13 +171,13 @@
 
                 <TextView
                     android:id="@+id/dashboard_item_value_tv"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/dimen80dp"
+                    android:layout_height="@dimen/dimen80dp"
                     android:layout_gravity="center"
                     android:layout_weight="2"
                     android:gravity="center"
                     android:text="12"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_18sp"
                     android:textStyle="normal" />
 
                 <LinearLayout
@@ -196,7 +196,6 @@
                         android:gravity="center"
                         android:minLines="2"
                         android:padding="@dimen/dimen_10dp"
-                        android:text="NCS to be Approved"
                         android:textSize="@dimen/text_15sp"
                         android:textStyle="normal" />
                 </LinearLayout>
@@ -209,7 +208,7 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom|end">
+        android:layout_gravity="bottom|right">
 
 
     </FrameLayout>

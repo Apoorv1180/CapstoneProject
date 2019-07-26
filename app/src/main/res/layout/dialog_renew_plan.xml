@@ -8,7 +8,7 @@
         android:id="@+id/infoCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp">
+        android:layout_margin="@dimen/dimen50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,21 +20,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Renew Date"
-                android:textSize="20sp" />
+                android:text="@string/renew_date"
+                android:textSize="@dimen/text_15sp" />
 
             <EditText
                 android:id="@+id/edt_plan_fee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Your fee" />
+                android:hint="@string/enter_your_fee" />
 
             <Button
                 android:id="@+id/saveInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/orange100"
-                android:text="Save" />
+                android:text="@string/save" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

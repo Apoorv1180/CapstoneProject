@@ -154,5 +154,12 @@
     <string name="renew_date_">Renew Date</string>
     <string name="fees_">Fees</string>
     <string name="renew_">Renew</string>
+    <string name="renew_date">Renew Date</string>
+    <string name="enter_your_fee">Enter Your fee</string>
+    <string name="save">Save</string>
+    <string name="save">Save</string>
+    <string name="plan">Plan</string>
+    <string name="article">Articles</string>
+    <string name="upload">Upload</string>
 
 </resources>
