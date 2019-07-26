@@ -163,10 +163,8 @@
     <string name="phone_number_">Phone Number</string>
     <string name="renew_date">Renew Date</string>
     <string name="enter_your_fee">Enter Your fee</string>
-    <string name="save">Save</string>
-    <string name="save">Save</string>
     <string name="plan">Plan</string>
     <string name="article">Articles</string>
-    <string name="upload">Upload</string>
+
 
 </resources>
