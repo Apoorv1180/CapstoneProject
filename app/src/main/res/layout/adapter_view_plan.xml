@@ -2,7 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/white_bg"
     android:orientation="vertical">
 
     <TextView
@@ -10,8 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="View  Plan"
-        android:textColor="@color/white"
+        android:text="@string/view_plan_"
+        android:textColor="@color/black"
         android:textSize="25dp" />
 
     <RelativeLayout
@@ -66,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:text="Plan Name"
+                        android:text="@string/plan_name_"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -82,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:text="Joining Date"
+                        android:text="@string/joining_date_"
                         android:textSize="14sp"
                         android:textStyle="italic" />
 
@@ -98,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:text="Renew Date"
+                        android:text="@string/renew_date_"
                         android:textSize="14sp"
                         android:textStyle="italic" />
 
@@ -114,7 +113,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:text="Fees"
+                        android:text="@string/fees_"
                         android:textSize="14sp"
                         android:textStyle="italic" />
 
@@ -145,7 +144,7 @@
         android:layout_marginTop="-35dp"
         android:background="@color/md_green_200"
         android:elevation="15dp"
-        android:text="Renew"
+        android:text="@string/renew_"
         android:textAllCaps="false"
         android:visibility="gone" />
 </LinearLayout>

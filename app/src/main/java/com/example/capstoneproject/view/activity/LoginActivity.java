@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.View.GONE;
 import static com.example.capstoneproject.util.Util.isEmptyText;
 import static com.example.capstoneproject.util.Util.isValidPassword;
 import static com.example.capstoneproject.util.Util.isValidUsername;
@@ -117,6 +118,23 @@ public class LoginActivity extends AppCompatActivity {
 
                 getValues();
                 validateLogin();
+            }
+        });
+        checksetFocus();
+    }
+
+    private void checksetFocus() {
+        etUsername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    //do nothing
+                } else {
+                    if (etUsername.getText().toString().equalsIgnoreCase(getResources().getString(R.string.admin_email))) {
+                        btSignUp.setVisibility(GONE);
+                    } else
+                        btSignUp.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -246,7 +264,7 @@ public class LoginActivity extends AppCompatActivity {
             progressBar.dismiss();
         }
         // get prompts.xml view
-        cardView.setVisibility(View.GONE);
+        cardView.setVisibility(GONE);
         final EditText userName, userPhoneNumber;
 
         LayoutInflater li = LayoutInflater.from(this);

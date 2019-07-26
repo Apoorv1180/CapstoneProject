@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -101,6 +102,9 @@ public class ArticleReadActivity extends AppCompatActivity {
                     mPager.setPageTransformer(true, new ZoomOutPageTransformer());
                     pagerAdapter = new CustomPageAdapter(ArticleReadActivity.this, articles);
                     mPager.setAdapter(pagerAdapter);
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_data), Toast.LENGTH_LONG).show();
+                    onBackPressed();
                 }
             }
         });

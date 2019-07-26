@@ -1,6 +1,7 @@
 package com.example.capstoneproject.view.activity;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -35,7 +36,7 @@ public class UserDetailActivity extends AppCompatActivity {
     Button save;
     String Uname,joiningdate,renewdate,fee,planname,uid;
     CustomDateTimePicker dateTimePicker,dateTimePickerrenew;
-
+    ProgressDialog progressDialog;
     Toolbar mToolbar;
 
     @Override
@@ -171,6 +172,9 @@ public class UserDetailActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog = ProgressDialog.show(UserDetailActivity.this, getString(R.string.loading),
+                        getString(R.string.please_wait) == null ? getString(R.string.wait) : getString(R.string.please_wait), true, false);
+
                 joiningdate=joining_date.getText().toString();
                 renewdate=renew_date.getText().toString();
                 fee=fees.getText().toString();
@@ -190,7 +194,11 @@ public class UserDetailActivity extends AppCompatActivity {
                     ViewModelProviders.of(this, new SaveUserDetailViewModelFactory(getApplication(), Uname, joiningdate, renewdate, fee, planname, uid))
                             .get(SaveUserDetailViewModel.class);
             observeViewModelSaveUserStatu(saveUserDetailViewModel);
-        } else Util.displaySnackBar(joining_date, "Enter All the details to Proceed");
+        } else {
+            Util.displaySnackBar(joining_date, getResources().getString(R.string.enter_details));
+            progressDialog.dismiss();
+            progressDialog.cancel();
+        }
 
     }
 
@@ -200,13 +208,19 @@ public class UserDetailActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
 
                 if(aBoolean){
-                    Util.displaySnackBar(joining_date, "UserRecord Saved Successfully");
+                    Util.displaySnackBar(joining_date, getString(R.string.saved_successful_msg));
+                    progressDialog.dismiss();
+                    progressDialog.cancel();
                     clearData();
                 } else {
-                    Util.displaySnackBar(joining_date, "UserRecord Saved UnSuccessful");
+                    Util.displaySnackBar(joining_date, getString(R.string.not_saved_successful_msg));
+                    progressDialog.dismiss();
+                    progressDialog.cancel();
                 }
             }
         });
+        progressDialog.dismiss();
+        progressDialog.cancel();
     }
 
     private void clearData() {

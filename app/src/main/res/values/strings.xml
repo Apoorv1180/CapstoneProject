@@ -147,5 +147,12 @@
     <string name="action_title_">ACTION TITLE</string>
     <string name="action_description_">ACTION DESCRIPTION</string>
     <string name="write_your_article_here">Write Your Article Here</string>
+    <string name="enter_details">Enter All the details to Proceed</string>
+    <string name="view_plan_">View Plan</string>
+    <string name="plan_name_">Plan Name</string>
+    <string name="joining_date_">Joining Date</string>
+    <string name="renew_date_">Renew Date</string>
+    <string name="fees_">Fees</string>
+    <string name="renew_">Renew</string>
 
 </resources>
