@@ -31,7 +31,7 @@
         android:paddingTop="9dp"
         android:scrollbarStyle="insideInset"
         android:scrollbars="vertical"
-        android:textSize="14dp" />
+        android:textSize="14sp" />
 
     <LinearLayout
         android:id="@+id/layout_button"

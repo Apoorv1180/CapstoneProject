@@ -100,7 +100,7 @@ public class PlanViewActivity extends AppCompatActivity implements ViewPlanAdapt
     }
 
     private void initViews() {
-        viewplanuser = (RecyclerView) findViewById(R.id.viewplan_user);
+        viewplanuser = (RecyclerView) findViewById(R.id.view_plan_user);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         viewplanuser.setLayoutManager(layoutManager);
         viewplanuser.setItemAnimator(new DefaultItemAnimator());

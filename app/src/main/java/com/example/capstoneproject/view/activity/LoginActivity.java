@@ -350,4 +350,17 @@ public class LoginActivity extends AppCompatActivity {
 
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog.cancel();
+        }
+        if (progressBar != null) {
+            progressBar.cancel();
+            progressBar.dismiss();
+        }
+        super.onBackPressed();
+    }
 }
