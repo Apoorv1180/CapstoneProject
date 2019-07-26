@@ -282,7 +282,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // set dialog message
         alertDialogBuilder
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("OK",
 
                         new DialogInterface.OnClickListener() {
