@@ -43,7 +43,7 @@
 
         <Button
             android:id="@+id/btnUpload"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dimen0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_10dp"
             android:layout_weight="1"

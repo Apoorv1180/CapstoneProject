@@ -16,14 +16,14 @@
     <string name="view_plans">View my Progress</string>
     <string name="read_articles">Read and be fit</string>
     <string name="months">Months</string>
-    <string name="save">Save</string>
+
     <string name="plan_card">Plan</string>
     <string name="my_program_card">My Program</string>
     <string name="articles_card">Articles</string>
     <string name="_12">12</string>
 
     <string name="choose">Choose</string>
-    <string name="upload">Upload</string>
+
     <string name="save_btn">SAVE</string>
     <string name="reset">Reset</string>
     <string name="article_image_description">Article Image Description</string>
@@ -98,7 +98,6 @@
     <string name="phone_number_">Phone Number</string>
     <string name="renew_date">Renew Date</string>
     <string name="enter_your_fee">Enter Your fee</string>
-    <string name="save">Save</string>
     <string name="save">Save</string>
     <string name="plan">Plan</string>
     <string name="article">Articles</string>

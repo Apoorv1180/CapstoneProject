@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_linear">#e0e0e0</color>
+    <color name="ooAdColor">#00ADA3</color>
+    <color name="colore0e0">#e0e0e0</color>
+    <color name="colorPrimary">#e65100</color>
+    <color name="colorPrimaryDark">#c62828</color>
+    <color name="colorAccent">#ff5722</color>
+    <color name="textYellow">#ff6f00</color>
+    <color name="textOrange">#e65100</color>
+    <color name="md_cyan_900">#ba6435</color>
+    <color name="white">#f9f7f7</color>
+    <color name="lightgrey">#eeeeee</color>
+    <color name="darkgrey">#757575</color>
+    <color name="orange100">#ffccbc</color>
+    <color name="orange400">#ff7043</color>
+    <color name="red700">#d32f2f</color>
+    <color name="redA700">#d50000</color>
+    <color name="border">#d78585</color>
+    <color name="strok">#c48f8f</color>
+    <color name="black">#000000</color>
+    <color name="md_green_200">#b3da93</color>
+    <color name="md_grey_600">#b4b0b0</color>
+    <color name="orange_red">#cee24730</color>
 </resources>
