@@ -31,11 +31,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="@dimen/dimen20dp"
                 android:gravity="center"
-                android:text="Plan Creation Form"
+                android:text="@string/plan_creation_form_"
                 android:textColor="@color/black"
-                android:textSize="25sp" />
+                android:textSize="@dimen/dimen25sp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -58,9 +58,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:gravity="center"
-                        android:text="Full Name"
+                        android:text="@string/full_name_"
                         android:textColor="@color/black"
-                        android:textSize="25sp" />
+                        android:textSize="@dimen/dimen25sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -73,12 +73,12 @@
                         <EditText
                             android:id="@+id/ed_join_date"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="@dimen/dimen40dp"
                             android:layout_below="@+id/tv_in_transit_vehicle_lane"
                             android:layout_marginTop="@dimen/padding5dp"
                             android:background="@drawable/edittext"
                             android:drawableRight="@drawable/calendarsvg"
-                            android:drawablePadding="5dp"
+                            android:drawablePadding="@dimen/dimen5dp"
                             android:gravity="center_vertical"
                             android:hint="@string/enter_joining_date"
                             android:paddingLeft="@dimen/dimen_10dp"
@@ -97,12 +97,12 @@
                         <EditText
                             android:id="@+id/et_renew_date"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="@dimen/dimen40dp"
                             android:layout_below="@+id/tv_in_transit_vehicle_lane"
                             android:layout_marginTop="@dimen/padding5dp"
                             android:background="@drawable/edittext"
                             android:drawableRight="@drawable/calendarsvg"
-                            android:drawablePadding="5dp"
+                            android:drawablePadding="@dimen/dimen5dp"
                             android:gravity="center_vertical"
                             android:hint="@string/enter_renew_date"
                             android:paddingLeft="@dimen/dimen_10dp"
@@ -124,9 +124,9 @@
                             android:layout_height="40dp"
                             android:layout_marginTop="@dimen/padding5dp"
                             android:background="@drawable/edittext"
-                            android:drawablePadding="5dp"
+                            android:drawablePadding="@dimen/dimen5dp"
                             android:gravity="center_vertical"
-                            android:hint="Enter Fees"
+                            android:hint="@string/enter_fees_"
                             android:inputType="number"
                             android:paddingLeft="@dimen/dimen_10dp"
                             android:paddingRight="@dimen/dimen_10dp"
@@ -144,12 +144,12 @@
                         <EditText
                             android:id="@+id/et_plan_name"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="@dimen/dimen40dp"
                             android:layout_marginTop="@dimen/padding5dp"
                             android:background="@drawable/edittext"
-                            android:drawablePadding="5dp"
+                            android:drawablePadding="@dimen/dimen5dp"
                             android:gravity="center_vertical"
-                            android:hint="Enter Plan Name"
+                            android:hint="@string/enter_plan_name_"
                             android:paddingLeft="@dimen/dimen_10dp"
                             android:paddingRight="@dimen/dimen_10dp"
                             android:textColor="@color/black" />
@@ -162,9 +162,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@color/md_green_200"
-                        android:text="Save"
+                        android:text="@string/save_"
                         android:textAllCaps="false" />
-
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

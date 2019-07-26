@@ -7,17 +7,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/dimen20dp"
         android:gravity="center"
         android:text="@string/view_plan_"
         android:textColor="@color/black"
-        android:textSize="25sp" />
+        android:textSize="@dimen/dimen25sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_10dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/dimen40dp"
         android:layout_marginRight="@dimen/dimen_10dp"
         android:layout_marginBottom="@dimen/dimen_10dp">
 
@@ -25,27 +25,27 @@
             android:id="@+id/card_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
+            android:layout_margin="@dimen/dimen2dp"
             android:background="@color/cardview_dark_background"
             app:cardCornerRadius="@dimen/cardview_default_radius"
-            app:cardElevation="10dp"
+            app:cardElevation="@dimen/dimen10dp"
             app:cardPreventCornerOverlap="false">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/dimen5dp"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
 
                 <ImageView
                     android:id="@+id/user_image"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="@dimen/dimen60dp"
+                    android:layout_height="@dimen/dimen60dp"
                     android:layout_gravity="center"
-                    android:layout_margin="5dp"
+                    android:layout_margin="@dimen/dimen5dp"
                     android:layout_weight="0.2"
                     android:background="@drawable/ic_my_plan"
                     android:contentDescription="@string/icon"
@@ -54,7 +54,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="@dimen/dimen5dp"
                     android:layout_weight="2.5"
                     android:orientation="vertical"
                     android:weightSum="1">
@@ -63,72 +63,72 @@
                         android:id="@+id/plan_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/dimen5dp"
                         android:layout_weight="1"
                         android:text="@string/plan_name_"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/text_18sp"
                         android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="5dp"
+                        android:layout_height="@dimen/dimen_1dp"
+                        android:layout_margin="@dimen/dimen5dp"
                         android:background="@color/colorAccent" />
 
                     <TextView
                         android:id="@+id/joining_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/dimen5dp"
                         android:layout_weight="1"
                         android:text="@string/joining_date_"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14sp"
                         android:textStyle="italic" />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="5dp"
+                        android:layout_height="@dimen/dimen_1dp"
+                        android:layout_margin="@dimen/dimen5dp"
                         android:background="@color/colorAccent" />
 
                     <TextView
                         android:id="@+id/renew_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/dimen5dp"
                         android:layout_weight="1"
                         android:text="@string/renew_date_"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14sp"
                         android:textStyle="italic" />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="5dp"
+                        android:layout_height="@dimen/dimen_1dp"
+                        android:layout_margin="@dimen/dimen5dp"
                         android:background="@color/colorAccent" />
 
                     <TextView
                         android:id="@+id/fees"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/dimen5dp"
                         android:layout_weight="1"
                         android:text="@string/fees_"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14sp"
                         android:textStyle="italic" />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="5dp"
+                        android:layout_height="@dimen/dimen_1dp"
+                        android:layout_margin="@dimen/dimen5dp"
                         android:background="@color/colorAccent" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/dimen5dp"
                         android:layout_weight="1"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14sp"
                         android:textStyle="italic" />
                 </LinearLayout>
             </LinearLayout>
